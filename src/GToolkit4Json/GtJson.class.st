@@ -10,6 +10,14 @@ GtJson class >> forJsonObject: aJsonObject [
 	^ self new jsonObject: aJsonObject
 ]
 
+{ #category : #'instance creation' }
+GtJson class >> forJsonString: aString [
+
+	(NeoJSONReader on: aString readStream)
+		mapClass: OrderPreservingDictionary;
+		next
+]
+
 { #category : #accessing }
 GtJson >> defaultJsonObject [
 
