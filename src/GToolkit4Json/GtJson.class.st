@@ -13,9 +13,12 @@ GtJson class >> forJsonObject: aJsonObject [
 { #category : #'instance creation' }
 GtJson class >> forJsonString: aString [
 
-	(NeoJSONReader on: aString readStream)
-		mapClass: OrderPreservingDictionary;
-		next
+	| aJsonObject |
+	aJsonObject := (NeoJSONReader on: aString readStream)
+		               mapClass: OrderPreservingDictionary;
+		               next.
+
+	^ self forJsonObject: aJsonObject
 ]
 
 { #category : #'gt - extensions' }

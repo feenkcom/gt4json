@@ -7,6 +7,21 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
+{ #category : #converting }
+GtJsonRasic >> asJson [
+
+	^ self
+]
+
+{ #category : #converting }
+GtJsonRasic >> asJsonString [
+
+	^ String streamContents: [ :aStream | 
+		  | aWriter |
+		  aWriter := NeoJSONWriter on: aStream.
+		  aWriter nextPut: self jsonObject ]
+]
+
 { #category : #'accessing - path' }
 GtJsonRasic >> at: anIndex [
 
