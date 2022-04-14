@@ -8,12 +8,6 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
-{ #category : #accessing }
-GtJsonIndex >> defaultJsonObject [
-
-	^ #(  )
-]
-
 { #category : #'gt - extensions' }
 GtJsonIndex >> gtJsonPathItemText [
 
@@ -48,9 +42,15 @@ GtJsonIndex >> parent: anObject [
 GtJsonIndex >> pathText [
 
 	<return: #BlText>
-	^ '[' asRopedText
-		  append: self index asRopedText;
-		  append: ']' asRopedText
+	| aPath |
+	aPath := '[' asRopedText
+		         append: self index asRopedText;
+		         append: ']' asRopedText.
+		         
+	self exists ifFalse: [ 
+		aPath foreground: BrGlamorousColors errorBackgroundColor ].
+		
+	^ aPath
 ]
 
 { #category : #enumerating }

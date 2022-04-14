@@ -75,12 +75,6 @@ GtJsonRasic >> atUnknown: anIndex [
 		  path: anIndex
 ]
 
-{ #category : #accessing }
-GtJsonRasic >> defaultJsonObject [
-
-	^ self subclassResponsibility
-]
-
 { #category : #testing }
 GtJsonRasic >> exists [
 
@@ -181,7 +175,7 @@ GtJsonRasic >> jsonObject [
 
 	^ jsonValue exists
 		  ifTrue: [ jsonValue value ]
-		  ifFalse: [ self defaultJsonObject ]
+		  ifFalse: [ nil ]
 ]
 
 { #category : #accessing }

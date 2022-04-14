@@ -18,12 +18,6 @@ GtJson class >> forJsonString: aString [
 		next
 ]
 
-{ #category : #accessing }
-GtJson >> defaultJsonObject [
-
-	^ nil
-]
-
 { #category : #'gt - extensions' }
 GtJson >> gtJsonPathItemText [
 

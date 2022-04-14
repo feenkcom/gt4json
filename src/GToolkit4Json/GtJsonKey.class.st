@@ -8,12 +8,6 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
-{ #category : #accessing }
-GtJsonKey >> defaultJsonObject [
-
-	^ OrderPreservingDictionary new
-]
-
 { #category : #'gt - extensions' }
 GtJsonKey >> gtJsonPathItemText [
 
