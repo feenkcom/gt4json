@@ -1,16 +1,16 @@
 Class {
-	#name : #GtRawJsonExamples,
+	#name : #GtJsonExamples,
 	#superclass : #Object,
 	#category : #'GToolkit4Json-Examples'
 }
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBChild [
+GtJsonExamples >> jsonBChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonRoot.
-	aRawObject := aParent atKey: #b.
+	aRawObject := aParent at: #b.
 
 	self assert: aRawObject parent equals: aParent.
 	self assert: aRawObject jsonObject equals: (self jsonObject at: #b).
@@ -19,12 +19,12 @@ GtRawJsonExamples >> jsonBChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD1Child [
+GtJsonExamples >> jsonBD1Child [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBDChild.
-	aRawObject := aParent atIndex: 1.
+	aRawObject := aParent at: 1.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -35,12 +35,12 @@ GtRawJsonExamples >> jsonBD1Child [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD1EChild [
+GtJsonExamples >> jsonBD1EChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD1Child.
-	aRawObject := aParent atKey: #e.
+	aRawObject := aParent at: #e.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -51,12 +51,12 @@ GtRawJsonExamples >> jsonBD1EChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD1FChild [
+GtJsonExamples >> jsonBD1FChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD1Child.
-	aRawObject := aParent atKey: #f.
+	aRawObject := aParent at: #f.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -67,12 +67,12 @@ GtRawJsonExamples >> jsonBD1FChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2Child [
+GtJsonExamples >> jsonBD2Child [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBDChild.
-	aRawObject := aParent atIndex: 2.
+	aRawObject := aParent at: 2.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -83,12 +83,12 @@ GtRawJsonExamples >> jsonBD2Child [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2FChild [
+GtJsonExamples >> jsonBD2FChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
-	aRawObject := aParent atKey: #f.
+	aRawObject := aParent at: #f.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -99,12 +99,12 @@ GtRawJsonExamples >> jsonBD2FChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2GChild [
+GtJsonExamples >> jsonBD2GChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
-	aRawObject := aParent atKey: #g.
+	aRawObject := aParent at: #g.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -115,12 +115,12 @@ GtRawJsonExamples >> jsonBD2GChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2HChild [
+GtJsonExamples >> jsonBD2HChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
-	aRawObject := aParent atKey: #h.
+	aRawObject := aParent at: #h.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -131,12 +131,12 @@ GtRawJsonExamples >> jsonBD2HChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2IChild [
+GtJsonExamples >> jsonBD2IChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
-	aRawObject := aParent atKey: #i.
+	aRawObject := aParent at: #i.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -147,12 +147,12 @@ GtRawJsonExamples >> jsonBD2IChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2JChild [
+GtJsonExamples >> jsonBD2JChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
-	aRawObject := aParent atKey: #j.
+	aRawObject := aParent at: #j.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -163,44 +163,46 @@ GtRawJsonExamples >> jsonBD2JChild [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2UnknownMapChild [
+GtJsonExamples >> jsonBD2UnknownMapChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
-	aRawObject := aParent atKey: #unknown.
+	aRawObject := aParent at: #unknown.
 
 	self assert: aRawObject parent equals: aParent.
+	self assert: aRawObject exists not.
 	self
 		assert: aRawObject jsonObject
-		equals: OrderPreservingDictionary new.
+		equals: nil.
 
 	^ aRawObject
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBD2UnknownMapLostChild [
+GtJsonExamples >> jsonBD2UnknownMapLostChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBD2UnknownMapChild.
-	aRawObject := aParent atKey: #lost.
+	aRawObject := aParent at: #lost.
 
 	self assert: aRawObject parent equals: aParent.
+	self assert: aRawObject exists not.
 	self
 		assert: aRawObject jsonObject
-		equals: OrderPreservingDictionary new.
+		equals: nil.
 
 	^ aRawObject
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonBDChild [
+GtJsonExamples >> jsonBDChild [
 
 	<gtExample>
 	| aParent aRawObject |
 	aParent := self jsonBChild.
-	aRawObject := aParent atKey: #d.
+	aRawObject := aParent at: #d.
 
 	self assert: aRawObject parent equals: aParent.
 	self
@@ -211,7 +213,7 @@ GtRawJsonExamples >> jsonBDChild [
 ]
 
 { #category : #'examples - json object' }
-GtRawJsonExamples >> jsonObject [
+GtJsonExamples >> jsonObject [
 
 	<gtExample>
 	^ OrderPreservingDictionary new
@@ -240,7 +242,7 @@ GtRawJsonExamples >> jsonObject [
 ]
 
 { #category : #'examples - raw json' }
-GtRawJsonExamples >> jsonRoot [
+GtJsonExamples >> jsonRoot [
 
 	<gtExample>
 	| aRawObject aJsonObject |
