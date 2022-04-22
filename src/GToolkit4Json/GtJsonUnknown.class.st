@@ -8,6 +8,12 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
+{ #category : #enumerating }
+GtJsonUnknown >> collect: aBlock [
+
+	^ #(  )
+]
+
 { #category : #'gt - extensions' }
 GtJsonUnknown >> gtJsonPathItemText [
 
