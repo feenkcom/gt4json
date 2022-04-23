@@ -1,5 +1,5 @@
 Class {
-	#name : #GtRawJsonValue,
+	#name : #GtJsonValue,
 	#superclass : #Object,
 	#instVars : [
 		'value'
@@ -8,31 +8,37 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtRawJsonValue class >> forValue: aJsonObject [
+GtJsonValue class >> error: anError [
+
+	^ GtJsonModelErrorValue new exception: anError
+]
+
+{ #category : #'instance creation' }
+GtJsonValue class >> forValue: aJsonObject [
 
 	^ self new value: aJsonObject
 ]
 
 { #category : #'instance creation' }
-GtRawJsonValue class >> null [
+GtJsonValue class >> null [
 
-	^ GtRawJsonMissingValue default
+	^ GtJsonMissingValue default
 ]
 
 { #category : #accessing }
-GtRawJsonValue >> exists [
+GtJsonValue >> exists [
 
 	^ true
 ]
 
 { #category : #accessing }
-GtRawJsonValue >> value [
+GtJsonValue >> value [
 
 	^ value
 ]
 
 { #category : #accessing }
-GtRawJsonValue >> value: anObject [
+GtJsonValue >> value: anObject [
 
 	value := anObject
 ]

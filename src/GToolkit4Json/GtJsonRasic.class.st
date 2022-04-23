@@ -214,7 +214,7 @@ GtJsonRasic >> initialize [
 
 	super initialize.
 
-	jsonValue := GtRawJsonValue null
+	jsonValue := GtJsonValue null
 ]
 
 { #category : #accessing }
@@ -228,7 +228,7 @@ GtJsonRasic >> jsonObject [
 { #category : #accessing }
 GtJsonRasic >> jsonObject: aJsonObject [
 
-	jsonValue := GtRawJsonValue forValue: aJsonObject
+	jsonValue := GtJsonValue forValue: aJsonObject
 ]
 
 { #category : #accessing }
