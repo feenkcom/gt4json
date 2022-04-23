@@ -61,6 +61,14 @@ GtJsonDateAndTimeModel >> gtPreviewFor: aView [
 ]
 
 { #category : #testing }
+GtJsonDateAndTimeModel >> ifValid: validBlock ifInvalid: invalidBlock [
+
+	^ self isValid
+		  ifTrue: [ validBlock cull: self value cull: self ]
+		  ifFalse: [ invalidBlock cull: self value cull: self ]
+]
+
+{ #category : #testing }
 GtJsonDateAndTimeModel >> isValid [
 
 	^ self dateAndTime exists
