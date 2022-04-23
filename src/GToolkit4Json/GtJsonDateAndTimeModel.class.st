@@ -11,6 +11,7 @@ Class {
 GtJsonDateAndTimeModel >> computeDateAndTime [
 
 	self json ifNil: [ ^ GtJsonModelValue defaultValue: nil ].
+	self json exists ifFalse: [ ^ GtJsonModelValue defaultValue: nil ].
 
 	[ ^ GtJsonModelValue value: self json jsonObject asDateAndTime ]
 		on: Error

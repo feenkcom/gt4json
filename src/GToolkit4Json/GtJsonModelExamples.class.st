@@ -5,6 +5,18 @@ Class {
 }
 
 { #category : #accessing }
+GtJsonModelExamples >> emptyDateAndTimeModel [
+
+	<gtExample>
+	| aModel |
+	aModel := GtJsonDateAndTimeModel new.
+
+	self assert: aModel isValid not.
+
+	^ aModel
+]
+
+{ #category : #accessing }
 GtJsonModelExamples >> invalidDateAndTimeModel [
 
 	<gtExample>
@@ -21,8 +33,11 @@ GtJsonModelExamples >> invalidDateAndTimeModel [
 GtJsonModelExamples >> missingDateAndTimeModel [
 
 	<gtExample>
-	| aModel |
-	aModel := GtJsonDateAndTimeModel new.
+	| aModel aRootJson aDateJson |
+	aRootJson := GtJson forJsonObject: #() asDictionary.
+	aDateJson := aRootJson at: #date.
+
+	aModel := GtJsonDateAndTimeModel forJson: aDateJson.
 
 	self assert: aModel isValid not.
 
