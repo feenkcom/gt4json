@@ -16,6 +16,15 @@ GtJsonListModelDefinition >> createModelForJson: aJson [
 	^ self modelClass forJsonCollection: aJson
 ]
 
+{ #category : #'instace creation' }
+GtJsonListModelDefinition >> createModelForValue: aCollection [
+
+	^ aCollection collect: [ :eachValue | 
+		  self modelClass
+			  forValue: eachValue
+			  defaultValue: self defaultValue ]
+]
+
 { #category : #accessing }
 GtJsonListModelDefinition >> defaultValue [
 

@@ -14,6 +14,14 @@ GtJsonLeafModel class >> forJson: aJson defaultValue: aValue [
 	^ (self forJson: aJson) defaultValue: aValue
 ]
 
+{ #category : #'instace creation' }
+GtJsonLeafModel class >> forValue: aValue defaultValue: aDefaultValue [
+
+	^ self new
+		  value: aValue;
+		  defaultValue: aDefaultValue
+]
+
 { #category : #private }
 GtJsonLeafModel >> convertJsonObjectToValue [
 

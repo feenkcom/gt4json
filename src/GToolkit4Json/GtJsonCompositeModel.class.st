@@ -7,14 +7,22 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
+{ #category : #'instance creation' }
+GtJsonCompositeModel class >> forValue: aValue defaultValue: aDefaultValue [
+
+	self assert: [ aValue class == self ] description: [ 
+		'Value `{1}` must be of an instance of {2}.' format: { 
+				aValue.
+				self } ].
+
+	^ aValue
+]
+
 { #category : #accessing }
 GtJsonCompositeModel >> createModelAt: aKey [
 
 	| aDefinition aJson aModel |
-	aDefinition := self jsonModelDefinition
-		               detect: [ :eachDefinition | 
-		               eachDefinition key = aKey ]
-		               ifNone: [ nil ].
+	aDefinition := self modelDefinitionAt: aKey.
 
 	self json ifNil: [ 
 		| aValue |
@@ -35,7 +43,7 @@ GtJsonCompositeModel >> createModelAt: aKey [
 	^ aModel
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtJsonCompositeModel >> gtJsonModelDefinitionFor: aView [
 
 	<gtView>
@@ -57,6 +65,25 @@ GtJsonCompositeModel >> gtJsonModelDefinitionFor: aView [
 		  actionUpdateButton
 ]
 
+{ #category : #'gt - extensions' }
+GtJsonCompositeModel >> gtModelChildren [
+
+	^ self models values
+]
+
+{ #category : #'gt - extensions' }
+GtJsonCompositeModel >> gtModelsFor: aView [
+
+	<gtView>
+	^ aView columnedList
+		  title: 'Models';
+		  priority: 65;
+		  items: [ self gtModelChildren ];
+		  column: 'Value' text: #value weight: 3;
+		  column: 'Type' text: #class;
+		  actionUpdateButton
+]
+
 { #category : #accessing }
 GtJsonCompositeModel >> modelAt: aKey [
 
@@ -69,6 +96,14 @@ GtJsonCompositeModel >> modelAt: aKey [
 GtJsonCompositeModel >> modelAt: aKey put: aValue [
 
 	self models at: aKey put: aValue
+]
+
+{ #category : #accessing }
+GtJsonCompositeModel >> modelDefinitionAt: aKey [
+
+	^ self jsonModelDefinition
+		  detect: [ :eachDefinition | eachDefinition key = aKey ]
+		  ifNone: [ nil ]
 ]
 
 { #category : #accessing }
@@ -86,5 +121,20 @@ GtJsonCompositeModel >> valueAt: aKey [
 { #category : #accessing }
 GtJsonCompositeModel >> valueAt: aKey put: aValue [
 
-	self modelAt: aKey put: aValue
+	| aDefinition aModel |
+	aDefinition := self modelDefinitionAt: aKey.
+	aDefinition
+		ifNotNil: [ aModel := aDefinition createModelForValue: aValue ]
+		ifNil: [ 
+		aModel := GtJsonLeafModel forValue: aValue defaultValue: nil ].
+
+	self modelAt: aKey put: aModel
+]
+
+{ #category : #testing }
+GtJsonCompositeModel >> valueExists [
+
+	"I am an instance, therefore I exist. Does not matter whether all my values are defined."
+
+	^ true
 ]

@@ -71,6 +71,16 @@ GtJsonModelExamples >> emptyPersonModel [
 	^ aPerson
 ]
 
+{ #category : #'examples - simple person' }
+GtJsonModelExamples >> emptySimplePersonModel [
+
+	<gtExample>
+	| aPerson |
+	aPerson := GtJsonSimplePersonModel new.
+	
+	^ aPerson
+]
+
 { #category : #'examples - date and time' }
 GtJsonModelExamples >> invalidDateAndTimeModel [
 
@@ -205,6 +215,28 @@ GtJsonModelExamples >> primaryAddressModel_JsonValues [
 		description: 'Address must be primary'.
 
 	^ anAddress
+]
+
+{ #category : #'examples - simple person' }
+GtJsonModelExamples >> simplePersonModel_ExplicitValue [
+
+	<gtExample>
+	| aPerson anAddress anAddressDefinition |
+	aPerson := self emptySimplePersonModel.
+
+	aPerson firstName: 'Joe'.
+	aPerson familyName: 'Doe'.
+	aPerson birthday: '12 June 2001' asDate.
+	anAddress := self primaryAddressModel_ExplicitValues.
+
+	aPerson address: anAddress.
+
+	self assert: aPerson firstName equals: 'Joe'.
+	self assert: aPerson familyName equals: 'Doe'.
+	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self assert: aPerson address equals: anAddress.
+
+	^ aPerson
 ]
 
 { #category : #'examples - date and time' }

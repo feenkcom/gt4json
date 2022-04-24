@@ -16,6 +16,12 @@ GtJsonModelDefinition >> createModelForJson: aJson [
 	^ self modelClass forJson: aJson defaultValue: self defaultValue
 ]
 
+{ #category : #'instace creation' }
+GtJsonModelDefinition >> createModelForValue: aValue [
+
+	^ self modelClass forValue: aValue defaultValue: self defaultValue
+]
+
 { #category : #accessing }
 GtJsonModelDefinition >> defaultValue [
 
@@ -31,8 +37,9 @@ GtJsonModelDefinition >> defaultValue: anObject [
 { #category : #accessing }
 GtJsonModelDefinition >> jsonModelDefinition [
 
-	^ self modelClass
-		  ifNotNil: [ :aClass | aClass new jsonModelDefinition ]
+	^ self object
+		  ifNotNil: [ :aModel | 
+		  	(aModel modelAt: self key) jsonModelDefinition ]
 		  ifNil: [ #(  ) ]
 ]
 

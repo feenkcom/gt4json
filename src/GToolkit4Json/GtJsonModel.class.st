@@ -88,6 +88,12 @@ GtJsonModel >> gtJsonPathFor: aView [
 		  view: #gtJsonPathFor:
 ]
 
+{ #category : #'gt - extensions' }
+GtJsonModel >> gtModelChildren [
+
+	^ #(  )
+]
+
 { #category : #accessing }
 GtJsonModel >> json [
 
