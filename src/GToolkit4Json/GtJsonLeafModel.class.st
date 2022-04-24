@@ -72,7 +72,7 @@ GtJsonLeafModel >> gtPreviewFor: aView [
 
 	^ aView forward
 		  title: 'Preview';
-		  priority: 1;
+		  priority: 55;
 		  object: [ self value ];
 		  view: #gtLiveFor:
 ]

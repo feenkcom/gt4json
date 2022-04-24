@@ -52,7 +52,7 @@ GtJsonCompositeModel >> gtJsonModelDefinitionFor: aView [
 		  priority: 60;
 		  items: [ self jsonModelDefinition ];
 		  children: #jsonModelDefinition;
-		  column: 'Key' text: #key weight: 2;
+		  column: 'Key' text: #key weight: 1.5;
 		  column: 'Value' text: [ :aDefinition | 
 			  aDefinition valueDo: [ :aValue :isDefault | 
 					  isDefault
