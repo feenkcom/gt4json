@@ -5,7 +5,7 @@ Class {
 		'key',
 		'parent'
 	],
-	#category : #'GToolkit4Json-Model'
+	#category : #'GToolkit4Json-Json'
 }
 
 { #category : #'gt - extensions' }

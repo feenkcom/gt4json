@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'defaultValue'
 	],
-	#category : #'GToolkit4Json-Users'
+	#category : #'GToolkit4Json-Model - Value'
 }
 
 { #category : #accessing }

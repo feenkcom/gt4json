@@ -6,7 +6,7 @@ Class {
 		'defaultValue',
 		'jsonObject'
 	],
-	#category : #'GToolkit4Json-Users'
+	#category : #'GToolkit4Json-Model - Value'
 }
 
 { #category : #accessing }

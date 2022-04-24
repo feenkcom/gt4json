@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtUniqueInstance',
 	#classTraits : 'TGtUniqueInstance classTrait',
-	#category : #'GToolkit4Json-Model'
+	#category : #'GToolkit4Json-Json - Value'
 }
 
 { #category : #testing }

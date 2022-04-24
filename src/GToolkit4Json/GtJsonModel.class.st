@@ -4,13 +4,19 @@ Class {
 	#instVars : [
 		'json'
 	],
-	#category : #'GToolkit4Json-Users'
+	#category : #'GToolkit4Json-Model'
 }
 
 { #category : #'instance creation' }
-GtJsonModel class >> forJson: aGtJson [
+GtJsonModel class >> forJson: aJson [
 
-	^ self new json: aGtJson
+	^ self new json: aJson
+]
+
+{ #category : #'instance creation' }
+GtJsonModel class >> forJson: aJson defaultValue: aValue [
+
+	^ self forJson: aJson
 ]
 
 { #category : #'instance creation' }
@@ -27,21 +33,44 @@ GtJsonModel class >> forJsonString: aString [
 	^ self new json: aJson
 ]
 
-{ #category : #testing }
-GtJsonModel >> exists [
+{ #category : #'instance creation - definition' }
+GtJsonModel class >> key: aKey at: anObject defaultValue: aValue [
 
-	^ self json isNotNil and: [ self json exists ]
+	^ GtJsonModelDefinition new
+		  object: anObject;
+		  modelClass: self;
+		  key: aKey;
+		  defaultValue: aValue
+]
+
+{ #category : #'instance creation - definition' }
+GtJsonModel class >> key: aKey defaultValue: aValue [
+
+	^ GtJsonModelDefinition new
+		  modelClass: self;
+		  key: aKey;
+		  defaultValue: aValue
+]
+
+{ #category : #'instance creation - definition' }
+GtJsonModel class >> listKey: aKey at: anObject defaultValue: aValue [
+
+	^ GtJsonListModelDefinition new
+		  object: anObject;
+		  modelClass: self;
+		  key: aKey;
+		  defaultValue: aValue
 ]
 
 { #category : #'gt - extensions' }
 GtJsonModel >> gtJsonObjectFor: aView context: aContext [
 
 	<gtView>
-	self exists ifFalse: [ ^ aView empty ].
+	self jsonExists ifFalse: [ ^ aView empty ].
 
 	^ aView forward
 		  title: 'JSON Object';
-		  priority: 60;
+		  priority: 71;
 		  object: [ self json ];
 		  view: #gtJsonObjectFor:context:
 ]
@@ -54,7 +83,7 @@ GtJsonModel >> gtJsonPathFor: aView [
 
 	^ aView forward
 		  title: 'JSON Path';
-		  priority: 62;
+		  priority: 72;
 		  object: [ self json ];
 		  view: #gtJsonPathFor:
 ]
@@ -69,4 +98,16 @@ GtJsonModel >> json [
 GtJsonModel >> json: anObject [
 
 	json := anObject
+]
+
+{ #category : #testing }
+GtJsonModel >> jsonExists [
+
+	^ self json isNotNil and: [ self json exists ]
+]
+
+{ #category : #accessing }
+GtJsonModel >> jsonModelDefinition [
+
+	^ #(  )
 ]

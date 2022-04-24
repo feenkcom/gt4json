@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'value'
 	],
-	#category : #'GToolkit4Json-Users'
+	#category : #'GToolkit4Json-Model - Value'
 }
 
 { #category : #'instance creation' }
@@ -32,6 +32,17 @@ GtJsonModelValue class >> value: anObject [
 GtJsonModelValue >> exists [
 
 	^ true
+]
+
+{ #category : #'gt - extensions' }
+GtJsonModelValue >> gtLiveFor: aView [
+
+	<gtView>
+	^ aView forward
+		  title: 'Live';
+		  priority: 1;
+		  object: [ self value ];
+		  view: #gtLiveFor:
 ]
 
 { #category : #accessing }

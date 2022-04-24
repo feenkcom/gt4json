@@ -1,7 +1,7 @@
 Class {
 	#name : #GtJson,
 	#superclass : #GtJsonRasic,
-	#category : #'GToolkit4Json-Model'
+	#category : #'GToolkit4Json-Json'
 }
 
 { #category : #'instance creation' }

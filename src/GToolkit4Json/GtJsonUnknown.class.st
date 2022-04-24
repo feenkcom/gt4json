@@ -5,7 +5,7 @@ Class {
 		'path',
 		'parent'
 	],
-	#category : #'GToolkit4Json-Model'
+	#category : #'GToolkit4Json-Json'
 }
 
 { #category : #enumerating }
