@@ -68,7 +68,7 @@ GtJsonCompositeModel >> gtJsonModelDefinitionFor: aView [
 { #category : #'gt - extensions' }
 GtJsonCompositeModel >> gtModelChildren [
 
-	^ self models values
+	^ self models associations
 ]
 
 { #category : #'gt - extensions' }
@@ -79,9 +79,15 @@ GtJsonCompositeModel >> gtModelsFor: aView [
 		  title: 'Models';
 		  priority: 65;
 		  items: [ self gtModelChildren ];
-		  column: 'Value' text: #value weight: 3;
-		  column: 'Type' text: #class;
-		  actionUpdateButton
+		  column: 'Key' text: #key;
+		  column: 'Value' text: [ :anAssoc | anAssoc value value ] weight: 3;
+		  send: #value;
+		  actionUpdateButton;
+		  actionButtonIcon: BrGlamorousIcons trash
+		  tooltip: 'Remove models'
+		  action: [ :aButton :aTab | 
+			  models := nil.
+			  aTab viewContentElement phlow update ]
 ]
 
 { #category : #accessing }
