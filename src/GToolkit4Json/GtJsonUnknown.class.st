@@ -5,8 +5,14 @@ Class {
 		'path',
 		'parent'
 	],
-	#category : #'GToolkit4Json-Model'
+	#category : #'GToolkit4Json-Json'
 }
+
+{ #category : #enumerating }
+GtJsonUnknown >> collect: aBlock [
+
+	^ #(  )
+]
 
 { #category : #'gt - extensions' }
 GtJsonUnknown >> gtJsonPathItemText [

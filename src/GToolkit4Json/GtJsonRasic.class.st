@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'jsonValue'
 	],
-	#category : #'GToolkit4Json-Model'
+	#category : #'GToolkit4Json-Json'
 }
 
 { #category : #converting }
@@ -66,7 +66,7 @@ GtJsonRasic >> atKey: aKey [
 				  key: aKey ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - path' }
 GtJsonRasic >> atLeaf: anIndex [
 
 	^ GtJsonUnknown new
@@ -88,6 +88,38 @@ GtJsonRasic >> atUnknown: anIndex [
 	^ GtJsonUnknown new
 		  parent: self;
 		  path: anIndex
+]
+
+{ #category : #accessing }
+GtJsonRasic >> collect: aBlock [
+
+	^ self jsonObject species
+		  new: self jsonObject size
+		  streamContents: [ :aStream | 
+			  self jsonObject isDictionary
+				  ifTrue: [ 
+					  self jsonObject keysDo: [ :aKey | 
+						  | aJson aResult |
+						  aJson := self at: aKey.
+						  aResult := aBlock cull: aJson.
+						  aStream nextPut: aResult ] ]
+				  ifFalse: [ 
+					  1 to: self jsonObject size do: [ :anIndex | 
+						  | aJson aResult |
+						  aJson := self at: anIndex.
+						  aResult := aBlock cull: aJson.
+						  aStream nextPut: aResult ] ] ]
+]
+
+{ #category : #'reflective operations' }
+GtJsonRasic >> doesNotUnderstand: message [
+
+	"Overwritten so that 'self foo' becomes 'self at: #foo' except that self is returned"
+
+	| key |
+	key := message selector.
+	key isUnary ifTrue: [ ^ self at: key ].
+	^ super doesNotUnderstand: message
 ]
 
 { #category : #testing }
@@ -182,7 +214,7 @@ GtJsonRasic >> initialize [
 
 	super initialize.
 
-	jsonValue := GtRawJsonValue null
+	jsonValue := GtJsonValue null
 ]
 
 { #category : #accessing }
@@ -196,7 +228,7 @@ GtJsonRasic >> jsonObject [
 { #category : #accessing }
 GtJsonRasic >> jsonObject: aJsonObject [
 
-	jsonValue := GtRawJsonValue forValue: aJsonObject
+	jsonValue := GtJsonValue forValue: aJsonObject
 ]
 
 { #category : #accessing }
@@ -228,6 +260,13 @@ GtJsonRasic >> printOn: aStream [
 GtJsonRasic >> root [
 
 	^ self withParentsDo: [ :aNode | ^ aNode ]
+]
+
+{ #category : #evaluating }
+GtJsonRasic >> value [
+	"Overwritten to make this accessor available as key"
+	
+	^ self at: #value
 ]
 
 { #category : #enumerating }

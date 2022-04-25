@@ -1,13 +1,13 @@
 Class {
-	#name : #GtRawJsonMissingValue,
+	#name : #GtJsonMissingValue,
 	#superclass : #Object,
 	#traits : 'TGtUniqueInstance',
 	#classTraits : 'TGtUniqueInstance classTrait',
-	#category : #'GToolkit4Json-Model'
+	#category : #'GToolkit4Json-Json - Value'
 }
 
 { #category : #testing }
-GtRawJsonMissingValue >> exists [
+GtJsonMissingValue >> exists [
 
 	^ false
 ]

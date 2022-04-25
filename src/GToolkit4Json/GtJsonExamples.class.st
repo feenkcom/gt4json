@@ -4,7 +4,7 @@ Class {
 	#category : #'GToolkit4Json-Examples'
 }
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBChild [
 
 	<gtExample>
@@ -18,7 +18,7 @@ GtJsonExamples >> jsonBChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD1Child [
 
 	<gtExample>
@@ -34,7 +34,7 @@ GtJsonExamples >> jsonBD1Child [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD1EChild [
 
 	<gtExample>
@@ -50,7 +50,7 @@ GtJsonExamples >> jsonBD1EChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD1FChild [
 
 	<gtExample>
@@ -66,7 +66,7 @@ GtJsonExamples >> jsonBD1FChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2Child [
 
 	<gtExample>
@@ -82,7 +82,7 @@ GtJsonExamples >> jsonBD2Child [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2FChild [
 
 	<gtExample>
@@ -98,7 +98,7 @@ GtJsonExamples >> jsonBD2FChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2GChild [
 
 	<gtExample>
@@ -114,7 +114,7 @@ GtJsonExamples >> jsonBD2GChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2HChild [
 
 	<gtExample>
@@ -130,7 +130,7 @@ GtJsonExamples >> jsonBD2HChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2IChild [
 
 	<gtExample>
@@ -146,7 +146,7 @@ GtJsonExamples >> jsonBD2IChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2JChild [
 
 	<gtExample>
@@ -162,7 +162,7 @@ GtJsonExamples >> jsonBD2JChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2UnknownMapChild [
 
 	<gtExample>
@@ -179,7 +179,7 @@ GtJsonExamples >> jsonBD2UnknownMapChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBD2UnknownMapLostChild [
 
 	<gtExample>
@@ -196,7 +196,7 @@ GtJsonExamples >> jsonBD2UnknownMapLostChild [
 	^ aRawObject
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonBDChild [
 
 	<gtExample>
@@ -241,7 +241,7 @@ GtJsonExamples >> jsonObject [
 		  yourself
 ]
 
-{ #category : #'examples - raw json' }
+{ #category : #'examples - json' }
 GtJsonExamples >> jsonRoot [
 
 	<gtExample>
@@ -252,4 +252,40 @@ GtJsonExamples >> jsonRoot [
 	self assert: aRawObject jsonObject equals: aJsonObject.
 
 	^ aRawObject
+]
+
+{ #category : #'examples - person' }
+GtJsonExamples >> personJson [
+
+	<gtExample>
+	| aJsonObject aJson |
+	aJsonObject := self personJsonObject.
+	aJson := GtJson forJsonObject: aJsonObject.
+
+	self assert: aJson jsonObject equals: aJsonObject.
+	self assert: (aJson at: #birthday) jsonObject equals: '12 June 2001'.
+	self assert: aJson birthday jsonObject equals: '12 June 2001'.
+
+	^ aJson
+]
+
+{ #category : #'examples - person' }
+GtJsonExamples >> personJsonObject [
+
+	<gtExample>
+	^ OrderPreservingDictionary new
+		  at: #firstName put: 'Joe';
+		  at: #familyName put: 'Doe';
+		  at: #birthday put: '12 June 2001';
+		  at: #addresses put: { 
+				  (OrderPreservingDictionary new
+					   at: #street put: 'Kopernikova 345';
+					   at: #city put: 'Bratislava';
+					   yourself).
+				  (OrderPreservingDictionary new
+					   at: #street put: 'Havlova 89';
+					   at: #city put: 'Praha';
+					   at: #is_primary put: true;
+					   yourself) };
+		  yourself
 ]
