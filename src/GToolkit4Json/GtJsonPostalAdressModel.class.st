@@ -1,6 +1,6 @@
 Class {
 	#name : #GtJsonPostalAdressModel,
-	#superclass : #GtJsonCompositeModel,
+	#superclass : #GtJsonDictionaryModel,
 	#category : #'GToolkit4Json-Examples'
 }
 

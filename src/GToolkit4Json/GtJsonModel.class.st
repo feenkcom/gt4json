@@ -44,18 +44,17 @@ GtJsonModel class >> key: aKey at: anObject defaultValue: aValue [
 ]
 
 { #category : #'instance creation - definition' }
-GtJsonModel class >> key: aKey defaultValue: aValue [
-
-	^ GtJsonModelDefinition new
-		  modelClass: self;
-		  key: aKey;
-		  defaultValue: aValue
+GtJsonModel class >> list: anObject defaultValue: aValue [
+	^ GtJsonCollectionModelDefinition new
+		modelClass: self;
+		object: anObject;
+		defaultValue: aValue
 ]
 
 { #category : #'instance creation - definition' }
 GtJsonModel class >> listKey: aKey at: anObject defaultValue: aValue [
 
-	^ GtJsonListModelDefinition new
+	^ GtJsonCollectionAtKeyModelDefinition new
 		  object: anObject;
 		  modelClass: self;
 		  key: aKey;

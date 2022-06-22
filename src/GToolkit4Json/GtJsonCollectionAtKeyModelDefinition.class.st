@@ -1,5 +1,5 @@
 Class {
-	#name : #GtJsonListModelDefinition,
+	#name : #GtJsonCollectionAtKeyModelDefinition,
 	#superclass : #Object,
 	#instVars : [
 		'key',
@@ -11,13 +11,13 @@ Class {
 }
 
 { #category : #'instace creation' }
-GtJsonListModelDefinition >> createModelForJson: aJson [
+GtJsonCollectionAtKeyModelDefinition >> createModelForJson: aJson [
 
 	^ self modelClass forJsonCollection: aJson
 ]
 
 { #category : #'instace creation' }
-GtJsonListModelDefinition >> createModelForValue: aCollection [
+GtJsonCollectionAtKeyModelDefinition >> createModelForValue: aCollection [
 
 	^ aCollection collect: [ :eachValue | 
 		  self modelClass
@@ -26,68 +26,68 @@ GtJsonListModelDefinition >> createModelForValue: aCollection [
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> defaultValue [
+GtJsonCollectionAtKeyModelDefinition >> defaultValue [
 
 	^ defaultValue
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> defaultValue: anObject [
+GtJsonCollectionAtKeyModelDefinition >> defaultValue: anObject [
 
 	defaultValue := anObject
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> jsonModelDefinition [
+GtJsonCollectionAtKeyModelDefinition >> jsonModelDefinition [
 
 	| aCollection |
 	aCollection := self object modelAt: self key.
 
 	^ aCollection withIndexCollect: [ :eachModel :anIndex | 
-		  GtJsonListItemModelDefinition new
+		  GtJsonCollectionItemModelDefinition new
 			  object: eachModel;
 			  modelClass: self modelClass;
 			  key: anIndex ]
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> key [
+GtJsonCollectionAtKeyModelDefinition >> key [
 
 	^ key
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> key: anObject [
+GtJsonCollectionAtKeyModelDefinition >> key: anObject [
 
 	key := anObject
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> modelClass [
+GtJsonCollectionAtKeyModelDefinition >> modelClass [
 
 	^ modelClass
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> modelClass: anObject [
+GtJsonCollectionAtKeyModelDefinition >> modelClass: anObject [
 
 	modelClass := anObject
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> object [
+GtJsonCollectionAtKeyModelDefinition >> object [
 
 	^ object
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> object: anObject [
+GtJsonCollectionAtKeyModelDefinition >> object: anObject [
 
 	object := anObject
 ]
 
 { #category : #printing }
-GtJsonListModelDefinition >> printOn: aStream [
+GtJsonCollectionAtKeyModelDefinition >> printOn: aStream [
 
 	super printOn: aStream.
 
@@ -100,7 +100,7 @@ GtJsonListModelDefinition >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtJsonListModelDefinition >> valueDo: aBlock [
+GtJsonCollectionAtKeyModelDefinition >> valueDo: aBlock [
 
 	| aCollection isDefaultValue |
 	aCollection := self object modelAt: self key.

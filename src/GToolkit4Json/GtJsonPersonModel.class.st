@@ -1,6 +1,6 @@
 Class {
 	#name : #GtJsonPersonModel,
-	#superclass : #GtJsonCompositeModel,
+	#superclass : #GtJsonDictionaryModel,
 	#category : #'GToolkit4Json-Examples'
 }
 
@@ -63,4 +63,16 @@ GtJsonPersonModel >> jsonModelDefinition [
 			   listKey: #addresses
 			   at: self
 			   defaultValue: #(  )) }
+]
+
+{ #category : #printing }
+GtJsonPersonModel >> printOn: aStream [
+	super printOn: aStream.
+
+	aStream
+		nextPut: $(;
+		nextPutAll: self firstName asString;
+		space;
+		nextPutAll: self familyName asString;
+		nextPut: $)
 ]
