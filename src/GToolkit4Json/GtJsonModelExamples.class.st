@@ -221,7 +221,7 @@ GtJsonModelExamples >> primaryAddressModel_JsonValues [
 GtJsonModelExamples >> simplePersonModel_ExplicitValue [
 
 	<gtExample>
-	| aPerson anAddress anAddressDefinition |
+	| aPerson anAddress |
 	aPerson := self emptySimplePersonModel.
 
 	aPerson firstName: 'Joe'.
