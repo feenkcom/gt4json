@@ -71,6 +71,15 @@ GtJsonModelExamples >> emptyPersonModel [
 	^ aPerson
 ]
 
+{ #category : #'examples - persons' }
+GtJsonModelExamples >> emptyPersonsModel [
+	<gtExample>
+	| aPerson |
+	aPerson := GtJsonPersonsModel new.
+
+	^ aPerson
+]
+
 { #category : #'examples - simple person' }
 GtJsonModelExamples >> emptySimplePersonModel [
 
@@ -158,6 +167,32 @@ GtJsonModelExamples >> personModel_JsonValue [
 	^ aPerson
 ]
 
+{ #category : #'examples - person' }
+GtJsonModelExamples >> personsJson [
+
+	<gtExample>
+	^ GtJsonExamples new personsJson
+]
+
+{ #category : #'examples - persons' }
+GtJsonModelExamples >> personsModel_JsonValue [
+	<gtExample>
+	| aJson aPersons |
+	aPersons := self emptyPersonsModel.
+
+	aPersons
+		items: {self personModel_ExplicitValue.
+				self personModel_JsonValue}.
+
+	self assert: aPersons size equals: 2.
+	self assert: (aPersons modelAt: 1) firstName equals: 'Joe'.
+	self assert: (aPersons modelAt: 1) familyName equals: 'Doe'.
+	self assert: (aPersons modelAt: 1) birthday equals: '12 June 2001' asDate.
+	self assert: (aPersons modelAt: 1) addresses size equals: 2.
+
+	^ aPersons
+]
+
 { #category : #'examples - address' }
 GtJsonModelExamples >> primaryAddressJson [
 
@@ -221,7 +256,7 @@ GtJsonModelExamples >> primaryAddressModel_JsonValues [
 GtJsonModelExamples >> simplePersonModel_ExplicitValue [
 
 	<gtExample>
-	| aPerson anAddress anAddressDefinition |
+	| aPerson anAddress |
 	aPerson := self emptySimplePersonModel.
 
 	aPerson firstName: 'Joe'.

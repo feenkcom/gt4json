@@ -1,5 +1,5 @@
 Class {
-	#name : #GtJsonCompositeModel,
+	#name : #GtJsonDictionaryModel,
 	#superclass : #GtJsonModel,
 	#instVars : [
 		'models'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtJsonCompositeModel class >> forValue: aValue defaultValue: aDefaultValue [
+GtJsonDictionaryModel class >> forValue: aValue defaultValue: aDefaultValue [
 
 	self assert: [ aValue class == self ] description: [ 
 		'Value `{1}` must be of an instance of {2}.' format: { 
@@ -19,7 +19,7 @@ GtJsonCompositeModel class >> forValue: aValue defaultValue: aDefaultValue [
 ]
 
 { #category : #accessing }
-GtJsonCompositeModel >> createModelAt: aKey [
+GtJsonDictionaryModel >> createModelAt: aKey [
 
 	| aDefinition aJson aModel |
 	aDefinition := self modelDefinitionAt: aKey.
@@ -44,14 +44,14 @@ GtJsonCompositeModel >> createModelAt: aKey [
 ]
 
 { #category : #'gt - extensions' }
-GtJsonCompositeModel >> gtJsonModelDefinitionFor: aView [
+GtJsonDictionaryModel >> gtJsonModelDefinitionFor: aView [
 
 	<gtView>
 	^ aView columnedTree
 		  title: 'Structure';
 		  priority: 60;
 		  items: [ self jsonModelDefinition ];
-		  children: #jsonModelDefinition;
+		  children: [ :anItem | anItem jsonModelDefinition asCollection ];
 		  column: 'Key' text: #key weight: 1.5;
 		  column: 'Value' text: [ :aDefinition | 
 			  aDefinition valueDo: [ :aValue :isDefault | 
@@ -66,13 +66,13 @@ GtJsonCompositeModel >> gtJsonModelDefinitionFor: aView [
 ]
 
 { #category : #'gt - extensions' }
-GtJsonCompositeModel >> gtModelChildren [
+GtJsonDictionaryModel >> gtModelChildren [
 
 	^ self models associations
 ]
 
 { #category : #'gt - extensions' }
-GtJsonCompositeModel >> gtModelsFor: aView [
+GtJsonDictionaryModel >> gtModelsFor: aView [
 
 	<gtView>
 	^ aView columnedList
@@ -91,7 +91,7 @@ GtJsonCompositeModel >> gtModelsFor: aView [
 ]
 
 { #category : #accessing }
-GtJsonCompositeModel >> modelAt: aKey [
+GtJsonDictionaryModel >> modelAt: aKey [
 
 	^ self models
 		  at: aKey
@@ -99,13 +99,13 @@ GtJsonCompositeModel >> modelAt: aKey [
 ]
 
 { #category : #accessing }
-GtJsonCompositeModel >> modelAt: aKey put: aValue [
+GtJsonDictionaryModel >> modelAt: aKey put: aValue [
 
 	self models at: aKey put: aValue
 ]
 
 { #category : #accessing }
-GtJsonCompositeModel >> modelDefinitionAt: aKey [
+GtJsonDictionaryModel >> modelDefinitionAt: aKey [
 
 	^ self jsonModelDefinition
 		  detect: [ :eachDefinition | eachDefinition key = aKey ]
@@ -113,19 +113,19 @@ GtJsonCompositeModel >> modelDefinitionAt: aKey [
 ]
 
 { #category : #accessing }
-GtJsonCompositeModel >> models [
+GtJsonDictionaryModel >> models [
 
 	^ models ifNil: [ models := Dictionary new ]
 ]
 
 { #category : #accessing }
-GtJsonCompositeModel >> valueAt: aKey [
+GtJsonDictionaryModel >> valueAt: aKey [
 
 	^ (self modelAt: aKey) value
 ]
 
 { #category : #accessing }
-GtJsonCompositeModel >> valueAt: aKey put: aValue [
+GtJsonDictionaryModel >> valueAt: aKey put: aValue [
 
 	| aDefinition aModel |
 	aDefinition := self modelDefinitionAt: aKey.
@@ -138,7 +138,7 @@ GtJsonCompositeModel >> valueAt: aKey put: aValue [
 ]
 
 { #category : #testing }
-GtJsonCompositeModel >> valueExists [
+GtJsonDictionaryModel >> valueExists [
 
 	"I am an instance, therefore I exist. Does not matter whether all my values are defined."
 

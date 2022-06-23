@@ -1,5 +1,5 @@
 Class {
-	#name : #GtJsonListItemModelDefinition,
+	#name : #GtJsonCollectionItemModelDefinition,
 	#superclass : #Object,
 	#instVars : [
 		'key',
@@ -10,49 +10,49 @@ Class {
 }
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> jsonModelDefinition [
+GtJsonCollectionItemModelDefinition >> jsonModelDefinition [
 
 	^ self object jsonModelDefinition
 ]
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> key [
+GtJsonCollectionItemModelDefinition >> key [
 
 	^ key
 ]
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> key: anObject [
+GtJsonCollectionItemModelDefinition >> key: anObject [
 
 	key := anObject
 ]
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> modelClass [
+GtJsonCollectionItemModelDefinition >> modelClass [
 
 	^ modelClass
 ]
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> modelClass: anObject [
+GtJsonCollectionItemModelDefinition >> modelClass: anObject [
 
 	modelClass := anObject
 ]
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> object [
+GtJsonCollectionItemModelDefinition >> object [
 
 	^ object
 ]
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> object: anObject [
+GtJsonCollectionItemModelDefinition >> object: anObject [
 
 	object := anObject
 ]
 
 { #category : #accessing }
-GtJsonListItemModelDefinition >> valueDo: aBlock [
+GtJsonCollectionItemModelDefinition >> valueDo: aBlock [
 
 	^ aBlock cull: self object cull: false
 ]

@@ -289,3 +289,45 @@ GtJsonExamples >> personJsonObject [
 					   yourself) };
 		  yourself
 ]
+
+{ #category : #'examples - person' }
+GtJsonExamples >> personTwoJsonObject [
+
+	<gtExample>
+	^ OrderPreservingDictionary new
+		  at: #firstName put: 'Jim';
+		  at: #familyName put: 'Doe';
+		  at: #birthday put: '21 June 2021';
+		  at: #addresses put: { 
+				  (OrderPreservingDictionary new
+					   at: #street put: 'Vladimírova 108';
+					   at: #city put: 'Košice';
+					   yourself).
+				  (OrderPreservingDictionary new
+					   at: #street put: 'Havlova 89';
+					   at: #city put: 'Praha';
+					   at: #is_primary put: true;
+					   yourself) };
+		  yourself
+]
+
+{ #category : #'examples - person' }
+GtJsonExamples >> personsJson [
+
+	<gtExample>
+	| aJsonObject aJson |
+	aJsonObject := self personsJsonObject.
+	aJson := GtJson forJsonObject: aJsonObject.
+
+	self assert: aJson jsonObject equals: aJsonObject.
+	self assert: (aJson atPath: #(1 #birthday)) jsonObject equals: '12 June 2001'.
+	self assert: (aJson at: 1) birthday jsonObject equals: '12 June 2001'.
+
+	^ aJson
+]
+
+{ #category : #'examples - person' }
+GtJsonExamples >> personsJsonObject [
+	<gtExample>
+	^ Array with: self personJsonObject with: self personTwoJsonObject
+]
