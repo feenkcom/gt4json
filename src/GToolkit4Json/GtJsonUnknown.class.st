@@ -1,6 +1,6 @@
 Class {
 	#name : #GtJsonUnknown,
-	#superclass : #GtJsonRasic,
+	#superclass : #GtJsonBasic,
 	#instVars : [
 		'path',
 		'parent'

@@ -1,6 +1,6 @@
 Class {
 	#name : #GtJsonIndex,
-	#superclass : #GtJsonRasic,
+	#superclass : #GtJsonBasic,
 	#instVars : [
 		'parent',
 		'index'

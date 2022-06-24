@@ -1,6 +1,6 @@
 Class {
 	#name : #GtJson,
-	#superclass : #GtJsonRasic,
+	#superclass : #GtJsonBasic,
 	#category : #'GToolkit4Json-Json'
 }
 
