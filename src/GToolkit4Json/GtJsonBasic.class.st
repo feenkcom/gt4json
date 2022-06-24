@@ -1,5 +1,5 @@
 Class {
-	#name : #GtJsonRasic,
+	#name : #GtJsonBasic,
 	#superclass : #Object,
 	#instVars : [
 		'jsonValue'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #converting }
-GtJsonRasic >> asJson [
+GtJsonBasic >> asJson [
 
 	^ self
 ]
 
 { #category : #converting }
-GtJsonRasic >> asJsonString [
+GtJsonBasic >> asJsonString [
 
 	^ String streamContents: [ :aStream | 
 		  | aWriter |
@@ -23,7 +23,7 @@ GtJsonRasic >> asJsonString [
 ]
 
 { #category : #'accessing - path' }
-GtJsonRasic >> at: anIndex [
+GtJsonBasic >> at: anIndex [
 
 	self exists ifFalse: [ ^ self atUnknown: anIndex ].
 
@@ -32,26 +32,67 @@ GtJsonRasic >> at: anIndex [
 	(self jsonObject isCollection and: [ self jsonObject isString not ])
 		ifTrue: [ ^ self atIndex: anIndex ].
 
-	^ self atLeaf: anIndex
+	^ self atUnknown: anIndex
+]
+
+{ #category : #modifying }
+GtJsonBasic >> at: anIndex put: aValue [
+	| anInstance |
+	anInstance := self.
+	self exists
+		ifFalse: [ anInstance := self createJsonObject: anIndex.
+			self
+				assert: [ anInstance exists ]
+				description: [ 'JSON value was not created: {1}' format: {anInstance} ] ].
+
+	anInstance jsonObject isDictionary
+		ifTrue: [ ^ anInstance atKey: anIndex put: aValue ].
+
+	(anInstance jsonObject isCollection and: [ anInstance jsonObject isString not ])
+		ifTrue: [ ^ anInstance atIndex: anIndex put: aValue ].
+
+	self
+		error: ('Cannot put {2} at {1} into a leaf object: {3}'
+				format: {anIndex.
+						aValue.
+						anInstance})
 ]
 
 { #category : #'accessing - path' }
-GtJsonRasic >> atIndex: anIndex [
-
+GtJsonBasic >> atIndex: anIndex [
 	| aJsonObject |
-	aJsonObject := self jsonObject at: anIndex ifAbsent: [ 
-		               ^ GtJsonIndex new
-			                 parent: self;
-			                 index: anIndex ].
+	self
+		assert: [ anIndex isInteger ]
+		description: [ 'Index must be an integer number: {1}' format: {anIndex} ].
+
+	aJsonObject := self jsonObject
+			at: anIndex
+			ifAbsent: [ ^ GtJsonIndex new
+					parent: self;
+					index: anIndex ].
 
 	^ GtJsonIndex new
-		  parent: self;
-		  index: anIndex;
-		  jsonObject: aJsonObject
+		parent: self;
+		index: anIndex;
+		jsonObject: aJsonObject
 ]
 
 { #category : #'accessing - path' }
-GtJsonRasic >> atKey: aKey [
+GtJsonBasic >> atIndex: anIndex put: aValue [
+	| aJsonObject |
+	self
+		assert: [ anIndex isInteger ]
+		description: [ 'Index must be an integer: {1}' format: {anIndex} ].
+
+	anIndex > self jsonObject size
+		ifTrue: [ self increaseCollectionToSize: anIndex ].
+	self jsonObject at: anIndex put: aValue.
+
+	^ self atIndex: anIndex
+]
+
+{ #category : #'accessing - path' }
+GtJsonBasic >> atKey: aKey [
 
 	^ self jsonObject
 		  at: aKey
@@ -66,16 +107,14 @@ GtJsonRasic >> atKey: aKey [
 				  key: aKey ]
 ]
 
-{ #category : #'accessing - path' }
-GtJsonRasic >> atLeaf: anIndex [
-
-	^ GtJsonUnknown new
-		  parent: self;
-		  path: anIndex
+{ #category : #modifying }
+GtJsonBasic >> atKey: aKey put: aValue [
+	self jsonObject at: aKey put: aValue.
+	^ self atKey: aKey
 ]
 
 { #category : #'accessing - path' }
-GtJsonRasic >> atPath: aCollection [
+GtJsonBasic >> atPath: aCollection [
 
 	^ aCollection
 		  inject: self
@@ -83,7 +122,17 @@ GtJsonRasic >> atPath: aCollection [
 ]
 
 { #category : #'accessing - path' }
-GtJsonRasic >> atUnknown: anIndex [
+GtJsonBasic >> atPath: aCollection put: aValue [
+	| aParent |
+	aParent := aCollection allButLast
+			inject: self
+			into: [ :aJson :anIndex | aJson at: anIndex ].
+
+	^ aParent at: aCollection last put: aValue
+]
+
+{ #category : #'accessing - path' }
+GtJsonBasic >> atUnknown: anIndex [
 
 	^ GtJsonUnknown new
 		  parent: self;
@@ -91,7 +140,7 @@ GtJsonRasic >> atUnknown: anIndex [
 ]
 
 { #category : #accessing }
-GtJsonRasic >> collect: aBlock [
+GtJsonBasic >> collect: aBlock [
 
 	^ self jsonObject species
 		  new: self jsonObject size
@@ -111,8 +160,21 @@ GtJsonRasic >> collect: aBlock [
 						  aStream nextPut: aResult ] ] ]
 ]
 
+{ #category : #private }
+GtJsonBasic >> createJsonObject: aType [
+	"Create an empty JSON object based on the type.
+	If the type is an integer value, then we create en empty list.
+	Otherwise we create a dictionary object.
+	Return the same GtJsonBasic instance if it holds the empty JSON object.
+	It a GtJsonBasic instance do not hold the empty JSON object, 
+	return a new GtJsonBasic instance."
+	<return: #GtJsonBasic>
+
+	self subclassResponsibility
+]
+
 { #category : #'reflective operations' }
-GtJsonRasic >> doesNotUnderstand: message [
+GtJsonBasic >> doesNotUnderstand: message [
 
 	"Overwritten so that 'self foo' becomes 'self at: #foo' except that self is returned"
 
@@ -123,7 +185,7 @@ GtJsonRasic >> doesNotUnderstand: message [
 ]
 
 { #category : #testing }
-GtJsonRasic >> exists [
+GtJsonBasic >> exists [
 
 	"Return true if a value exists at the given path"
 
@@ -131,7 +193,7 @@ GtJsonRasic >> exists [
 ]
 
 { #category : #accessing }
-GtJsonRasic >> fullPathText [
+GtJsonBasic >> fullPathText [
 
 	| aPath |
 	aPath := '' asRopedText.
@@ -141,7 +203,7 @@ GtJsonRasic >> fullPathText [
 ]
 
 { #category : #'gt - extensions' }
-GtJsonRasic >> gtConstructRawJsonFor: anItem treeNode: aNode jsonObject: aCollection [
+GtJsonBasic >> gtConstructRawJsonFor: anItem treeNode: aNode jsonObject: aCollection [
 
 	| aChild |
 	aChild := self.
@@ -156,7 +218,7 @@ GtJsonRasic >> gtConstructRawJsonFor: anItem treeNode: aNode jsonObject: aCollec
 ]
 
 { #category : #'gt - extensions' }
-GtJsonRasic >> gtJsonObjectFor: aView context: aContext [
+GtJsonBasic >> gtJsonObjectFor: aView context: aContext [
 
 	<gtView>
 	self exists ifFalse: [ ^ aView empty ].
@@ -179,7 +241,7 @@ GtJsonRasic >> gtJsonObjectFor: aView context: aContext [
 ]
 
 { #category : #'gt - extensions' }
-GtJsonRasic >> gtJsonPathFor: aView [
+GtJsonBasic >> gtJsonPathFor: aView [
 
 	<gtView>
 	^ aView columnedList
@@ -204,13 +266,33 @@ GtJsonRasic >> gtJsonPathFor: aView [
 ]
 
 { #category : #'gt - extensions' }
-GtJsonRasic >> gtJsonPathItemText [
+GtJsonBasic >> gtJsonPathItemText [
 
 	^ self subclassResponsibility
 ]
 
+{ #category : #private }
+GtJsonBasic >> increaseCollectionToSize: aSize [
+	| aCollection aNewCollection myParent |
+	aCollection := self jsonObject.
+
+	self
+		assert: [ aCollection isCollection
+				and: [ aCollection isDictionary not and: [ aCollection isString not ] ] ]
+		description: [ 'JSON object must be a collection: {1}' format: {aCollection} ].
+
+	aNewCollection := aCollection species new: (aSize max: aCollection size).
+
+	aCollection
+		withIndexDo: [ :aValue :anIndex | aNewCollection at: anIndex put: aValue ].
+
+	self jsonObject: aNewCollection.
+
+	self updateValueInParent: aNewCollection
+]
+
 { #category : #initialization }
-GtJsonRasic >> initialize [
+GtJsonBasic >> initialize [
 
 	super initialize.
 
@@ -218,7 +300,7 @@ GtJsonRasic >> initialize [
 ]
 
 { #category : #accessing }
-GtJsonRasic >> jsonObject [
+GtJsonBasic >> jsonObject [
 
 	^ jsonValue exists
 		  ifTrue: [ jsonValue value ]
@@ -226,27 +308,27 @@ GtJsonRasic >> jsonObject [
 ]
 
 { #category : #accessing }
-GtJsonRasic >> jsonObject: aJsonObject [
+GtJsonBasic >> jsonObject: aJsonObject [
 
 	jsonValue := GtJsonValue forValue: aJsonObject
 ]
 
 { #category : #accessing }
-GtJsonRasic >> parents [
+GtJsonBasic >> parents [
 
 	^ Array streamContents: [ :aStream | 
 		  self withParentsDo: [ :eachNode | aStream nextPut: eachNode ] ]
 ]
 
 { #category : #accessing }
-GtJsonRasic >> pathText [
+GtJsonBasic >> pathText [
 
 	<return: #BlText>
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
-GtJsonRasic >> printOn: aStream [
+GtJsonBasic >> printOn: aStream [
 
 	super printOn: aStream.
 
@@ -257,20 +339,27 @@ GtJsonRasic >> printOn: aStream [
 ]
 
 { #category : #accessing }
-GtJsonRasic >> root [
+GtJsonBasic >> root [
 
 	^ self withParentsDo: [ :aNode | ^ aNode ]
 ]
 
+{ #category : #private }
+GtJsonBasic >> updateValueInParent: aNewValue [
+	"Subclasses may update new value in their parents"
+
+	self subclassResponsibility
+]
+
 { #category : #evaluating }
-GtJsonRasic >> value [
+GtJsonBasic >> value [
 	"Overwritten to make this accessor available as key"
 	
 	^ self at: #value
 ]
 
 { #category : #enumerating }
-GtJsonRasic >> withParentsDo: aBlock [
+GtJsonBasic >> withParentsDo: aBlock [
 
 	self subclassResponsibility
 ]

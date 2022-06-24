@@ -1,6 +1,6 @@
 Class {
 	#name : #GtJson,
-	#superclass : #GtJsonRasic,
+	#superclass : #GtJsonBasic,
 	#category : #'GToolkit4Json-Json'
 }
 
@@ -33,6 +33,13 @@ GtJson >> pathText [
 	<return: #BlText>
 	^ 'root' asRopedText foreground:
 		  BrGlamorousColors disabledButtonTextColor
+]
+
+{ #category : #private }
+GtJson >> updateValueInParent: aNewValue [
+	"Since I do not have a parent, I do nothing."
+
+	
 ]
 
 { #category : #enumerating }

@@ -7,6 +7,18 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
+{ #category : #enumerating }
+GtJsonCollectionModel >> collect: aBlock [
+	^ Array
+		new: self size
+		streamContents: [ :aStream | 
+			self
+				do: [ :anItemModel :anIndex | 
+					| aValue |
+					aValue := aBlock cull: anItemModel cull: anIndex.
+					aStream nextPut: aValue ] ]
+]
+
 { #category : #accessing }
 GtJsonCollectionModel >> createModelAt: anIndex [
 
@@ -32,6 +44,52 @@ GtJsonCollectionModel >> createModelAt: anIndex [
 	^ aModel
 ]
 
+{ #category : #enumerating }
+GtJsonCollectionModel >> detect: aBlock [
+	"Evaluate aBlock with each of the receiver's elements as the argument. 
+	Answer the first element for which aBlock evaluates to true."
+
+	^ self detect: aBlock ifNone: [ self errorNotFound: aBlock ]
+]
+
+{ #category : #enumerating }
+GtJsonCollectionModel >> detect: aBlock ifFound: foundBlock ifNone: exceptionBlock [
+	"Evaluate aBlock with each of the receiver's elements as the argument.  
+	If some element evaluates aBlock to true, then cull this element into 
+	foundBlock and answer the result of this evaluation. 
+	If none evaluate to true, then evaluate exceptionBlock."
+
+	self do: [ :each | (aBlock value: each) ifTrue: [ ^ foundBlock cull: each ] ].
+	^ exceptionBlock value
+]
+
+{ #category : #enumerating }
+GtJsonCollectionModel >> detect: aBlock ifNone: exceptionBlock [
+	"Evaluate aBlock with each of the receiver's elements as the argument.  
+	Answer the first element for which aBlock evaluates to true. If none  
+	evaluate to true, then evaluate the argument, exceptionBlock."
+
+	^ self
+		detect: aBlock
+		ifFound: [ :element | element ]
+		ifNone: exceptionBlock
+]
+
+{ #category : #enumerating }
+GtJsonCollectionModel >> do: aBlock [
+	^ 1
+		to: self size
+		do: [ :anIndex | 
+			| aModel |
+			aModel := self modelAt: anIndex.
+			aBlock cull: aModel cull: anIndex ]
+]
+
+{ #category : #private }
+GtJsonCollectionModel >> errorNotFound: anObject [
+	NotFound signalFor: anObject
+]
+
 { #category : #'gt - extensions' }
 GtJsonCollectionModel >> gtJsonModelDefinitionFor: aView [
 
@@ -41,6 +99,7 @@ GtJsonCollectionModel >> gtJsonModelDefinitionFor: aView [
 		  priority: 60;
 		  items: [ self jsonModelDefinition  asCollection ];
 		  children: [ :anItem | anItem jsonModelDefinition asCollection ];
+		  expandUpTo: 1;
 		  column: 'Key' text: #key weight: 1.5;
 		  column: 'Value' text: [ :aDefinition | 
 			  aDefinition valueDo: [ :aValue :isDefault | 
@@ -127,4 +186,9 @@ GtJsonCollectionModel >> printOn: aStream [
 GtJsonCollectionModel >> size [
 	self json ifNotNil: [ :aJson | ^ aJson jsonObject size ].
 	^ models ifNotNil: #size ifNil: [ 0 ]
+]
+
+{ #category : #enumerating }
+GtJsonCollectionModel >> withIndexCollect: aBlock [
+	^ self collect: aBlock
 ]
