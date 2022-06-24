@@ -48,11 +48,11 @@ GtJsonDictionaryModel >> gtJsonModelDefinitionFor: aView [
 
 	<gtView>
 	^ aView columnedTree
-		  title: 'Structure';
+		  title: 'Model Structure';
 		  priority: 60;
 		  items: [ self jsonModelDefinition ];
 		  children: [ :anItem | anItem jsonModelDefinition asCollection ];
-		  column: 'Key' text: #key weight: 1.5;
+		  column: 'Key' text: #key weight: 1.2;
 		  column: 'Value' text: [ :aDefinition | 
 			  aDefinition valueDo: [ :aValue :isDefault | 
 					  isDefault
@@ -60,7 +60,7 @@ GtJsonDictionaryModel >> gtJsonModelDefinitionFor: aView [
 						  ifTrue: [ 
 							  aValue asRopedText foreground:
 									  BrGlamorousColors disabledButtonTextColor ] ] ];
-		  column: 'Type' text: #modelClass;
+		  column: 'Type' text: #modelClass weight: 0.5;
 		  send: [ :aDefinition | aDefinition valueDo: [ :aValue | aValue ] ];
 		  actionUpdateButton
 ]
@@ -76,7 +76,8 @@ GtJsonDictionaryModel >> gtModelsFor: aView [
 
 	<gtView>
 	^ aView columnedList
-		  title: 'Models';
+		  title: 'Model Cache';
+		  tooltip: 'I display model objects that were already instantiated';
 		  priority: 65;
 		  items: [ self gtModelChildren ];
 		  column: 'Key' text: #key;

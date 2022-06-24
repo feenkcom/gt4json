@@ -35,6 +35,13 @@ GtJson >> pathText [
 		  BrGlamorousColors disabledButtonTextColor
 ]
 
+{ #category : #private }
+GtJson >> updateValueInParent: aNewValue [
+	"Since I do not have a parent, I do nothing."
+
+	
+]
+
 { #category : #enumerating }
 GtJson >> withParentsDo: aBlock [
 

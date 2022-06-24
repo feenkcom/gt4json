@@ -61,6 +61,11 @@ GtJsonModel class >> listKey: aKey at: anObject defaultValue: aValue [
 		  defaultValue: aValue
 ]
 
+{ #category : #converting }
+GtJsonModel >> asJsonString [
+	^ self json asJsonString
+]
+
 { #category : #'gt - extensions' }
 GtJsonModel >> gtJsonObjectFor: aView context: aContext [
 
@@ -115,4 +120,9 @@ GtJsonModel >> jsonExists [
 GtJsonModel >> jsonModelDefinition [
 
 	^ #(  )
+]
+
+{ #category : #accessing }
+GtJsonModel >> jsonObject [
+	^ self json jsonObject
 ]

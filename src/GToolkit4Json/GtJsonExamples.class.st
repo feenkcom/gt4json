@@ -4,6 +4,134 @@ Class {
 	#category : #'GToolkit4Json-Examples'
 }
 
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonAddDoubleUnknownPathKey [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject atPath: #(z za zaa)) exists not.
+
+	aRawObject atPath: #(z za zaa) put: 9.
+
+	self assert: (aRawObject atPath: #(z za zaa)) exists.
+	self assert: (aRawObject atPath: #(z za zaa)) jsonObject equals: 9.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonAddNewRootKey [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject at: #z) exists not.
+
+	aRawObject at: #z put: 'new value-z'.
+
+	self assert: (aRawObject at: #z) exists.
+	self assert: (aRawObject at: #z) jsonObject equals: 'new value-z'.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonAddPathIndex [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject atPath: #(b d 3)) exists not.
+
+	aRawObject atPath: #(b d 3) put: 21.
+
+	self assert: (aRawObject atPath: #(b d 3)) exists.
+	self assert: (aRawObject atPath: #(b d 3)) jsonObject equals: 21.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonAddTripleUnknownPathIndex [
+	<gtExample>
+	| aRawObject anArraySize aPath |
+	aRawObject := self jsonRoot.
+
+	anArraySize := (aRawObject atPath: #(b d)) jsonObject size.
+	aPath := {#b.
+			#d.
+			anArraySize + 3.
+			#z.
+			2.
+			3.
+			1}.
+	self assert: (aRawObject atPath: aPath) exists not.
+
+	aRawObject atPath: aPath put: 9.
+
+	self assert: (aRawObject atPath: aPath) exists.
+	self assert: (aRawObject atPath: aPath) jsonObject equals: 9.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonAddTripleUnknownPathKey [
+	<gtExample>
+	| aRawObject anArraySize aPath |
+	aRawObject := self jsonRoot.
+
+	anArraySize := (aRawObject atPath: #(b d)) jsonObject size.
+	aPath := {#b.
+			#d.
+			anArraySize + 3.
+			#z.
+			#za.
+			#zaa.
+			#zaaa}.
+	self assert: (aRawObject atPath: aPath) exists not.
+
+	aRawObject atPath: aPath put: 9.
+
+	self assert: (aRawObject atPath: aPath) exists.
+	self assert: (aRawObject atPath: aPath) jsonObject equals: 9.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonAddUnknownPathKey [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject atPath: #(z za)) exists not.
+
+	aRawObject atPath: #(z za) put: 9.
+
+	self assert: (aRawObject atPath: #(z za)) exists.
+	self assert: (aRawObject atPath: #(z za)) jsonObject equals: 9.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonAppNewPathKey [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject atPath: #(b d 2 gg)) exists not.
+
+	aRawObject atPath: #(b d 2 gg) put: 'new value-gg'.
+
+	self assert: (aRawObject atPath: #(b d 2 gg)) exists.
+	self assert: (aRawObject atPath: #(b d 2 gg)) jsonObject equals: 'new value-gg'.
+
+	^ aRawObject
+]
+
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBChild [
 
@@ -212,6 +340,53 @@ GtJsonExamples >> jsonBDChild [
 	^ aRawObject
 ]
 
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonModifyPathIndex [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject atPath: #(b d 2)) exists.
+
+	aRawObject atPath: #(b d 2) put: 12.
+
+	self assert: (aRawObject atPath: #(b d 2)) exists.
+	self assert: (aRawObject atPath: #(b d 2)) jsonObject equals: 12.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonModifyPathKey [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject atPath: #(b d 2 g)) exists.
+
+	aRawObject atPath: #(b d 2 g) put: 108.
+
+	self assert: (aRawObject atPath: #(b d 2 g)) exists.
+	self assert: (aRawObject atPath: #(b d 2 g)) jsonObject equals: 108.
+
+	^ aRawObject
+]
+
+{ #category : #'examples - modifications' }
+GtJsonExamples >> jsonModifyRootKeyValue [
+	<gtExample>
+	| aRawObject |
+	aRawObject := self jsonRoot.
+
+	self assert: (aRawObject at: #a) exists.
+	aRawObject at: #a put: 'new value-a'.
+
+	self assert: (aRawObject at: #a) exists.
+	self assert: (aRawObject at: #a) jsonObject equals: 'new value-a'.
+
+	^ aRawObject
+]
+
 { #category : #'examples - json object' }
 GtJsonExamples >> jsonObject [
 
@@ -250,6 +425,7 @@ GtJsonExamples >> jsonRoot [
 	aRawObject := GtJson forJsonObject: aJsonObject.
 
 	self assert: aRawObject jsonObject equals: aJsonObject.
+	self assert: aRawObject exists.
 
 	^ aRawObject
 ]

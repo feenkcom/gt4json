@@ -8,6 +8,16 @@ Class {
 	#category : #'GToolkit4Json-Json'
 }
 
+{ #category : #private }
+GtJsonIndex >> createJsonObject: aType [
+	"Create an empty JSON object"
+
+	| aNewValue |
+	aNewValue := GtJsonUtility newValueOfType: aType.
+	self jsonObject: aNewValue.
+	self updateValueInParent: aNewValue
+]
+
 { #category : #'gt - extensions' }
 GtJsonIndex >> gtJsonPathItemText [
 
@@ -51,6 +61,20 @@ GtJsonIndex >> pathText [
 		aPath foreground: BrGlamorousColors errorBackgroundColor ].
 		
 	^ aPath
+]
+
+{ #category : #private }
+GtJsonIndex >> updateValueInParent: aNewValue [
+	"Set new value in my parent JSON object"
+
+	| aParentObject |
+	aParentObject := self parent jsonObject.
+
+	self index > aParentObject size
+		ifTrue: [ self parent increaseCollectionToSize: self index.
+			aParentObject := self parent jsonObject ].
+
+	aParentObject at: self index put: aNewValue
 ]
 
 { #category : #enumerating }

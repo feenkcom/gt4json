@@ -31,19 +31,12 @@ GtJsonCollectionModelDefinition >> defaultValue: anObject [
 
 { #category : #accessing }
 GtJsonCollectionModelDefinition >> jsonModelDefinition [
-	^ Array
-		new: self object size
-		streamContents: [ :aStream | 
-			1
-				to: self object size
-				do: [ :anIndex | 
-					| aModel aDefinition |
-					aModel := self object modelAt: anIndex.
-					aDefinition := GtJsonCollectionItemModelDefinition new
-							object: aModel;
-							modelClass: self modelClass;
-							key: anIndex.
-					aStream nextPut: aDefinition ] ]
+	^ self object
+		withIndexCollect: [ :aModel :anIndex | 
+			GtJsonCollectionItemModelDefinition new
+				object: aModel;
+				modelClass: self modelClass;
+				key: anIndex ]
 ]
 
 { #category : #accessing }
