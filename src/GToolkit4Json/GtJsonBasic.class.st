@@ -150,13 +150,13 @@ GtJsonBasic >> collect: aBlock [
 					  self jsonObject keysDo: [ :aKey | 
 						  | aJson aResult |
 						  aJson := self at: aKey.
-						  aResult := aBlock cull: aJson.
+						  aResult := aBlock cull: aJson cull: aKey.
 						  aStream nextPut: aResult ] ]
 				  ifFalse: [ 
 					  1 to: self jsonObject size do: [ :anIndex | 
 						  | aJson aResult |
 						  aJson := self at: anIndex.
-						  aResult := aBlock cull: aJson.
+						  aResult := aBlock cull: aJson cull: anIndex.
 						  aStream nextPut: aResult ] ] ]
 ]
 
