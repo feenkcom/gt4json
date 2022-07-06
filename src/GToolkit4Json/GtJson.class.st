@@ -21,6 +21,15 @@ GtJson class >> forJsonString: aString [
 	^ self forJsonObject: aJsonObject
 ]
 
+{ #category : #private }
+GtJson >> evaluateBlock: aBlock [
+	aBlock
+		cull: self jsonObject
+		cull: nil
+		cull: nil
+		cull: self
+]
+
 { #category : #'gt - extensions' }
 GtJson >> gtJsonPathItemText [
 

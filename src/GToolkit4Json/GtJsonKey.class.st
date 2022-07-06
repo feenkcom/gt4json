@@ -18,6 +18,15 @@ GtJsonKey >> createJsonObject: aType [
 	self updateValueInParent: aNewValue
 ]
 
+{ #category : #private }
+GtJsonKey >> evaluateBlock: aBlock [
+	aBlock
+		cull: self jsonObject
+		cull: self key
+		cull: self parent
+		cull: self
+]
+
 { #category : #'gt - extensions' }
 GtJsonKey >> gtJsonPathItemText [
 

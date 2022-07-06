@@ -7,6 +7,12 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
+{ #category : #accessing }
+GtJsonCollectionModel >> asBrItemsProvider [
+	^ BrListSequenceableCollectionItemsProvider
+		forCollection: (self collect: #yourself)
+]
+
 { #category : #enumerating }
 GtJsonCollectionModel >> collect: aBlock [
 	^ Array

@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : #enumerating }
+GtJsonUnknown >> allValuesDepthFirstDo: aBlock [
+	"do nothing"
+
+	
+]
+
+{ #category : #enumerating }
 GtJsonUnknown >> collect: aBlock [
 
 	^ #(  )
@@ -23,6 +30,11 @@ GtJsonUnknown >> createJsonObject: aType [
 
 	aNewInstance := aNewParent at: self path.
 	^ aNewInstance createJsonObject: aType
+]
+
+{ #category : #private }
+GtJsonUnknown >> evaluateBlock: aBlock [
+	self shouldNotImplement
 ]
 
 { #category : #'gt - extensions' }

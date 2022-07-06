@@ -18,6 +18,15 @@ GtJsonIndex >> createJsonObject: aType [
 	self updateValueInParent: aNewValue
 ]
 
+{ #category : #private }
+GtJsonIndex >> evaluateBlock: aBlock [
+	aBlock
+		cull: self jsonObject
+		cull: self index
+		cull: self parent
+		cull: self
+]
+
 { #category : #'gt - extensions' }
 GtJsonIndex >> gtJsonPathItemText [
 
