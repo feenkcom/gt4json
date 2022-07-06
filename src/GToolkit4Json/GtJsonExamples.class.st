@@ -116,6 +116,207 @@ GtJsonExamples >> jsonAddUnknownPathKey [
 	^ aRawObject
 ]
 
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllLeafValuesIteration_jsonRoot [
+	<gtExample>
+	| aJson allValues |
+	aJson := self jsonRoot.
+	allValues := OrderedCollection new.
+	self assert: aJson exists.
+
+	aJson
+		allLeafValuesDepthFirstDo: [ :aValue :aKey :aParent :aChild | 
+			allValues
+				add: {aValue.
+						aKey.
+						aParent.
+						aChild} ].
+
+	self assert: allValues size equals: 12.
+	self assert: allValues first first equals: 'value-a'.
+	self assert: allValues second first equals: 'value-c'.
+	self assert: allValues third first equals: 'value-1-e'.
+	self assert: allValues fourth first equals: 'value-1-f'.
+
+	self assert: allValues last first equals: 'value-m'.
+
+	^ allValues
+]
+
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllValuesIteration_collection [
+	<gtExample>
+	| aJson allValues |
+	aJson := GtJson forJsonObject: Array empty.
+	allValues := OrderedCollection new.
+	self assert: aJson exists.
+
+	aJson
+		allValuesDepthFirstDo: [ :aValue :aKey :aParent :aChild | 
+			allValues
+				add: {aValue.
+						aKey.
+						aParent.
+						aChild} ].
+
+	self assert: allValues size equals: 1.
+	self
+		assert: allValues first
+		equals: {Array empty.
+				nil.
+				nil.
+				aJson}.
+
+	^ allValues
+]
+
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllValuesIteration_dictionary [
+	<gtExample>
+	| aJson allValues |
+	aJson := GtJson forJsonObject: Dictionary new.
+	allValues := OrderedCollection new.
+	self assert: aJson exists.
+
+	aJson
+		allValuesDepthFirstDo: [ :aValue :aKey :aParent :aChild | 
+			allValues
+				add: {aValue.
+						aKey.
+						aParent.
+						aChild} ].
+
+	self assert: allValues size equals: 1.
+	self
+		assert: allValues first
+		equals: {Dictionary new.
+				nil.
+				nil.
+				aJson}.
+
+	^ allValues
+]
+
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllValuesIteration_integer [
+	<gtExample>
+	| aJson allValues |
+	aJson := GtJson forJsonObject: 108.
+	allValues := OrderedCollection new.
+	self assert: aJson exists.
+
+	aJson
+		allValuesDepthFirstDo: [ :aValue :aKey :aParent :aChild | 
+			allValues
+				add: {aValue.
+						aKey.
+						aParent.
+						aChild} ].
+
+	self assert: allValues size equals: 1.
+	self
+		assert: allValues first
+		equals: {108.
+				nil.
+				nil.
+				aJson}.
+
+	^ allValues
+]
+
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllValuesIteration_jsonRoot [
+	<gtExample>
+	| aJson allValues |
+	aJson := self jsonRoot.
+	allValues := OrderedCollection new.
+	self assert: aJson exists.
+
+	aJson
+		allValuesDepthFirstDo: [ :aValue :aKey :aParent :aChild | 
+			allValues
+				add: {aValue.
+						aKey.
+						aParent.
+						aChild} ].
+
+	self assert: allValues size equals: 18.
+	self assert: allValues first first equals: 'value-a'.
+	self assert: allValues second first equals: 'value-c'.
+	self assert: allValues third first equals: 'value-1-e'.
+	self assert: allValues fourth first equals: 'value-1-f'.
+
+	self assert: allValues last first equals: aJson jsonObject.
+
+	^ allValues
+]
+
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllValuesIteration_notExisting [
+	<gtExample>
+	
+	| aJson allValues |
+	aJson := GtJson new.
+	allValues := OrderedCollection new.
+	
+	self assert: aJson exists not.
+	
+	aJson allValuesDepthFirstDo: [ :aValue | allValues add: aValue ].
+	
+	self assert: allValues size equals: 0.
+	
+	^ aJson
+]
+
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllValuesIteration_string [
+	<gtExample>
+	| aJson allValues |
+	aJson := GtJson forJsonObject: 'value'.
+	allValues := OrderedCollection new.
+	self assert: aJson exists.
+
+	aJson
+		allValuesDepthFirstDo: [ :aValue :aKey :aParent :aChild | 
+			allValues
+				add: {aValue.
+						aKey.
+						aParent.
+						aChild} ].
+
+	self assert: allValues size equals: 1.
+	self
+		assert: allValues first
+		equals: {'value'.
+				nil.
+				nil.
+				aJson}.
+
+	^ allValues
+]
+
+{ #category : #'examples - enumeration' }
+GtJsonExamples >> jsonAllValuesIteration_unknown [
+	<gtExample>
+	| aJson allValues aRoot |
+	aRoot := GtJson forJsonObject: Dictionary new.
+	aJson := aRoot at: #uknown.
+	allValues := OrderedCollection new.
+	self assert: aJson exists not.
+
+	aJson
+		allValuesDepthFirstDo: [ :aValue :aKey :aParent :aChild | 
+			allValues
+				add: {aValue.
+						aKey.
+						aParent.
+						aChild} ].
+
+	self assert: allValues size equals: 0.
+
+	^ aJson
+]
+
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAppNewPathKey [
 	<gtExample>

@@ -7,6 +7,36 @@ Class {
 	#category : #'GToolkit4Json-Json'
 }
 
+{ #category : #enumerating }
+GtJsonBasic >> allLeafValuesDepthFirstDo: aBlock [
+	self
+		allValuesDepthFirstDo: [ :aValue :aKey :aParent :aJson | 
+			(aValue isCollection and: [ aValue isString not ])
+				ifFalse: [ aBlock
+						cull: aValue
+						cull: aKey
+						cull: aParent
+						cull: aJson ] ]
+]
+
+{ #category : #enumerating }
+GtJsonBasic >> allValuesDepthFirstDo: aBlock [
+	self exists ifFalse: [ ^ self ].
+	self jsonObject isString
+		ifTrue: [ self evaluateBlock: aBlock.
+			^ self ].
+	self jsonObject isDictionary
+		ifTrue: [ self jsonObject
+				keysDo: [ :eachKey | (self at: eachKey) allValuesDepthFirstDo: aBlock ].
+			self evaluateBlock: aBlock.
+			^ self ].
+	self jsonObject isCollection
+		ifTrue: [ 1
+				to: self jsonObject size
+				do: [ :anIndex | (self at: anIndex) allValuesDepthFirstDo: aBlock ] ].
+	self evaluateBlock: aBlock
+]
+
 { #category : #converting }
 GtJsonBasic >> asJson [
 
@@ -182,6 +212,11 @@ GtJsonBasic >> doesNotUnderstand: message [
 	key := message selector.
 	key isUnary ifTrue: [ ^ self at: key ].
 	^ super doesNotUnderstand: message
+]
+
+{ #category : #private }
+GtJsonBasic >> evaluateBlock: aBlock [
+	self subclassResponsibility
 ]
 
 { #category : #testing }
