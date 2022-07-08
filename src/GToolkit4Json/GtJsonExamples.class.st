@@ -590,31 +590,32 @@ GtJsonExamples >> jsonModifyRootKeyValue [
 
 { #category : #'examples - json object' }
 GtJsonExamples >> jsonObject [
-
 	<gtExample>
-	^ OrderPreservingDictionary new
-		  at: #a put: 'value-a';
-		  at: #b put: (OrderPreservingDictionary new
-				   at: #c put: 'value-c';
-				   at: #d put: { 
-						   (OrderPreservingDictionary new
-							    at: #e put: 'value-1-e';
-							    at: #f put: 'value-1-f';
-							    yourself).
-						   (OrderPreservingDictionary new
-							    at: #e put: 'value-2-e';
-							    at: #f put: Float pi;
-							    at: #g put: 42;
-							    at: #h put: true;
-							    at: #i put: false;
-							    at: #j put: nil;
-							    yourself) };
-				   yourself);
-		  at: #k put: (OrderPreservingDictionary new
-			   at: #l put: 'value-l';
-			   at: #m put: 'value-m';
-			   yourself);
-		  yourself
+	^ OrderedDictionary new
+		at: #a put: 'value-a';
+		at: #b
+			put: (OrderedDictionary new
+					at: #c put: 'value-c';
+					at: #d
+						put: {OrderedDictionary new
+									at: #e put: 'value-1-e';
+									at: #f put: 'value-1-f';
+									yourself.
+								OrderedDictionary new
+									at: #e put: 'value-2-e';
+									at: #f put: Float pi;
+									at: #g put: 42;
+									at: #h put: true;
+									at: #i put: false;
+									at: #j put: nil;
+									yourself};
+					yourself);
+		at: #k
+			put: (OrderedDictionary new
+					at: #l put: 'value-l';
+					at: #m put: 'value-m';
+					yourself);
+		yourself
 ]
 
 { #category : #'examples - json' }
@@ -650,16 +651,16 @@ GtJsonExamples >> personJson [
 GtJsonExamples >> personJsonObject [
 
 	<gtExample>
-	^ OrderPreservingDictionary new
+	^ OrderedDictionary new
 		  at: #firstName put: 'Joe';
 		  at: #familyName put: 'Doe';
 		  at: #birthday put: '12 June 2001';
 		  at: #addresses put: { 
-				  (OrderPreservingDictionary new
+				  (OrderedDictionary new
 					   at: #street put: 'Kopernikova 345';
 					   at: #city put: 'Bratislava';
 					   yourself).
-				  (OrderPreservingDictionary new
+				  (OrderedDictionary new
 					   at: #street put: 'Havlova 89';
 					   at: #city put: 'Praha';
 					   at: #is_primary put: true;
@@ -671,16 +672,16 @@ GtJsonExamples >> personJsonObject [
 GtJsonExamples >> personTwoJsonObject [
 
 	<gtExample>
-	^ OrderPreservingDictionary new
+	^ OrderedDictionary new
 		  at: #firstName put: 'Jim';
 		  at: #familyName put: 'Doe';
 		  at: #birthday put: '21 June 2021';
 		  at: #addresses put: { 
-				  (OrderPreservingDictionary new
+				  (OrderedDictionary new
 					   at: #street put: 'Vladimírova 108';
 					   at: #city put: 'Košice';
 					   yourself).
-				  (OrderPreservingDictionary new
+				  (OrderedDictionary new
 					   at: #street put: 'Havlova 89';
 					   at: #city put: 'Praha';
 					   at: #is_primary put: true;

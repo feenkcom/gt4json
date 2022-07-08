@@ -7,5 +7,5 @@ Class {
 { #category : #factory }
 GtJsonUtility class >> newValueOfType: aType [
 	aType isInteger ifTrue: [ ^ Array empty ].
-	^ OrderPreservingDictionary new
+	^ OrderedDictionary new
 ]
