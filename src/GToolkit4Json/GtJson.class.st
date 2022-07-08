@@ -15,7 +15,7 @@ GtJson class >> forJsonString: aString [
 
 	| aJsonObject |
 	aJsonObject := (NeoJSONReader on: aString readStream)
-		               mapClass: OrderPreservingDictionary;
+		               mapClass: OrderedDictionary;
 		               next.
 
 	^ self forJsonObject: aJsonObject
