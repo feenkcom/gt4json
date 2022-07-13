@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtJsonCollectionModel >> asBrItemsProvider [
-	^ BrListSequenceableCollectionItemsProvider
+	^ BrSequenceableCollectionItemsProvider
 		forCollection: (self collect: #yourself)
 ]
 
