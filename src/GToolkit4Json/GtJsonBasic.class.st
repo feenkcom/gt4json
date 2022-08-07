@@ -65,6 +65,21 @@ GtJsonBasic >> at: anIndex [
 	^ self atUnknown: anIndex
 ]
 
+{ #category : #'accessing - path' }
+GtJsonBasic >> at: anIndex ifAbsent: absentBlock [
+	^ self
+		at: anIndex
+		ifPresent: [ :aJson | aJson ]
+		ifAbsent: absentBlock
+]
+
+{ #category : #'accessing - path' }
+GtJsonBasic >> at: anIndex ifPresent: presentBlock ifAbsent: absentBlock [
+	| aJson |
+	aJson := self at: anIndex.
+	^ aJson ifExists: presentBlock ifNotExists: absentBlock
+]
+
 { #category : #modifying }
 GtJsonBasic >> at: anIndex put: aValue [
 	| anInstance |
@@ -304,6 +319,11 @@ GtJsonBasic >> gtJsonPathFor: aView [
 GtJsonBasic >> gtJsonPathItemText [
 
 	^ self subclassResponsibility
+]
+
+{ #category : #testing }
+GtJsonBasic >> ifExists: presentBlock ifNotExists: absentBlock [
+	^ self exists ifTrue: [ presentBlock cull: self ] ifFalse: absentBlock
 ]
 
 { #category : #private }
