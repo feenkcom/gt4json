@@ -1,6 +1,6 @@
-Extension { #name : #ZnResponse }
+Extension { #name : #ZnMessage }
 
 { #category : #'*GToolkit4Json' }
-ZnResponse >> asJson [
+ZnMessage >> asJson [
 	^ GtJson forJsonString: self contents
 ]
