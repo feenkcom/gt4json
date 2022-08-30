@@ -269,25 +269,29 @@ GtJsonBasic >> gtConstructRawJsonFor: anItem treeNode: aNode jsonObject: aCollec
 
 { #category : #'gt - extensions' }
 GtJsonBasic >> gtJsonObjectFor: aView context: aContext [
-
 	<gtView>
 	self exists ifFalse: [ ^ aView empty ].
 
 	aContext at: #gtTreeExpansionLevel put: 1.
-	aContext at: #gtTreeSend put: [ :anItem :aNode :aCollection | 
-		self
-			gtConstructRawJsonFor: anItem
-			treeNode: aNode
-			jsonObject: aCollection ].
+	aContext
+		at: #gtTreeSend
+		put: [ :anItem :aNode :aCollection | 
+			self
+				gtConstructRawJsonFor: anItem
+				treeNode: aNode
+				jsonObject: aCollection ].
+	aContext
+		at: #gtTreeValueStyler
+		ifAbsentPut: [ [ :aNode | aNode value gtJsonValueDisplayText ] ].
 
 	^ aView forward
-		  title: 'JSON Object';
-		  priority: 40;
-		  object: [ self jsonObject ];
-		  view: #gtRawJsonFor:context:;
-		  actionButtonIcon: BrGlamorousVectorIcons inspect
-		  tooltip: 'Inspect JSON Object'
-		  action: [ :aButton | aButton phlow spawnObject: self jsonObject ]
+		title: 'JSON Object';
+		priority: 40;
+		object: [ self jsonObject ];
+		view: #gtRawJsonFor:context:;
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect JSON Object'
+			action: [ :aButton | aButton phlow spawnObject: self jsonObject ]
 ]
 
 { #category : #'gt - extensions' }
