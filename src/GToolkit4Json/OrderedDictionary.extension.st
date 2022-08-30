@@ -9,6 +9,8 @@ OrderedDictionary >> asJson [
 { #category : #'*GToolkit4Json' }
 OrderedDictionary >> gtJsonValueDisplayText [
 	^ self size gtDisplayText
-		append: (' properties' asPluralBasedOn: self size) gtDisplayText;
+		append: (self size = 1
+				ifTrue: [ 'property' gtDisplayText ]
+				ifFalse: [ ' properties' gtDisplayText ]);
 		foreground: BrGlamorousColors disabledButtonTextColor
 ]
