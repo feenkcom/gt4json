@@ -43,6 +43,21 @@ GtJsonDictionaryModel >> createModelAt: aKey [
 	^ aModel
 ]
 
+{ #category : #accessing }
+GtJsonDictionaryModel >> doesNotUnderstand: aMessage [
+	(aMessage numArgs isZero
+		and: [ (self modelDefinitionAt: aMessage selector) isNotNil ])
+		ifTrue: [ ^ self valueAt: aMessage selector ].
+
+	aMessage numArgs = 1
+		ifTrue: [ | aSelector |
+			aSelector := aMessage selector copyFrom: 1 to: aMessage selector size - 1.
+			(self modelDefinitionAt: aSelector) isNotNil
+				ifTrue: [ ^ self valueAt: aSelector put: aMessage arguments first ] ].
+
+	super doesNotUnderstand: aMessage
+]
+
 { #category : #'gt - extensions' }
 GtJsonDictionaryModel >> gtJsonModelDefinitionFor: aView [
 
@@ -89,6 +104,12 @@ GtJsonDictionaryModel >> gtModelsFor: aView [
 		  action: [ :aButton :aTab | 
 			  models := nil.
 			  aTab viewContentElement phlow update ]
+]
+
+{ #category : #accessing }
+GtJsonDictionaryModel >> json: anObject [
+	super json: anObject.
+	models := nil
 ]
 
 { #category : #accessing }
