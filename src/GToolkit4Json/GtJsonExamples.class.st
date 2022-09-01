@@ -709,3 +709,18 @@ GtJsonExamples >> personsJsonObject [
 	<gtExample>
 	^ Array with: self personJsonObject with: self personTwoJsonObject
 ]
+
+{ #category : #'examples - person' }
+GtJsonExamples >> simplePersonJsonObject [
+	<gtExample>
+	^ OrderedDictionary new
+		at: #firstName put: 'Joe';
+		at: #familyName put: 'Doe';
+		at: #birthday put: '12 June 2001';
+		at: #address
+			put: (OrderedDictionary new
+					at: #street put: 'Kopernikova 345';
+					at: #city put: 'Bratislava';
+					yourself);
+		yourself
+]

@@ -90,6 +90,16 @@ GtJsonModelExamples >> emptySimplePersonModel [
 	^ aPerson
 ]
 
+{ #category : #'examples - simple person' }
+GtJsonModelExamples >> emptySimplePersonModelWithoutAccessors [
+
+	<gtExample>
+	| aPerson |
+	aPerson := GtJsonSimplePersonModelWithoutAccessors new.
+	
+	^ aPerson
+]
+
 { #category : #'examples - date and time' }
 GtJsonModelExamples >> invalidDateAndTimeModel [
 
@@ -252,6 +262,78 @@ GtJsonModelExamples >> primaryAddressModel_JsonValues [
 	^ anAddress
 ]
 
+{ #category : #'examples - person' }
+GtJsonModelExamples >> simplePersonJson [
+
+	<gtExample>
+	^ GtJsonExamples new simplePersonJsonObject asJson.
+]
+
+{ #category : #'examples - simple person' }
+GtJsonModelExamples >> simplePersonModelWithouAccessors_JsonValues [
+	<gtExample>
+	| aPerson aJson |
+	aJson := self simplePersonJson.
+	aPerson := self emptySimplePersonModel.
+
+	aPerson json: aJson.
+
+	self assert: aPerson firstName equals: 'Joe'.
+	self assert: aPerson familyName equals: 'Doe'.
+	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self assert: aPerson address street equals: 'Kopernikova 345'.
+	self assert: aPerson address city equals: 'Bratislava'.
+
+	^ aPerson
+]
+
+{ #category : #'examples - simple person' }
+GtJsonModelExamples >> simplePersonModelWithoutAccessors_ExplicitValue [
+
+	<gtExample>
+	| aPerson anAddress |
+	aPerson := self emptySimplePersonModelWithoutAccessors.
+
+	aPerson firstName: 'Joe'.
+	aPerson familyName: 'Doe'.
+	aPerson birthday: '12 June 2001' asDate.
+	anAddress := self primaryAddressModel_ExplicitValues.
+
+	aPerson address: anAddress.
+
+	self assert: aPerson firstName equals: 'Joe'.
+	self assert: aPerson familyName equals: 'Doe'.
+	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self assert: aPerson address equals: anAddress.
+
+	^ aPerson
+]
+
+{ #category : #'examples - simple person' }
+GtJsonModelExamples >> simplePersonModelWithoutAccessors_JsonValues [
+	<gtExample>
+	| aPerson aJson |
+	aJson := self simplePersonJson.
+	aPerson := self emptySimplePersonModelWithoutAccessors.
+
+	aPerson json: aJson.
+
+	self assert: aPerson firstName equals: 'Joe'.
+	self assert: aPerson familyName equals: 'Doe'.
+	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self assert: aPerson address street equals: 'Kopernikova 345'.
+	self assert: aPerson address city equals: 'Bratislava'.
+
+	[ aPerson nonExistingMethod.
+	self
+		assert: false
+		description: [ MessageNotUnderstood name , ' exception is expected' ] ]
+		on: MessageNotUnderstood
+		do: [  "an expected error":anError |  ].
+
+	^ aPerson
+]
+
 { #category : #'examples - simple person' }
 GtJsonModelExamples >> simplePersonModel_ExplicitValue [
 
@@ -270,6 +352,24 @@ GtJsonModelExamples >> simplePersonModel_ExplicitValue [
 	self assert: aPerson familyName equals: 'Doe'.
 	self assert: aPerson birthday equals: '12 June 2001' asDate.
 	self assert: aPerson address equals: anAddress.
+
+	^ aPerson
+]
+
+{ #category : #'examples - simple person' }
+GtJsonModelExamples >> simplePersonModel_JsonValues [
+	<gtExample>
+	| aPerson aJson |
+	aJson := self simplePersonJson.
+	aPerson := self emptySimplePersonModel.
+
+	aPerson json: aJson.
+
+	self assert: aPerson firstName equals: 'Joe'.
+	self assert: aPerson familyName equals: 'Doe'.
+	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self assert: aPerson address street equals: 'Kopernikova 345'.
+	self assert: aPerson address city equals: 'Bratislava'.
 
 	^ aPerson
 ]
