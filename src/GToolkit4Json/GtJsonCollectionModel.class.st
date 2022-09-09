@@ -188,6 +188,21 @@ GtJsonCollectionModel >> printOn: aStream [
 		nextPut: $]
 ]
 
+{ #category : #enumerating }
+GtJsonCollectionModel >> select: aBlock [
+	| someModels |
+	someModels := Array
+			new: self size
+			streamContents: [ :aStream | 
+				self
+					do: [ :anItemModel :anIndex | 
+						| aValue |
+						aValue := aBlock cull: anItemModel cull: anIndex.
+						aValue ifTrue: [ aStream nextPut: anItemModel ] ] ].
+
+	^ self class new items: someModels
+]
+
 { #category : #accessing }
 GtJsonCollectionModel >> size [
 	self json ifNotNil: [ :aJson | ^ aJson jsonObject size ].
