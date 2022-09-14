@@ -325,6 +325,19 @@ GtJsonBasic >> gtJsonPathItemText [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'gt - extensions' }
+GtJsonBasic >> gtJsonStringFor: aView [
+	<gtView>
+	self exists ifFalse: [ ^ aView empty ].
+
+	^ aView textEditor
+		title: 'JSON String';
+		priority: 41;
+		aptitude: [ BrGlamorousCodeEditorAptitude ];
+		styler: [ JSONParser gtStyler ];
+		text: [ STONJSON toStringPretty: self jsonObject ]
+]
+
 { #category : #testing }
 GtJsonBasic >> ifExists: presentBlock ifNotExists: absentBlock [
 	^ self exists ifTrue: [ presentBlock cull: self ] ifFalse: absentBlock
