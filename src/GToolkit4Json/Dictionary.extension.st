@@ -10,7 +10,7 @@ Dictionary >> asJson [
 Dictionary >> gtJsonValueDisplayText [
 	^ self size gtDisplayText
 		append: (self size = 1
-				ifTrue: [ 'property' gtDisplayText ]
+				ifTrue: [ ' property' gtDisplayText ]
 				ifFalse: [ ' properties' gtDisplayText ]);
 		foreground: BrGlamorousColors disabledButtonTextColor
 ]

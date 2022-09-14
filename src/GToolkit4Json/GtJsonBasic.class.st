@@ -272,7 +272,7 @@ GtJsonBasic >> gtJsonObjectFor: aView context: aContext [
 	<gtView>
 	self exists ifFalse: [ ^ aView empty ].
 
-	aContext at: #gtTreeExpansionLevel put: 1.
+	aContext at: #gtTreeExpansionLevel ifAbsentPut: [ 1 ].
 	aContext
 		at: #gtTreeSend
 		put: [ :anItem :aNode :aCollection | 
