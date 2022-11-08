@@ -184,7 +184,7 @@ GtJsonBasic >> atUnknown: anIndex [
 		  path: anIndex
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 GtJsonBasic >> collect: aBlock [
 
 	^ self jsonObject species
@@ -338,6 +338,11 @@ GtJsonBasic >> gtJsonStringFor: aView [
 		text: [ STONJSON toStringPretty: self jsonObject ]
 ]
 
+{ #category : #'gt - extensions' }
+GtJsonBasic >> gtJsonValueDisplayText [
+	^ self jsonObject gtJsonValueDisplayText
+]
+
 { #category : #testing }
 GtJsonBasic >> ifExists: presentBlock ifNotExists: absentBlock [
 	^ self exists ifTrue: [ presentBlock cull: self ] ifFalse: absentBlock
@@ -345,7 +350,7 @@ GtJsonBasic >> ifExists: presentBlock ifNotExists: absentBlock [
 
 { #category : #private }
 GtJsonBasic >> increaseCollectionToSize: aSize [
-	| aCollection aNewCollection myParent |
+	| aCollection aNewCollection |
 	aCollection := self jsonObject.
 
 	self
@@ -414,6 +419,33 @@ GtJsonBasic >> printOn: aStream [
 GtJsonBasic >> root [
 
 	^ self withParentsDo: [ :aNode | ^ aNode ]
+]
+
+{ #category : #enumerating }
+GtJsonBasic >> select: aBlock [
+	| aSelection |
+	self exists ifFalse: [ ^ GtJson forJsonObject: #() ].
+
+	aSelection := self jsonObject species
+			streamContents: [ :aStream | 
+				self jsonObject isDictionary
+					ifTrue: [ self jsonObject
+							keysDo: [ :aKey | 
+								| aJson aResult |
+								aJson := self at: aKey.
+								aResult := aBlock cull: aJson cull: aKey.
+								aResult ifTrue: [ aStream nextPut: aJson jsonObject ] ] ]
+					ifFalse: [ 1
+							to: self jsonObject size
+							do: [ :anIndex | 
+								| aJson aResult |
+								aJson := self at: anIndex.
+								aResult := aBlock cull: aJson cull: anIndex.
+								aResult ifTrue: [ aStream nextPut: aJson jsonObject ] ] ] ].
+
+	^ GtJsonFilter new
+		parent: self;
+		jsonObject: aSelection
 ]
 
 { #category : #private }
