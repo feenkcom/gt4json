@@ -218,6 +218,22 @@ GtJsonBasic >> createJsonObject: aType [
 	self subclassResponsibility
 ]
 
+{ #category : #enumerating }
+GtJsonBasic >> do: aBlock [
+	self jsonObject isDictionary
+		ifTrue: [ self jsonObject
+				keysDo: [ :aKey | 
+					| aJson aResult |
+					aJson := self at: aKey.
+					aResult := aBlock cull: aJson cull: aKey ] ]
+		ifFalse: [ 1
+				to: self jsonObject size
+				do: [ :anIndex | 
+					| aJson aResult |
+					aJson := self at: anIndex.
+					aResult := aBlock cull: aJson cull: anIndex ] ]
+]
+
 { #category : #'reflective operations' }
 GtJsonBasic >> doesNotUnderstand: message [
 
