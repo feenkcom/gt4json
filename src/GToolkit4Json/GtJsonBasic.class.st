@@ -219,19 +219,39 @@ GtJsonBasic >> createJsonObject: aType [
 ]
 
 { #category : #enumerating }
+GtJsonBasic >> detect: aBlock ifFound: aFoundBlock ifNone: anExceptionBlock [
+	self jsonObject isDictionary
+		ifTrue: [ self jsonObject
+				keysDo: [ :aKey | 
+					| aJson |
+					aJson := self at: aKey.
+					(aBlock cull: aJson cull: aKey)
+						ifTrue: [ ^ aFoundBlock cull: aJson cull: aKey ] ] ]
+		ifFalse: [ 1
+				to: self jsonObject size
+				do: [ :anIndex | 
+					| aJson |
+					aJson := self at: anIndex.
+					(aBlock cull: aJson cull: anIndex)
+						ifTrue: [ ^ aFoundBlock cull: aJson cull: anIndex ] ] ].
+
+	^ anExceptionBlock value
+]
+
+{ #category : #enumerating }
 GtJsonBasic >> do: aBlock [
 	self jsonObject isDictionary
 		ifTrue: [ self jsonObject
 				keysDo: [ :aKey | 
-					| aJson aResult |
+					| aJson |
 					aJson := self at: aKey.
-					aResult := aBlock cull: aJson cull: aKey ] ]
+					aBlock cull: aJson cull: aKey ] ]
 		ifFalse: [ 1
 				to: self jsonObject size
 				do: [ :anIndex | 
-					| aJson aResult |
+					| aJson |
 					aJson := self at: anIndex.
-					aResult := aBlock cull: aJson cull: anIndex ] ]
+					aBlock cull: aJson cull: anIndex ] ]
 ]
 
 { #category : #'reflective operations' }
