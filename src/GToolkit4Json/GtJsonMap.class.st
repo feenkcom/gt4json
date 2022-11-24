@@ -7,6 +7,25 @@ Class {
 	#category : #'GToolkit4Json-Support'
 }
 
+{ #category : #'api - factory' }
+GtJsonMap class >> forJson: aJson at: aPropertyName collect: aBlock [
+	| aParent aCollection aJsonObject |
+	aParent := aJson at: aPropertyName.
+
+	aParent exists ifFalse: [ ^ self new parent: aParent ].
+
+	aCollection := aParent collect: aBlock.
+
+	aJsonObject := (aCollection
+			allSatisfy: [ :eachItem | eachItem isKindOf: GtJsonBasic ])
+			ifTrue: [ aCollection collect: #jsonObject ]
+			ifFalse: [ aCollection ].
+
+	^ self new
+		parent: aParent;
+		jsonObject: aJsonObject
+]
+
 { #category : #'gt - extensions' }
 GtJsonMap >> gtJsonPathItemText [
 	^ 'map(...)'
