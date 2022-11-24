@@ -176,7 +176,7 @@ GtJsonBasic >> atPath: aCollection put: aValue [
 	^ aParent at: aCollection last put: aValue
 ]
 
-{ #category : #'accessing - path' }
+{ #category : #'private - path' }
 GtJsonBasic >> atUnknown: anIndex [
 
 	^ GtJsonUnknown new
@@ -186,23 +186,33 @@ GtJsonBasic >> atUnknown: anIndex [
 
 { #category : #enumerating }
 GtJsonBasic >> collect: aBlock [
+	| aNewCollection isJson |
+	isJson := true.
+	aNewCollection := self jsonObject species
+			new: self jsonObject size
+			streamContents: [ :aStream | 
+				self jsonObject isDictionary
+					ifTrue: [ self jsonObject
+							keysDo: [ :aKey | 
+								| aJson aResult |
+								aJson := self at: aKey.
+								aResult := aBlock cull: aJson cull: aKey.
+								(aResult isKindOf: GtJsonBasic) ifFalse: [ isJson := false ].
+								aStream nextPut: aResult ] ]
+					ifFalse: [ 1
+							to: self jsonObject size
+							do: [ :anIndex | 
+								| aJson aResult |
+								aJson := self at: anIndex.
+								aResult := aBlock cull: aJson cull: anIndex.
+								(aResult isKindOf: GtJsonBasic) ifFalse: [ isJson := false ].
+								aStream nextPut: aResult ] ] ].
 
-	^ self jsonObject species
-		  new: self jsonObject size
-		  streamContents: [ :aStream | 
-			  self jsonObject isDictionary
-				  ifTrue: [ 
-					  self jsonObject keysDo: [ :aKey | 
-						  | aJson aResult |
-						  aJson := self at: aKey.
-						  aResult := aBlock cull: aJson cull: aKey.
-						  aStream nextPut: aResult ] ]
-				  ifFalse: [ 
-					  1 to: self jsonObject size do: [ :anIndex | 
-						  | aJson aResult |
-						  aJson := self at: anIndex.
-						  aResult := aBlock cull: aJson cull: anIndex.
-						  aStream nextPut: aResult ] ] ]
+	^ isJson
+		ifTrue: [ GtJsonMap new
+				parent: self;
+				jsonObject: (aNewCollection collect: #jsonObject) ]
+		ifFalse: [ aNewCollection ]
 ]
 
 { #category : #private }
@@ -272,7 +282,6 @@ GtJsonBasic >> evaluateBlock: aBlock [
 
 { #category : #testing }
 GtJsonBasic >> exists [
-
 	"Return true if a value exists at the given path"
 
 	^ jsonValue isNotNil and: [ jsonValue exists ]
