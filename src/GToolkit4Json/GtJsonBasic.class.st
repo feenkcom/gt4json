@@ -103,7 +103,7 @@ GtJsonBasic >> at: anIndex put: aValue [
 						anInstance})
 ]
 
-{ #category : #'accessing - path' }
+{ #category : #'private - path' }
 GtJsonBasic >> atIndex: anIndex [
 	| aJsonObject |
 	self
@@ -122,7 +122,7 @@ GtJsonBasic >> atIndex: anIndex [
 		jsonObject: aJsonObject
 ]
 
-{ #category : #'accessing - path' }
+{ #category : #'private - path' }
 GtJsonBasic >> atIndex: anIndex put: aValue [
 	| aJsonObject |
 	self
@@ -136,7 +136,7 @@ GtJsonBasic >> atIndex: anIndex put: aValue [
 	^ self atIndex: anIndex
 ]
 
-{ #category : #'accessing - path' }
+{ #category : #'private - path' }
 GtJsonBasic >> atKey: aKey [
 
 	^ self jsonObject
@@ -152,7 +152,7 @@ GtJsonBasic >> atKey: aKey [
 				  key: aKey ]
 ]
 
-{ #category : #modifying }
+{ #category : #'private - path' }
 GtJsonBasic >> atKey: aKey put: aValue [
 	self jsonObject at: aKey put: aValue.
 	^ self atKey: aKey
