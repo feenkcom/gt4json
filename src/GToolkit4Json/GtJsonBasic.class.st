@@ -186,6 +186,8 @@ GtJsonBasic >> atUnknown: anIndex [
 
 { #category : #enumerating }
 GtJsonBasic >> collect: aBlock [
+	self exists ifFalse: [ ^ #() ].
+
 	^ self jsonObject species
 		new: self jsonObject size
 		streamContents: [ :aStream | 
