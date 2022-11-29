@@ -11,10 +11,26 @@ BaselineOfGToolkit4Json >> baseline: spec [
 		for: #common
 		do: [ spec
 				baseline: 'NeoJSON'
-					with: [ spec repository: 'github://svenvc/NeoJSON:v17/repository' ];
-				baseline: 'OrderPreservingDictionary'
-					with: [ spec
-							repository: 'github://pharo-contributions/OrderPreservingDictionary:bee45d74ab513cf6230bdda2dcbaecd46905f7e6/src' ].
+				with: [ spec repository: 'github://svenvc/NeoJSON:v17/repository' ].
 
-			spec package: 'GToolkit4Json' with: [ spec requires: #('NeoJSON' 'OrderPreservingDictionary') ] ]
+			spec
+				baseline: 'GToolkitBasicUtility'
+				with: [ spec repository: 'github://feenkcom/gtoolkit-utility:main/src' ].
+
+			spec
+				baseline: 'Brick'
+				with: [ spec repository: 'github://feenkcom/Brick:main/src' ].
+
+			spec
+				baseline: 'SmaCC'
+				with: [ spec repository: 'github://j-brant/SmaCC:Pharo10/src' ].
+
+			spec
+				baseline: 'GToolkitInspector'
+				with: [ spec repository: 'github://feenkcom/gtoolkit-inspector:main/src' ].
+
+			spec
+				package: 'GToolkit4Json'
+				with: [ spec
+						requires: #('NeoJSON' 'GToolkitBasicUtility' 'Brick' 'SmaCC' 'GToolkitInspector') ] ]
 ]
