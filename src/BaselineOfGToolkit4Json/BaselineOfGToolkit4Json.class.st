@@ -11,8 +11,11 @@ BaselineOfGToolkit4Json >> baseline: spec [
 		spec
 			baseline: 'NeoJSON' with: [
 				spec repository: 'github://svenvc/NeoJSON:v17/repository' ].
+		spec
+			baseline: 'OrderPreservingDictionary' with: [
+				spec repository: 'github://pharo-contributions/OrderPreservingDictionary:bee45d74ab513cf6230bdda2dcbaecd46905f7e6/src' ].
 
 		spec package: 'GToolkit4Json' with: [
-			spec requires: #('NeoJSON') ].
+			spec requires: #('NeoJSON' 'OrderPreservingDictionary') ].
 	]
 ]

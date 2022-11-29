@@ -1,1 +1,1 @@
-{	"repositories" : {		"github://svenvc/NeoJSON/repository" : "v17"	}}
+{	"repositories" : {		"github://svenvc/NeoJSON/repository" : "v17",		"github://pharo-contributions/OrderPreservingDictionary/src" : "bee45d74ab513cf6230bdda2dcbaecd46905f7e6"	}}
