@@ -13,16 +13,16 @@ BaselineOfGToolkit4Json >> baseline: spec [
 				spec repository: 'github://svenvc/NeoJSON:3dc868944d6eb2ba65927d3018ad13d93a7c4905/repository' ].
 		spec
 			baseline: 'GToolkitBasicUtility' with: [
-				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.193/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-utility:v0.8.194/src' ].
 		spec
 			baseline: 'Brick' with: [
-				spec repository: 'github://feenkcom/Brick:v0.8.939/src' ].
+				spec repository: 'github://feenkcom/Brick:v0.8.940/src' ].
 		spec
 			baseline: 'JSONParser' with: [
-				spec repository: 'github://j-brant/SmaCC:v3.0.13' ].
+				spec repository: 'github://j-brant/SmaCC:v3.0.14' ].
 		spec
 			baseline: 'GToolkitInspector' with: [
-				spec repository: 'github://feenkcom/gtoolkit-inspector:v0.8.1618/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-inspector:v0.8.1619/src' ].
 
 		spec package: 'GToolkit4Json' with: [
 			spec requires: #('NeoJSON' 'GToolkitBasicUtility' 'Brick' 'JSONParser' 'GToolkitInspector') ].
