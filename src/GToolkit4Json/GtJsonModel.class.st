@@ -73,7 +73,7 @@ GtJsonModel >> gtJsonObjectFor: aView context: aContext [
 	self jsonExists ifFalse: [ ^ aView empty ].
 
 	^ aView forward
-		  title: 'JSON Object';
+		  title: 'JSON object';
 		  priority: 71;
 		  object: [ self json ];
 		  view: #gtJsonObjectFor:context:
@@ -86,7 +86,7 @@ GtJsonModel >> gtJsonPathFor: aView [
 	self json ifNil: [ ^ aView empty ].
 
 	^ aView forward
-		  title: 'JSON Path';
+		  title: 'JSON path';
 		  priority: 72;
 		  object: [ self json ];
 		  view: #gtJsonPathFor:

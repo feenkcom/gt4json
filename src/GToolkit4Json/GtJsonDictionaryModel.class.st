@@ -63,7 +63,7 @@ GtJsonDictionaryModel >> gtJsonModelDefinitionFor: aView [
 
 	<gtView>
 	^ aView columnedTree
-		  title: 'Model Structure';
+		  title: 'Model structure';
 		  priority: 60;
 		  items: [ self jsonModelDefinition ];
 		  children: [ :anItem | anItem jsonModelDefinition asCollection ];
@@ -91,7 +91,7 @@ GtJsonDictionaryModel >> gtModelsFor: aView [
 
 	<gtView>
 	^ aView columnedList
-		  title: 'Model Cache';
+		  title: 'Model cache';
 		  tooltip: 'I display model objects that were already instantiated';
 		  priority: 65;
 		  items: [ self gtModelChildren ];
