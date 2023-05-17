@@ -322,7 +322,7 @@ GtJsonBasic >> gtJsonObjectFor: aView context: aContext [
 		ifAbsentPut: [ [ :aNode | aNode value gtJsonValueDisplayText ] ].
 
 	^ aView forward
-		title: 'JSON Object';
+		title: 'JSON object';
 		priority: 40;
 		object: [ self jsonObject ];
 		view: #gtRawJsonFor:context:;
@@ -336,7 +336,7 @@ GtJsonBasic >> gtJsonPathFor: aView [
 
 	<gtView>
 	^ aView columnedList
-		  title: 'JSON Path';
+		  title: 'JSON path';
 		  priority: 42;
 		  items: [ self parents ];
 		  column: 'Icon' stencil: [ :aNode | 
@@ -368,7 +368,7 @@ GtJsonBasic >> gtJsonStringFor: aView [
 	self exists ifFalse: [ ^ aView empty ].
 
 	^ aView textEditor
-		title: 'JSON String';
+		title: 'JSON string';
 		priority: 41;
 		aptitude: [ BrGlamorousCodeEditorAptitude ];
 		styler: [ JSONParser gtStyler ];

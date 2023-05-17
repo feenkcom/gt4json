@@ -58,7 +58,7 @@ GtJsonLeafModel >> gtErrorDescriptionFor: aView [
 	self valueExists ifTrue: [ ^ aView empty ].
 
 	^ aView textEditor
-		  title: 'Invalid Value';
+		  title: 'Invalid value';
 		  priority: 1;
 		  glamorousRegularFontAndSize;
 		  text: [ self modelValue description ]
