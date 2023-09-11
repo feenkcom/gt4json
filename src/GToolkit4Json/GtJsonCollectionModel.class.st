@@ -91,9 +91,36 @@ GtJsonCollectionModel >> do: aBlock [
 			aBlock cull: aModel cull: anIndex ]
 ]
 
+{ #category : #enumerating }
+GtJsonCollectionModel >> do: aBlock separatedBy: aSeparatorBlock [
+	| isBeforeFirst |
+	isBeforeFirst := true.
+	^ 1
+		to: self size
+		do: [ :anIndex | 
+			| aModel |
+			isBeforeFirst 
+				ifTrue: [ isBeforeFirst := false ]
+				ifFalse: [ aSeparatorBlock value ].
+			aModel := self modelAt: anIndex.
+			aBlock cull: aModel cull: anIndex ]
+]
+
 { #category : #private }
 GtJsonCollectionModel >> errorNotFound: anObject [
 	NotFound signalFor: anObject
+]
+
+{ #category : #enumerating }
+GtJsonCollectionModel >> flatCollect: aBlock [
+	^ Array
+		new: self size
+		streamContents: [ :aStream | 
+			self
+				do: [ :anItemModel :anIndex | 
+					| aValue |
+					aValue := aBlock cull: anItemModel cull: anIndex.
+					aStream nextPutAll: aValue ] ]
 ]
 
 { #category : #'gt - extensions' }
