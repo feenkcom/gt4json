@@ -51,6 +51,13 @@ GtJsonLeafModel >> defaultValue: anObject [
 	defaultValue := anObject
 ]
 
+{ #category : #printing }
+GtJsonLeafModel >> gtDisplayOn: stream [
+	self valueExists
+		ifTrue: [ self value gtDisplayOn: stream ]
+		ifFalse: [ super gtDisplayOn: stream ]
+]
+
 { #category : #'gt - extensions' }
 GtJsonLeafModel >> gtErrorDescriptionFor: aView [
 
@@ -81,6 +88,14 @@ GtJsonLeafModel >> gtPreviewFor: aView [
 GtJsonLeafModel >> modelValue [
 
 	^ modelValue ifNil: [ modelValue := self createModelValue ]
+]
+
+{ #category : #accessing }
+GtJsonLeafModel >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPut: $(.
+	self valueExists ifTrue: [ self value printOn: aStream ].
+	aStream nextPut: $)
 ]
 
 { #category : #private }
