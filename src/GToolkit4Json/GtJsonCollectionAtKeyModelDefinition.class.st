@@ -37,6 +37,11 @@ GtJsonCollectionAtKeyModelDefinition >> defaultValue: anObject [
 	defaultValue := anObject
 ]
 
+{ #category : #testing }
+GtJsonCollectionAtKeyModelDefinition >> includesKey: aKey [
+	^ self key = aKey
+]
+
 { #category : #accessing }
 GtJsonCollectionAtKeyModelDefinition >> jsonModelDefinition [
 

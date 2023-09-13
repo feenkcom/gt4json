@@ -18,6 +18,19 @@ GtJsonDictionaryModel class >> forValue: aValue defaultValue: aDefaultValue [
 	^ aValue
 ]
 
+{ #category : #enumerating }
+GtJsonDictionaryModel >> collect: aBlock [
+	| newCollection |
+	newCollection := OrderedDictionary new.
+	self
+		do: [ :anItemModel :aKey | 
+			| aValue |
+			aValue := aBlock cull: anItemModel cull: aKey.
+			newCollection at: aKey put: aValue ].
+
+	^ newCollection
+]
+
 { #category : #accessing }
 GtJsonDictionaryModel >> createModelAt: aKey [
 
@@ -25,9 +38,10 @@ GtJsonDictionaryModel >> createModelAt: aKey [
 	aDefinition := self modelDefinitionAt: aKey.
 
 	self json ifNil: [ 
-		| aValue |
-		aValue := aDefinition ifNotNil: #defaultValue.
-		^ GtJsonLeafModel new value: aValue ].
+		aDefinition ifNotNil: [ 
+			aModel := aDefinition createDefaultModel.
+			self modelAt: aKey put: aModel.
+			^ aModel ] ].
 
 	aJson := self json at: aKey.
 	(aJson exists not and: [ aDefinition isNil ]) ifTrue: [ 
@@ -43,6 +57,15 @@ GtJsonDictionaryModel >> createModelAt: aKey [
 	^ aModel
 ]
 
+{ #category : #enumerating }
+GtJsonDictionaryModel >> do: aBlock [
+	^ self json
+		do: [ :aValue :aKey | 
+			| aModel |
+			aModel := self modelAt: aKey.
+			aBlock cull: aModel cull: aKey ]
+]
+
 { #category : #accessing }
 GtJsonDictionaryModel >> doesNotUnderstand: aMessage [
 	(aMessage numArgs isZero
@@ -55,7 +78,7 @@ GtJsonDictionaryModel >> doesNotUnderstand: aMessage [
 			(self modelDefinitionAt: aSelector) isNotNil
 				ifTrue: [ ^ self valueAt: aSelector put: aMessage arguments first ] ].
 
-	super doesNotUnderstand: aMessage
+	^ super doesNotUnderstand: aMessage
 ]
 
 { #category : #'gt - extensions' }
@@ -130,7 +153,7 @@ GtJsonDictionaryModel >> modelAt: aKey put: aValue [
 GtJsonDictionaryModel >> modelDefinitionAt: aKey [
 
 	^ self jsonModelDefinition
-		  detect: [ :eachDefinition | eachDefinition key = aKey ]
+		  detect: [ :eachDefinition | eachDefinition includesKey: aKey ]
 		  ifNone: [ nil ]
 ]
 
@@ -141,6 +164,12 @@ GtJsonDictionaryModel >> models [
 ]
 
 { #category : #accessing }
+GtJsonDictionaryModel >> size [
+	self json ifNotNil: [ :aJson | ^ aJson jsonObject size ].
+	^ models ifNotNil: #size ifNil: [ 0 ]
+]
+
+{ #category : #accessing }
 GtJsonDictionaryModel >> valueAt: aKey [
 
 	^ (self modelAt: aKey) value
@@ -148,13 +177,11 @@ GtJsonDictionaryModel >> valueAt: aKey [
 
 { #category : #accessing }
 GtJsonDictionaryModel >> valueAt: aKey put: aValue [
-
 	| aDefinition aModel |
 	aDefinition := self modelDefinitionAt: aKey.
 	aDefinition
 		ifNotNil: [ aModel := aDefinition createModelForValue: aValue ]
-		ifNil: [ 
-		aModel := GtJsonLeafModel forValue: aValue defaultValue: nil ].
+		ifNil: [ aModel := GtJsonLeafModel forValue: aValue defaultValue: nil ].
 
 	self modelAt: aKey put: aModel
 ]
@@ -165,4 +192,9 @@ GtJsonDictionaryModel >> valueExists [
 	"I am an instance, therefore I exist. Does not matter whether all my values are defined."
 
 	^ true
+]
+
+{ #category : #enumerating }
+GtJsonDictionaryModel >> withIndexCollect: aBlock [
+	^ self collect: aBlock
 ]
