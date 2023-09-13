@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #'instace creation' }
+GtJsonModelDefinition >> createDefaultModel [
+	^ GtJsonLeafModel new value: self defaultValue value
+]
+
+{ #category : #'instace creation' }
 GtJsonModelDefinition >> createModelForJson: aJson [
 
 	^ self modelClass forJson: aJson defaultValue: self defaultValue
@@ -32,6 +37,11 @@ GtJsonModelDefinition >> defaultValue [
 GtJsonModelDefinition >> defaultValue: anObject [
 
 	defaultValue := anObject
+]
+
+{ #category : #testing }
+GtJsonModelDefinition >> includesKey: aKey [
+	^ self key = aKey
 ]
 
 { #category : #accessing }

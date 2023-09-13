@@ -62,6 +62,16 @@ GtJsonModelExamples >> emptyDateAndTimeModel [
 ]
 
 { #category : #'examples - person' }
+GtJsonModelExamples >> emptyPersonKeyedAddressesModel [
+
+	<gtExample>
+	| aPerson |
+	aPerson := GtJsonPersonKeyedAddressesModel new.
+	
+	^ aPerson
+]
+
+{ #category : #'examples - person' }
 GtJsonModelExamples >> emptyPersonModel [
 
 	<gtExample>
@@ -138,6 +148,56 @@ GtJsonModelExamples >> personJson [
 ]
 
 { #category : #'examples - person' }
+GtJsonModelExamples >> personKeyedAddressesJson [
+
+	<gtExample>
+	^ GtJsonExamples new personKeyedAddressesJson
+]
+
+{ #category : #'examples - person' }
+GtJsonModelExamples >> personKeyedAddressesModel_ExplicitValue [
+	<gtExample>
+	| aPerson |
+	aPerson := self emptyPersonKeyedAddressesModel.
+
+	aPerson firstName: 'Joe'.
+	aPerson familyName: 'Doe'.
+	aPerson birthday: '12 June 2001' asDate.
+
+	aPerson addresses home: self primaryAddressModel_ExplicitValues.
+	aPerson addresses work: self anotherAddressModel_JsonValues.
+
+	self assert: aPerson firstName equals: 'Joe'.
+	self assert: aPerson familyName equals: 'Doe'.
+	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self assert: aPerson addresses size equals: 2.
+
+	self assert: aPerson addresses home street equals: 'Kostelní 12'.
+	self assert: aPerson addresses work street equals: 'Kopernikova 345'.
+	
+	^ aPerson
+]
+
+{ #category : #'examples - person' }
+GtJsonModelExamples >> personKeyedAddressesModel_JsonValue [
+
+	<gtExample>
+	| aJson aPerson |
+	aJson := self personKeyedAddressesJson.
+	aPerson := self emptyPersonKeyedAddressesModel.
+	aPerson json: aJson.
+
+	self assert: aPerson firstName equals: 'Joe'.
+	self assert: aPerson familyName equals: 'Doe'.
+	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self assert: aPerson addresses size equals: 2.
+	
+	self assert: aPerson addresses home street equals: 'Kopernikova 345'.
+
+	^ aPerson
+]
+
+{ #category : #'examples - person' }
 GtJsonModelExamples >> personModel_ExplicitValue [
 
 	<gtExample>
@@ -187,7 +247,7 @@ GtJsonModelExamples >> personsJson [
 { #category : #'examples - persons' }
 GtJsonModelExamples >> personsModel_JsonValue [
 	<gtExample>
-	| aJson aPersons |
+	| aPersons |
 	aPersons := self emptyPersonsModel.
 
 	aPersons

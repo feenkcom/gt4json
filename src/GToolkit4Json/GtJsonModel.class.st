@@ -7,6 +7,16 @@ Class {
 	#category : #'GToolkit4Json-Model'
 }
 
+{ #category : #'instance creation - definition' }
+GtJsonModel class >> dictionariesKey: aKey at: anObject defaultValue: aValue [
+
+	^ GtJsonDictionariesAtKeyModelDefinition new
+		  object: anObject;
+		  modelClass: self;
+		  key: aKey;
+		  defaultValue: aValue
+]
+
 { #category : #'instance creation' }
 GtJsonModel class >> forJson: aJson [
 
