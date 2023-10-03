@@ -167,6 +167,13 @@ GtJsonBasic >> atPath: aCollection [
 ]
 
 { #category : #'accessing - path' }
+GtJsonBasic >> atPath: aCollection ifPresent: presentBlock ifAbsent: absentBlock [
+	| aJson |
+	aJson := self atPath: aCollection.
+	^ aJson ifExists: presentBlock ifNotExists: absentBlock
+]
+
+{ #category : #'accessing - path' }
 GtJsonBasic >> atPath: aCollection put: aValue [
 	| aParent |
 	aParent := aCollection allButLast
