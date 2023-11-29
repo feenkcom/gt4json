@@ -9,7 +9,11 @@ BaselineOfGToolkit4NeoJSON >> baseline: spec [
 	<baseline>
 	spec
 		for: #common
-		do: [ spec
+		do: [ 
+			spec
 				baseline: 'NeoJSON'
-				with: [ spec repository: 'github://svenvc/NeoJSON:master/repository' ] ]
+				with: [ spec repository: 'github://svenvc/NeoJSON:master/repository' ].
+			spec 
+				package: 'GToolkit4NeoJSON' 
+				with: [ spec requires: #('NeoJSON') ] ]
 ]
