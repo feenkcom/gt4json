@@ -1,6 +1,9 @@
 Class {
 	#name : #NeoJSONSchemaTests,
 	#superclass : #TestCase,
+	#instVars : [
+		'schema'
+	],
 	#category : #'GToolkit4NeoJSON-Schema'
 }
 
@@ -9,9 +12,51 @@ NeoJSONSchemaTests >> arrayOfInstances [
 	^ { 42 . 'string' . Float pi . true . nil . #(1 2 3). { 'foo'->'bar' } as: NeoJSONObject }
 ]
 
+{ #category : #asserting }
+NeoJSONSchemaTests >> assertValid: jsonObject [
+	| validator errors |
+	validator := schema validator.
+	validator validate: jsonObject.
+	errors := validator validationErrors.
+	self assert: validator isValid.
+	self assert: errors isEmpty.
+	^ validator
+]
+
+{ #category : #asserting }
+NeoJSONSchemaTests >> assertValidJson: jsonString [
+	| jsonObject |
+	jsonObject := NeoJSONObject fromString: jsonString.
+	^ self assertValid: jsonObject
+]
+
+{ #category : #asserting }
+NeoJSONSchemaTests >> denyValid: jsonObject [
+	| validator errors |
+	validator := schema validator.
+	validator validate: jsonObject.
+	errors := validator validationErrors.
+	self deny: validator isValid.
+	self deny: errors isEmpty.
+	^ validator
+]
+
+{ #category : #asserting }
+NeoJSONSchemaTests >> denyValidJson: jsonString [
+	| jsonObject |
+	jsonObject := NeoJSONObject fromString: jsonString.
+	^ self denyValid: jsonObject
+]
+
 { #category : #accessing }
+NeoJSONSchemaTests >> schemaFromJson: jsonString [
+	| jsonObject |
+	jsonObject := NeoJSONObject fromString: jsonString.
+	schema := NeoJSONSchema new json: jsonObject
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testBoolean [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 'type' -> 'boolean' } as: NeoJSONObject).
 	#( true false ) do: [ :each |
 		self assert: (schema validate: each) ].
@@ -19,9 +64,8 @@ NeoJSONSchemaTests >> testBoolean [
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testConst [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 'const' -> 'one' } as: NeoJSONObject).
 	self assert: (schema validate: 'one').
 	{ 42 . 'string' . Float pi . true . #(1 2 3). { 'foo'->'bar' } as: NeoJSONObject } do: [ :each |
@@ -30,15 +74,13 @@ NeoJSONSchemaTests >> testConst [
 
 { #category : #testing }
 NeoJSONSchemaTests >> testEmpty [
-	| schema |
 	schema := NeoJSONSchema new.
 	self arrayOfInstances do: [ :each |
 		self assert: (schema validate: each) ] 
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testEnum [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 'enum' -> #( 'one' 'two' ) } as: NeoJSONObject).
 	#( 'one' 'two' ) do: [ :each |
 		self assert: (schema validate: each) ].
@@ -48,15 +90,13 @@ NeoJSONSchemaTests >> testEnum [
 
 { #category : #testing }
 NeoJSONSchemaTests >> testFalse [
-	| schema |
 	schema := NeoJSONSchema new json: false.
 	self arrayOfInstances do: [ :each |
 		self deny: (schema validate: each) ] 
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testInteger [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 'type' -> 'integer' } as: NeoJSONObject).
 	#( 1 -1 0 1.0 0.0 -1.0 ) do: [ :each |
 		self assert: (schema validate: each) ].
@@ -64,9 +104,8 @@ NeoJSONSchemaTests >> testInteger [
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testIntegerMultiple [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 
 		'type' -> 'integer' . 
 		'multipleOf' -> 10 } as: NeoJSONObject).
@@ -76,18 +115,16 @@ NeoJSONSchemaTests >> testIntegerMultiple [
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testNull [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 'type' -> 'null' } as: NeoJSONObject).
 	self assert: (schema validate: nil).
 	{ 42 . 'string' . Float pi . true . #(1 2 3). { 'foo'->'bar' } as: NeoJSONObject } do: [ :each |
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testNumber [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 'type' -> 'number' } as: NeoJSONObject).
 	#( 1 -1 0 1.0 0.0 -1.0 3.14159 -0.123456789e10 ) do: [ :each |
 		self assert: (schema validate: each) ].
@@ -95,9 +132,8 @@ NeoJSONSchemaTests >> testNumber [
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testNumberExclusiveRange [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 
 		'type' -> 'number' . 
 		'exclusiveMinimum' -> 10 . 
@@ -108,9 +144,8 @@ NeoJSONSchemaTests >> testNumberExclusiveRange [
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testNumberRange [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 
 		'type' -> 'number' . 
 		'minimum' -> 10 . 
@@ -121,9 +156,28 @@ NeoJSONSchemaTests >> testNumberRange [
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+NeoJSONSchemaTests >> testObjectSimple [
+	self schemaFromJson: '
+	{
+		"type":"object",
+		"properties":{
+			"first":{"type":"string","minLength":1},
+			"last":{"type":"string","minLength":1},
+			"age":{"type":"integer","minimum":1}},
+		"required":["first","last"]
+	}'.
+	self assertValidJson: '{"first":"Jane","last":"Doe","age":33}'.
+	self assertValidJson: '{"first":"Jane","last":"Doe"}'.
+	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
+	self denyValidJson: '{"first":"Jane","last":"","age":33}'.
+	self denyValidJson: '{"first":-1,"last":false,"age":"N/A"}'.
+	self denyValidJson: '{"first":"Jane","age":33}'.
+	self denyValidJson: '{"first":"Jane","last":{},"age":33}'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testString [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 'type' -> 'string' } as: NeoJSONObject).
 	#( 'str' '' 'élève' ) do: [ :each |
 		self assert: (schema validate: each) ].
@@ -131,9 +185,8 @@ NeoJSONSchemaTests >> testString [
 		self deny: (schema validate: each) ] 	
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 NeoJSONSchemaTests >> testStringLength [
-	| schema |
 	schema := NeoJSONSchema new json: ({ 
 		'type' -> 'string'.
 		'minLength' -> 2.
@@ -146,7 +199,6 @@ NeoJSONSchemaTests >> testStringLength [
 
 { #category : #testing }
 NeoJSONSchemaTests >> testTrue [
-	| schema |
 	schema := NeoJSONSchema new json: true.
 	self arrayOfInstances do: [ :each |
 		self assert: (schema validate: each) ] 
