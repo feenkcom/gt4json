@@ -56,6 +56,44 @@ NeoJSONSchemaTests >> schemaFromJson: jsonString [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testArraySimpleListValidation [
+	self schemaFromJson: '
+	{
+		"type":"array",
+		"items":{
+			"type":"string",
+			"minLength":1
+		}
+	}'.
+	self assertValidJson: '["foo","bar"]'.
+	self assertValidJson: '[]'.
+	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
+	self denyValidJson: '[1,2,3]'.
+	self denyValidJson: '["foo",""]'.
+	self denyValidJson: '100'.
+	self denyValidJson: 'null'.
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testArraySimpleTupleValidation [
+	self schemaFromJson: '
+	{
+		"type":"array",
+		"prefixItems":[
+			{"type":"string","minLength":1},
+			{"type":"integer","minimum":1}
+		]
+	}'.
+	self assertValidJson: '["foo",100]'.
+	self assertValidJson: '["x",1]'.
+	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
+	self denyValidJson: '[1,2,3]'.
+	self denyValidJson: '["",0]'.
+	self denyValidJson: '["x",-1]'.
+	self denyValidJson: '["",1000]'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testBoolean [
 	schema := NeoJSONSchema new json: ({ 'type' -> 'boolean' } as: NeoJSONObject).
 	#( true false ) do: [ :each |
@@ -182,6 +220,15 @@ NeoJSONSchemaTests >> testString [
 	#( 'str' '' 'élève' ) do: [ :each |
 		self assert: (schema validate: each) ].
 	{ 42 . 3.14159 . true . nil . #(1 2 3) } do: [ :each |
+		self deny: (schema validate: each) ] 	
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testStringFormatDateTime [
+	schema := NeoJSONSchema new json: ({ 'type' -> 'string' . 'format' -> 'date-time' } as: NeoJSONObject).
+	#( '2018-11-13T20:20:39+00:00' '2024-04-02T08:15:09.762852Z' '2024-04-02T08:15:09.762852+02:00' ) do: [ :each |
+		self assert: (schema validate: each) ].
+	{ 'foo' . '2024-AA-02T08:15:09.762852Z' . 42 . 3.14159 . true . nil . #(1 2 3) } do: [ :each |
 		self deny: (schema validate: each) ] 	
 ]
 
