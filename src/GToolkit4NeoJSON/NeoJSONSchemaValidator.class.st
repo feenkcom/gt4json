@@ -242,7 +242,9 @@ NeoJSONSchemaValidator >> validateString [
 	schema maxLength ifNotNil: [ :maximum |
 		instance size <= maximum
 			ifFalse: [ self addValidationErrorMessage: ('longer than maxLength [{1}]' format: { maximum }) ] ].
-	"pattern"
+	schema pattern ifNotNil: [ :pattern |
+		(instance matchesRegex: pattern)
+			ifFalse: [ self addValidationErrorMessage: ('string does not match pattern [{1}]' format: { pattern }) ] ].
 	schema format ifNotNil: [ :format |
 		(self knownFormats includes: format)
 			ifTrue: [ self perform: #validateFormat , (($- split: format) flatCollect: #capitalized as: String) ] ]

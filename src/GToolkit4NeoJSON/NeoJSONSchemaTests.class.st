@@ -306,6 +306,20 @@ NeoJSONSchemaTests >> testStringLength [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testStringPattern [
+	self schemaFromJson: '
+	{
+		"type": "string",
+		"pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+	}'.
+	self assertValidJson: '"555-1212"'.
+	self assertValidJson: '"(888)555-1212"'.
+	self denyValidJson: '"(888)555-1212 ext. 532"'.
+	self denyValidJson: '"(800)FLOWERS"'.
+	self denyValidJson: '42'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testTrue [
 	schema := NeoJSONSchema new json: true.
 	self arrayOfInstances do: [ :each |
