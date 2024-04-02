@@ -84,7 +84,8 @@ NeoJSONSchemaValidator >> validate: jsonInstance [
 		ifNotNil: [ :type | 
 			(self knowTypes includes: type)
 				ifTrue: [ self perform: #validate , type capitalized ] ].
-	self validateGeneral.
+	self validateGeneric.
+	self validateComposition.
 	^ self isValid
 ]
 
@@ -125,6 +126,34 @@ NeoJSONSchemaValidator >> validateBoolean [
 		ifFalse: [ self addValidationErrorMessage: 'boolean expected' ].
 ]
 
+{ #category : #validation }
+NeoJSONSchemaValidator >> validateComposition [
+	| subSchema subValidator |
+	schema allOf ifNotNil: [ :allOf |
+		(allOf allSatisfy: [ :each |
+			subSchema := schema resolveSubSchema: each.
+			subValidator := subSchema validator.
+			subValidator validate: instance ])
+			ifFalse: [ self addValidationErrorMessage: 'allOf failed' ] ].
+	schema anyOf ifNotNil: [ :anyOf |
+		(anyOf anySatisfy: [ :each |
+			subSchema := schema resolveSubSchema: each.
+			subValidator := subSchema validator.
+			subValidator validate: instance ])
+			ifFalse: [ self addValidationErrorMessage: 'anyOf failed' ] ].
+	schema oneOf ifNotNil: [ :oneOf |
+		(oneOf count: [ :each |
+			subSchema := schema resolveSubSchema: each.
+			subValidator := subSchema validator.
+			subValidator validate: instance ]) = 1
+			ifFalse: [ self addValidationErrorMessage: 'oneOf failed' ] ].
+	schema not ifNotNil: [ :not |
+		subSchema := schema resolveSubSchema: not.
+		subValidator := subSchema validator.
+		(subValidator validate: instance)
+			ifTrue: [ self addValidationErrorMessage: 'not failed' ] ]
+]
+
 { #category : #formats }
 NeoJSONSchemaValidator >> validateFormatDateTime [
 	[ DateAndTime fromString: instance ]
@@ -133,7 +162,7 @@ NeoJSONSchemaValidator >> validateFormatDateTime [
 ]
 
 { #category : #validation }
-NeoJSONSchemaValidator >> validateGeneral [
+NeoJSONSchemaValidator >> validateGeneric [
 	schema const ifNotNil: [ :const |
 		instance = const 
 			ifFalse: [ self addValidationErrorMessage: ('not equal to const [{1}]' format: { const }) ] ].
