@@ -33,6 +33,23 @@ NeoJSONSchemaExamples >> firstSchemaInstanceOneJson [
 ]
 
 { #category : #accessing }
+NeoJSONSchemaExamples >> firstSchemaInstanceTwoJson [
+	^ '{
+  "productId": 1,
+  "productName": "An ice sculpture",
+  "price": 12.50,
+  "tags": [ "cold", "ice" ],
+  "dimensions": {
+    "length": 7.0,
+    "width": 12.0
+  },
+  "warehouseLocation": {
+    "latitude": -200.4
+  }
+}'
+]
+
+{ #category : #accessing }
 NeoJSONSchemaExamples >> firstSchemaJson [
 	^ '{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -116,5 +133,17 @@ NeoJSONSchemaExamples >> validateFirstSchemaInstanceOne [
 	validator := schema validator.
 	self assert: (validator validate: instance).
 	self assert: validator validationErrors isEmpty.
+	^ validator
+]
+
+{ #category : #accessing }
+NeoJSONSchemaExamples >> validateFirstSchemaInstanceTwo [
+	<gtExample>
+	| schema instance validator |
+	schema := self firstSchema.
+	instance := NeoJSONObject fromString: self firstSchemaInstanceTwoJson.
+	validator := schema validator.
+	self assert: (validator validate: instance) not.
+	self assert: validator validationErrors notEmpty.
 	^ validator
 ]
