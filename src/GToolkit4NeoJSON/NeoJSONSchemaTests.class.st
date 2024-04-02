@@ -56,6 +56,38 @@ NeoJSONSchemaTests >> schemaFromJson: jsonString [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testAllOf [
+	self schemaFromJson: '
+	{
+		"allOf":[
+			{"type":"string","maxLength":7},
+			{"type":"string","minLength":3}
+		]
+	}'.
+	self assertValidJson: '"foobar"'.
+	self assertValidJson: '"abcd"'.
+	self denyValidJson: '"fo"'.
+	self denyValidJson: '"abcdefghijklmnopqrstuvwxyz"'.
+	self denyValidJson: '[1,2]'.
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testAnyOf [
+	self schemaFromJson: '
+	{
+		"anyOf":[
+			{"type":"string"},
+			{"type":"integer"}
+		]
+	}'.
+	self assertValidJson: '"foobar"'.
+	self assertValidJson: '100'.
+	self denyValidJson: 'true'.
+	self denyValidJson: '-3.14159'.
+	self denyValidJson: '[1,2]'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testArraySimpleListValidation [
 	self schemaFromJson: '
 	{
@@ -154,6 +186,19 @@ NeoJSONSchemaTests >> testIntegerMultiple [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testNot [
+	self schemaFromJson: '
+	{
+		"not":{
+			"type":"string"
+		}
+	}'.
+	self assertValidJson: '100'.
+	self assertValidJson: 'null'.
+	self denyValidJson: '"foo"'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testNull [
 	schema := NeoJSONSchema new json: ({ 'type' -> 'null' } as: NeoJSONObject).
 	self assert: (schema validate: nil).
@@ -215,6 +260,22 @@ NeoJSONSchemaTests >> testObjectSimple [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testOneOf [
+	self schemaFromJson: '
+	{
+		"oneOf":[
+			{"type":"integer","multipleOf":5},
+			{"type":"integer","multipleOf":3}
+		]
+	}'.
+	self assertValidJson: '10'.
+	self assertValidJson: '9'.
+	self denyValidJson: '2'.
+	self denyValidJson: '-3.14159'.
+	self denyValidJson: '15'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testString [
 	schema := NeoJSONSchema new json: ({ 'type' -> 'string' } as: NeoJSONObject).
 	#( 'str' '' 'élève' ) do: [ :each |
@@ -242,6 +303,20 @@ NeoJSONSchemaTests >> testStringLength [
 		self assert: (schema validate: each) ].
 	#( '' 'A' 'ABCDE' 42 true nil ) do: [ :each |
 		self deny: (schema validate: each) ] 	
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testStringPattern [
+	self schemaFromJson: '
+	{
+		"type": "string",
+		"pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+	}'.
+	self assertValidJson: '"555-1212"'.
+	self assertValidJson: '"(888)555-1212"'.
+	self denyValidJson: '"(888)555-1212 ext. 532"'.
+	self denyValidJson: '"(800)FLOWERS"'.
+	self denyValidJson: '42'.
 ]
 
 { #category : #testing }
