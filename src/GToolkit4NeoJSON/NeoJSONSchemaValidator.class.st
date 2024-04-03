@@ -122,6 +122,23 @@ NeoJSONSchemaValidator >> validateArray [
 						ifFalse: [
 							itemsValidator validationErrors do: [ :error | 
 								self addValidationError: (error pushLocation: index) ] ] ] ] ].
+	schema uniqueItems ifNotNil: [ :uniqueItems |
+		uniqueItems ifTrue: [
+			instance asSet size = instance size ifFalse: [ self addValidationErrorMessage: 'array uniqueItems expected' ] ] ].
+	schema minItems ifNotNil: [ :minItems |
+		minItems <= instance size ifFalse: [
+			self addValidationErrorMessage: ('less than minItems [{1}]' format: { minItems }) ] ].
+	schema maxItems ifNotNil: [ :maxItems |
+		instance size  <= maxItems ifFalse: [
+			self addValidationErrorMessage: ('more than maxItems [{1}]' format: { maxItems }) ] ].
+	schema contains ifNotNil: [ :contains |
+		| containsSchema containsValidator |
+		containsSchema := schema resolveSubSchema: contains.
+		containsValidator := containsSchema validator.
+		(instance anySatisfy: [ :each | containsValidator validate: each ])
+			ifFalse: [ self addValidationErrorMessage: 'contains expected' ].
+		"minContains"
+		"maxContains" ]
 ]
 
 { #category : #validation }
@@ -138,24 +155,24 @@ NeoJSONSchemaValidator >> validateComposition [
 			subSchema := schema resolveSubSchema: each.
 			subValidator := subSchema validator.
 			subValidator validate: instance ])
-			ifFalse: [ self addValidationErrorMessage: 'allOf failed' ] ].
+			ifFalse: [ self addValidationErrorMessage: 'allOf expected' ] ].
 	schema anyOf ifNotNil: [ :anyOf |
 		(anyOf anySatisfy: [ :each |
 			subSchema := schema resolveSubSchema: each.
 			subValidator := subSchema validator.
 			subValidator validate: instance ])
-			ifFalse: [ self addValidationErrorMessage: 'anyOf failed' ] ].
+			ifFalse: [ self addValidationErrorMessage: 'anyOf expected' ] ].
 	schema oneOf ifNotNil: [ :oneOf |
 		(oneOf count: [ :each |
 			subSchema := schema resolveSubSchema: each.
 			subValidator := subSchema validator.
 			subValidator validate: instance ]) = 1
-			ifFalse: [ self addValidationErrorMessage: 'oneOf failed' ] ].
+			ifFalse: [ self addValidationErrorMessage: 'oneOf expected' ] ].
 	schema not ifNotNil: [ :not |
 		subSchema := schema resolveSubSchema: not.
 		subValidator := subSchema validator.
 		(subValidator validate: instance)
-			ifTrue: [ self addValidationErrorMessage: 'not failed' ] ]
+			ifTrue: [ self addValidationErrorMessage: 'not expected' ] ]
 ]
 
 { #category : #formats }
