@@ -203,6 +203,67 @@ NeoJSONSchemaTests >> testConst [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testDependentRequired [
+	self schemaFromJson: '{
+  	"type": "object",
+  	"properties": {
+    	"name": { "type": "string" },
+   	 "credit_card": { "type": "number" },
+    	"billing_address": { "type": "string" }
+  	},
+  	"required": ["name"],
+  	"dependentRequired": {
+  	  "credit_card": ["billing_address"]
+  	}
+	}'.
+	self assertValidJson: '{
+  	"name": "John Doe",
+  	"credit_card": 5555555555555555,
+  	"billing_address": "555 Debtor''s Lane"
+	}'.
+	self assertValidJson: '{
+  	"name": "John Doe"
+	}'.
+	self denyValidJson: '{
+  	"name": "John Doe",
+  	"credit_card": 5555555555555555
+	}'.
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testDependentSchemas [
+	self schemaFromJson: '{
+ 	 "type": "object",
+  	"properties": {
+    	"name": { "type": "string" },
+    	"credit_card": { "type": "number" }
+  	},
+  	"required": ["name"],
+  	"dependentSchemas": {
+   	 "credit_card": {
+   	   "type":"object",
+    	  "properties": {
+        	"billing_address": { "type": "string" }
+      	},
+      	"required": ["billing_address"]
+    	}
+  	}
+	}'.
+	self assertValidJson: '{
+  	"name": "John Doe",
+  	"credit_card": 5555555555555555,
+  	"billing_address": "555 Debtor''s Lane"
+	}'.
+	self assertValidJson: '{
+  	"name": "John Doe"
+	}'.
+	self denyValidJson: '{
+  	"name": "John Doe",
+  	"credit_card": 5555555555555555
+	}'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testEmpty [
 	schema := NeoJSONSchema new.
 	self arrayOfInstances do: [ :each |
