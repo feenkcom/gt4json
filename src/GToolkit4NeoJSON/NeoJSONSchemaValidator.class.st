@@ -77,7 +77,7 @@ NeoJSONSchemaValidator >> validate: jsonInstance [
 	schema raw = true 
 		ifTrue: [ ^ true ].
 	schema raw = false
-		ifTrue: [ ^ self addValidationError: 'false JSON Schema is always invalid' ].
+		ifTrue: [ ^ self addValidationErrorMessage: 'false JSON Schema is always invalid' ].
 	schema isEmpty 
 		ifTrue: [ ^ true ].
 	schema type 
@@ -91,19 +91,11 @@ NeoJSONSchemaValidator >> validate: jsonInstance [
 
 { #category : #validation }
 NeoJSONSchemaValidator >> validateArray [
+	| lastPrefixItemMatch incomplete |
 	instance isArray
 		ifFalse: [ ^ self addValidationErrorMessage: 'array expected' ].
-	schema items ifNotNil: [ :items |
-		| itemsSchema itemsValidator |
-		itemsSchema := schema resolveSubSchema: items.
-		itemsValidator := itemsSchema validator.
-		instance doWithIndex: [ :item :index |
-			(itemsValidator validate: item)
-				ifFalse: [
-					itemsValidator validationErrors do: [ :error | 
-						self addValidationError: (error pushLocation: index) ] ] ] ].
+	lastPrefixItemMatch := 0.
 	schema prefixItems ifNotNil: [ :prefixItems |
-		| incomplete |
 		incomplete := false.
 		prefixItems doWithIndex: [ :prefixItem :index |
 			| subSchema subValidator subInstance |
@@ -114,10 +106,22 @@ NeoJSONSchemaValidator >> validateArray [
 				ifFalse: [
 					subInstance := instance at: index.
 					(subValidator validate: subInstance)
+						ifTrue: [ lastPrefixItemMatch := index ]
 						ifFalse: [
 							subValidator validationErrors do: [ :error | 
-						self addValidationError: (error pushLocation: index) ] ] ] ].
+								self addValidationError: (error pushLocation: index) ] ] ] ].
 		incomplete ifTrue: [ self addValidationErrorMessage: 'array required prefixItems missing' ] ].
+	schema items ifNotNil: [ :items |
+		| itemsSchema itemsValidator |
+		itemsSchema := schema resolveSubSchema: items.
+		itemsValidator := itemsSchema validator.
+		instance doWithIndex: [ :item :index |
+			index > lastPrefixItemMatch
+				ifTrue: [
+					(itemsValidator validate: item)
+						ifFalse: [
+							itemsValidator validationErrors do: [ :error | 
+								self addValidationError: (error pushLocation: index) ] ] ] ] ].
 ]
 
 { #category : #validation }

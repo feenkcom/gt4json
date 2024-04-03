@@ -88,6 +88,45 @@ NeoJSONSchemaTests >> testAnyOf [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testArrayAnyExtra [
+	self schemaFromJson: '
+	{
+		"type":"array",
+		"prefixItems":[
+			{"type":"string","minLength":1},
+			{"type":"integer","minimum":1}
+		]
+	}'.
+	self assertValidJson: '["foo",100]'.
+	self assertValidJson: '["foo",123,"extra"]'.
+	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
+	self denyValidJson: '[1,2,3]'.
+	self denyValidJson: '["",0]'.
+	self denyValidJson: '["x",-1]'.
+	self denyValidJson: '["",1000]'.
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testArrayNoExtra [
+	self schemaFromJson: '
+	{
+		"type":"array",
+		"prefixItems":[
+			{"type":"string","minLength":1},
+			{"type":"integer","minimum":1}
+		],
+		"items":false
+	}'.
+	self assertValidJson: '["foo",100]'.
+	self denyValidJson: '["foo",123,"extra"]'.
+	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
+	self denyValidJson: '[1,2,3]'.
+	self denyValidJson: '["",0]'.
+	self denyValidJson: '["x",-1]'.
+	self denyValidJson: '["",1000]'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testArraySimpleListValidation [
 	self schemaFromJson: '
 	{
@@ -118,6 +157,27 @@ NeoJSONSchemaTests >> testArraySimpleTupleValidation [
 	}'.
 	self assertValidJson: '["foo",100]'.
 	self assertValidJson: '["x",1]'.
+	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
+	self denyValidJson: '[1,2,3]'.
+	self denyValidJson: '["",0]'.
+	self denyValidJson: '["x",-1]'.
+	self denyValidJson: '["",1000]'.
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testArrayStringExtra [
+	self schemaFromJson: '
+	{
+		"type":"array",
+		"prefixItems":[
+			{"type":"string","minLength":1},
+			{"type":"integer","minimum":1}
+		],
+		"items":{"type":"string"}
+	}'.
+	self assertValidJson: '["foo",100]'.
+	self assertValidJson: '["foo",123,"extra"]'.
+	self denyValidJson: '["foo",123,1000000]'.
 	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
 	self denyValidJson: '[1,2,3]'.
 	self denyValidJson: '["",0]'.
