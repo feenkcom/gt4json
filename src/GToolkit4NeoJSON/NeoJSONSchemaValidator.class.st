@@ -86,6 +86,7 @@ NeoJSONSchemaValidator >> validate: jsonInstance [
 				ifTrue: [ self perform: #validate , type capitalized ] ].
 	self validateGeneric.
 	self validateComposition.
+	self validateConditionals.
 	^ self isValid
 ]
 
@@ -173,6 +174,33 @@ NeoJSONSchemaValidator >> validateComposition [
 		subValidator := subSchema validator.
 		(subValidator validate: instance)
 			ifTrue: [ self addValidationErrorMessage: 'not expected' ] ]
+]
+
+{ #category : #validation }
+NeoJSONSchemaValidator >> validateConditionals [
+	instance isDictionary ifFalse: [ ^ self ].
+	schema dependentRequired ifNotNil: [ :dependentRequired |
+		dependentRequired keysAndValuesDo: [ :key :value |
+			(instance includesKey: key)
+				ifTrue: [
+					value \ instance keys
+						ifNotEmpty: [ :missing | 
+							self addValidationErrorMessage: ('required properties missing [{1}]' format: 
+								{ ', ' join: missing }) ] ] ] ].
+	schema dependentSchemas ifNotNil: [ :dependentSchemas |
+		dependentSchemas keysAndValuesDo: [ :key :value |
+			(instance includesKey: key)
+				ifTrue: [
+					| subSchema subValidator |
+					subSchema := schema resolveSubSchema: value.
+					subValidator := subSchema validator.
+					(subValidator validate: instance)
+						ifFalse: [
+							subValidator validationErrors do: [ :error | 
+								self addValidationError: error ] ] ] ] ].
+	"if"
+	"then"
+	"else"
 ]
 
 { #category : #formats }
