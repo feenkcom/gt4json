@@ -373,10 +373,12 @@ NeoJSONSchema >> resolveJSONPointer: jsonPointer [
 
 { #category : #accessing }
 NeoJSONSchema >> resolveSubSchema: jsonObject [
-	(jsonObject at: '$ref')
-		ifNotNil: [ :url | 
-			(self resolveJSONPointer: url) ifNotNil: [ :resolvedJson |
-				^ self newSubSchema json: resolvedJson ] ].
+	jsonObject isDictionary
+		ifTrue: [ 
+			(jsonObject at: '$ref')
+				ifNotNil: [ :url | 
+					(self resolveJSONPointer: url)
+						ifNotNil: [ :resolvedJson | ^ self newSubSchema json: resolvedJson ] ] ].
 	^ self newSubSchema json: jsonObject
 ]
 
