@@ -121,23 +121,32 @@ NeoJSONSchema >> format [
 
 { #category : #'gt extensions' }
 NeoJSONSchema >> gtDetails [
-	| details special|
+	| details vocabulary subSchemas subSchemaMaps subSchemaLists printStrings special |
 	details := OrderedCollection new.
-	special := #(properties required defs).
-	self vocabulary do: [ :each |
-		| label accessor |
-		each isSymbol
-			ifTrue: [ accessor := label := each ]
-			ifFalse: [ accessor := each first. label := each second ].
-		(special includes: accessor) ifFalse: [
-			(self perform: accessor) ifNotNil: [ :value |
-				details add: { label . value } ] ] ].
-	self properties ifNotNil: [ :map | 
-		details add: { 'properties' . ', ' join: map keys . map } ].
-	self required ifNotNil: [ :list | 
-		details add: { 'required' . ', ' join: list . list } ].
-	self defs ifNotNil: [ :map | 
-		details add: { '$defs' . ', ' join: map keys . map } ].
+	vocabulary := self vocabulary 
+		collect: [ :each | each isSymbol ifTrue: [ each -> each ] ifFalse: [ each first -> each second ] ] 
+		as: OrderedDictionary.
+	subSchemas := #(items contains not if then else).
+	subSchemaLists := #(allOf anyOf oneOf).
+	subSchemaMaps := #(properties defs).
+	printStrings := #(required enum const default).
+	special := subSchemas , subSchemaLists , subSchemaMaps , printStrings.
+	vocabulary keys do: [ :key |
+		(special includes: key) ifFalse: [
+			(self perform: key) ifNotNil: [ :value |
+				details add: { vocabulary at: key . value } ] ] ].
+	subSchemas do: [ :key |
+		(self perform: key) ifNotNil: [ :value |
+			details add: { vocabulary at: key . self resolveSubSchema: value } ] ].
+	subSchemaLists do: [ :key |
+		(self perform: key) ifNotNil: [ :list |
+			details add: { vocabulary at: key . (list collect: [ :each | self resolveSubSchema: each ]) as: Array } ] ].
+	subSchemaMaps do: [ :key |
+		(self perform: key) ifNotNil: [ :map |
+			details add: { vocabulary at: key . (map collect: [ :each | self resolveSubSchema: each ]) as: Dictionary } ] ].			
+	printStrings do: [ :key |
+		(self perform: key) ifNotNil: [ :value |
+			details add: { vocabulary at: key . value printString . value } ] ].
 	 ^ details
 ]
 
