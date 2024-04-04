@@ -241,7 +241,6 @@ NeoJSONSchemaTests >> testDependentSchemas [
   	"required": ["name"],
   	"dependentSchemas": {
    	 "credit_card": {
-   	   "type":"object",
     	  "properties": {
         	"billing_address": { "type": "string" }
       	},
@@ -284,6 +283,60 @@ NeoJSONSchemaTests >> testFalse [
 	schema := NeoJSONSchema new json: false.
 	self arrayOfInstances do: [ :each |
 		self deny: (schema validate: each) ] 
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testIfThenElse [
+	self schemaFromJson: '{
+ 	 "type": "object",
+ 	 "properties": {
+    	"street_address": {
+      	"type": "string"
+    	},
+   	"country": {
+      	"default": "United States of America",
+      	"enum": ["United States of America", "Canada"]
+    	}
+  	},
+  	"if": {
+    	"properties": {
+      	"country": { "const": "United States of America" }
+    	}
+  	},
+  	"then": {
+    	"properties": {
+      	"postal_code": { "pattern": "[0-9]{5}(-[0-9]{4})?" }
+    	}
+  	},
+  	"else": {
+    	"properties": {
+      	"postal_code": { "pattern": "[A-Z][0-9][A-Z] [0-9][A-Z][0-9]" }
+    	}
+  	}
+	}'.
+	self assertValidJson: '{
+  	"street_address": "1600 Pennsylvania Avenue NW",
+  	"country": "United States of America",
+  	"postal_code": "20500"
+	}'.
+	self assertValidJson: '{
+  	"street_address": "1600 Pennsylvania Avenue NW",
+  	"postal_code": "20500"
+	}'.
+	self assertValidJson: '{
+  	"street_address": "24 Sussex Drive",
+  	"country": "Canada",
+  	"postal_code": "K1M 1M4"
+	}'.
+	self denyValidJson: '{
+  	"street_address": "24 Sussex Drive",
+  	"country": "Canada",
+  	"postal_code": "10000"
+	}'.
+	self denyValidJson: '{
+  	"street_address": "1600 Pennsylvania Avenue NW",
+  	"postal_code": "K1M 1M4"
+	}'.
 ]
 
 { #category : #testing }

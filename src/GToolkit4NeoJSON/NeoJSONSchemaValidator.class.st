@@ -84,6 +84,8 @@ NeoJSONSchemaValidator >> validate: jsonInstance [
 		ifNotNil: [ :type | 
 			(self knowTypes includes: type)
 				ifTrue: [ self perform: #validate , type capitalized ] ].
+	self validateObjectProperties.
+	self validateStringProperties.
 	self validateGeneric.
 	self validateComposition.
 	self validateConditionals.
@@ -178,6 +180,7 @@ NeoJSONSchemaValidator >> validateComposition [
 
 { #category : #validation }
 NeoJSONSchemaValidator >> validateConditionals [
+	| conditionValue subSchema subValidator |
 	instance isDictionary ifFalse: [ ^ self ].
 	schema dependentRequired ifNotNil: [ :dependentRequired |
 		dependentRequired keysAndValuesDo: [ :key :value |
@@ -191,16 +194,26 @@ NeoJSONSchemaValidator >> validateConditionals [
 		dependentSchemas keysAndValuesDo: [ :key :value |
 			(instance includesKey: key)
 				ifTrue: [
-					| subSchema subValidator |
 					subSchema := schema resolveSubSchema: value.
 					subValidator := subSchema validator.
 					(subValidator validate: instance)
 						ifFalse: [
 							subValidator validationErrors do: [ :error | 
 								self addValidationError: error ] ] ] ] ].
-	"if"
-	"then"
-	"else"
+	conditionValue := nil.
+	schema if ifNotNil: [ :if |
+		subSchema := schema resolveSubSchema: if.
+		conditionValue := subSchema validate: instance ].
+	schema then ifNotNil: [ :then |
+		conditionValue = true ifTrue: [
+			subSchema := schema resolveSubSchema: then.
+			(subSchema validate: instance)
+				ifFalse: [ self addValidationErrorMessage: 'if/then failed' ] ] ].
+	schema else ifNotNil: [ :else |
+		conditionValue = false ifTrue: [
+			subSchema := schema resolveSubSchema: else.
+			(subSchema validate: instance)
+				ifFalse: [ self addValidationErrorMessage: 'if/else failed' ] ] ].
 ]
 
 { #category : #formats }
@@ -262,13 +275,17 @@ NeoJSONSchemaValidator >> validateNumeric [
 { #category : #validation }
 NeoJSONSchemaValidator >> validateObject [
 	instance isDictionary
-		ifFalse: [ ^ self addValidationErrorMessage: 'object expected'].
+		ifFalse: [ self addValidationErrorMessage: 'object expected' ].
+]
+
+{ #category : #validation }
+NeoJSONSchemaValidator >> validateObjectProperties [
 	schema properties ifNotNil: [ :properties |
 		properties keysAndValuesDo: [ :key :value | 
 			| subSchema subValidator subInstance |
 			subSchema := schema resolveSubSchema: value.
 			subValidator := subSchema validator.
-			(instance includesKey: key)
+			(instance isDictionary and: [ instance includesKey: key ])
 				ifTrue: [
 					subInstance := instance at: key.
 					(subValidator validate: subInstance)
@@ -276,9 +293,13 @@ NeoJSONSchemaValidator >> validateObject [
 							subValidator validationErrors do: [ :error | 
 								self addValidationError: (error pushLocation: key) ] ] ] ] ].
 	schema required ifNotNil: [ :required |
-		required \ instance keys
-			ifNotEmpty: [ :missing | 
-				self addValidationErrorMessage: ('required properties missing [{1}]' format: { ', ' join: missing }) ] ].
+		instance isDictionary
+			ifTrue: [
+				required \ instance keys
+					ifNotEmpty: [ :missing | 
+						self addValidationErrorMessage: ('required properties missing [{1}]' format: { ', ' join: missing }) ]]
+			ifFalse: [ 
+				self addValidationErrorMessage: ('required properties missing [{1}]' format: { ', ' join: required }) ] ].
 ]
 
 { #category : #validation }
@@ -291,8 +312,12 @@ NeoJSONSchemaValidator >> validateString [
 	schema maxLength ifNotNil: [ :maximum |
 		instance size <= maximum
 			ifFalse: [ self addValidationErrorMessage: ('longer than maxLength [{1}]' format: { maximum }) ] ].
+]
+
+{ #category : #validation }
+NeoJSONSchemaValidator >> validateStringProperties [
 	schema pattern ifNotNil: [ :pattern |
-		(instance matchesRegex: pattern)
+		(instance isString and: [ instance matchesRegex: pattern ])
 			ifFalse: [ self addValidationErrorMessage: ('string does not match pattern [{1}]' format: { pattern }) ] ].
 	schema format ifNotNil: [ :format |
 		(self knownFormats includes: format)
