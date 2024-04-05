@@ -26,7 +26,23 @@ NeoJSONSchemaValidator >> addValidationErrorMessage: message [
 	^ self addValidationError: validationError
 ]
 
-{ #category : #accessing }
+{ #category : #'gt extensions' }
+NeoJSONSchemaValidator >> gtViewDetailsIn: composite [
+	<gtView>
+	^ composite columnedList
+		title: 'Details';
+		priority: 30;
+		items: [ {
+			{ #valid . self isValid }.
+			{ #instance . instance }.
+			{ #schema . self schema }. 
+		} ];
+		column: 'Key' text: #first;
+		column: 'Value' text: #second weight: 3;
+		send: #second
+]
+
+{ #category : #'gt extensions' }
 NeoJSONSchemaValidator >> gtViewValidationErrorsIn: composite [
 	<gtView>
 	self isValid ifTrue: [ ^ composite empty ].
