@@ -57,9 +57,11 @@ NeoJSONSchemaValidationError >> message: anObject [
 { #category : #accessing }
 NeoJSONSchemaValidationError >> messageText [
 	^ messageText ifNil: [ 
-		self location ifNotNil: [ 
-			messageText := '@[{1}] ' format: { $/ join: self location } ].
-		messageText := messageText , self message ]
+		messageText := self location
+			ifNil: [ self message ] 
+			ifNotNil: [ | prefix |
+				prefix := '@[{1}] ' format: { $/ join: self location }.
+				prefix , self message ] ]
 ]
 
 { #category : #accessing }
