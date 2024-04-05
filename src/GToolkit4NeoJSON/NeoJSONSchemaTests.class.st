@@ -360,6 +360,15 @@ NeoJSONSchemaTests >> testIntegerMultiple [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testMultipleTypes [
+	schema := NeoJSONSchema new json: ({ 'type' -> #('number' 'string') } as: NeoJSONObject).
+	#( 42 3.14159 'foo' 'BAR' ) do: [ :each |
+		self assert: (schema validate: each) ].
+	{ true . nil . #(1 2 3) } do: [ :each |
+		self deny: (schema validate: each) ] 	
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testNot [
 	self schemaFromJson: '
 	{
