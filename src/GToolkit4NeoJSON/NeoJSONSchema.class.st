@@ -19,6 +19,21 @@ Class {
 	#category : #'GToolkit4NeoJSON-Schema'
 }
 
+{ #category : #accessing }
+NeoJSONSchema class >> metaSchema [
+	<gtExample>
+	
+	| jsonString json |
+	jsonString := ZnClient new beOneShot; get: self metaSchemaUrl.
+	json := NeoJSONObject fromString: jsonString.
+	^ self new json: json
+]
+
+{ #category : #accessing }
+NeoJSONSchema class >> metaSchemaUrl [
+	^ 'https://json-schema.org/draft/2020-12/schema' asUrl
+]
+
 { #category : #vocabulary }
 NeoJSONSchema >> additionalProperties [
 	^ self rawProperties at: #additionalProperties
@@ -27,6 +42,11 @@ NeoJSONSchema >> additionalProperties [
 { #category : #vocabulary }
 NeoJSONSchema >> allOf [
 	^ self rawProperties at: #allOf
+]
+
+{ #category : #vocabulary }
+NeoJSONSchema >> anchor [
+	^ self rawProperties at: '$anchor'
 ]
 
 { #category : #vocabulary }
@@ -90,6 +110,11 @@ NeoJSONSchema >> description [
 ]
 
 { #category : #vocabulary }
+NeoJSONSchema >> dynamicAnchor [
+	^ self rawProperties at: '$dynamicAnchor'
+]
+
+{ #category : #vocabulary }
 NeoJSONSchema >> else [
 	^ self rawProperties at: #else
 ]
@@ -123,7 +148,7 @@ NeoJSONSchema >> format [
 NeoJSONSchema >> gtDetails [
 	| details vocabulary subSchemas subSchemaMaps subSchemaLists printStrings special |
 	details := OrderedCollection new.
-	vocabulary := self vocabulary 
+	vocabulary := self recognisedVocabulary 
 		collect: [ :each | each isSymbol ifTrue: [ each -> each ] ifFalse: [ each first -> each second ] ] 
 		as: OrderedDictionary.
 	subSchemas := #(items contains not if then else).
@@ -359,6 +384,25 @@ NeoJSONSchema >> readOnly [
 	^ self rawProperties at: #readOnly
 ]
 
+{ #category : #accessing }
+NeoJSONSchema >> recognisedVocabulary [
+	^ #(
+		(schemaUrl '$schema') (idUrl '$id') type 
+		title description examples
+		readOnly writeOnly deprecated
+		minLength maxLength pattern format
+		multipleOf minimum exclusiveMinimum maximum exclusiveMaximum
+		properties patternProperties additionalProperties unevaluatedProperties required propertyNames minProperties maxProperties
+		items prefixItems unevaluatedItems contains minContains maxContains minItems maxItems uniqueItems
+		enum const default
+		contentMediaType contentEncoding
+		allOf anyOf oneOf not
+		dependentRequired dependentSchemas if then else
+		(ref '$ref') (defs '$defs') (anchor '$anchor') (dynamicAnchor '$dynamicAnchor')
+		(comment '$comment') (vocabulary '$vocubulary')
+	)
+]
+
 { #category : #vocabulary }
 NeoJSONSchema >> ref [
 	^ self rawProperties at: '$ref'
@@ -444,20 +488,7 @@ NeoJSONSchema >> validator [
 
 { #category : #accessing }
 NeoJSONSchema >> vocabulary [
-	^ #(
-		(schemaUrl '$schema') (idUrl '$id') type 
-		title description examples
-		readOnly writeOnly deprecated
-		minLength maxLength pattern format
-		multipleOf minimum exclusiveMinimum maximum exclusiveMaximum
-		properties patternProperties additionalProperties unevaluatedProperties required propertyNames minProperties maxProperties
-		items prefixItems unevaluatedItems contains minContains maxContains minItems maxItems uniqueItems
-		enum const default
-		contentMediaType contentEncoding
-		allOf anyOf oneOf not
-		dependentRequired dependentSchemas if then else
-		(ref '$ref') (defs '$defs')
-	)
+	^ self rawProperties at: '$vocabulary'
 ]
 
 { #category : #vocabulary }
