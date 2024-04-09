@@ -151,9 +151,9 @@ NeoJSONSchema >> gtDetails [
 	vocabulary := self recognisedVocabulary 
 		collect: [ :each | each isSymbol ifTrue: [ each -> each ] ifFalse: [ each first -> each second ] ] 
 		as: OrderedDictionary.
-	subSchemas := #(items contains not if then else).
-	subSchemaLists := #(allOf anyOf oneOf).
-	subSchemaMaps := #(properties defs).
+	subSchemas := #(items contains not if then else propertyNames unevaluatedItems unevaluatedProperties additionalProperties).
+	subSchemaLists := #(allOf anyOf oneOf prefixItems).
+	subSchemaMaps := #(properties defs patternProperties).
 	printStrings := #(required enum const default).
 	special := subSchemas , subSchemaLists , subSchemaMaps , printStrings.
 	vocabulary keys do: [ :key |

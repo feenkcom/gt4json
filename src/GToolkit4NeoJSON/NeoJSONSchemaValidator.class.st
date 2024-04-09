@@ -163,7 +163,8 @@ NeoJSONSchemaValidator >> validateArray [
 		(instance isArray and: [ instance anySatisfy: [ :each | containsValidator validate: each ] ])
 			ifFalse: [ self addValidationErrorMessage: 'contains expected' ].
 		"minContains"
-		"maxContains" ]
+		"maxContains" ].
+	"unevaluatedItems"
 ]
 
 { #category : #validation }
@@ -290,6 +291,26 @@ NeoJSONSchemaValidator >> validateObject [
 						self addValidationErrorMessage: ('required properties missing [{1}]' format: { ', ' join: missing }) ]]
 			ifFalse: [ 
 				self addValidationErrorMessage: ('required properties missing [{1}]' format: { ', ' join: required }) ] ].
+	schema propertyNames ifNotNil: [ :propertyNames |
+		instance isDictionary
+			ifTrue: [
+				| subSchema subValidator |
+				subSchema := schema resolveSubSchema: propertyNames.
+				subValidator := subSchema validator.
+				instance keys do: [ :key |
+					(subValidator validate: key)
+						ifFalse: [ 
+							subValidator validationErrors do: [ :error | 
+								self addValidationError: (error pushLocation: key) ] ] ] ] ].
+	schema minProperties ifNotNil: [ :minProperties |
+		(instance isDictionary and: [ minProperties <= instance keys size ])
+			ifFalse: [ self addValidationErrorMessage: ('object minProperties [{1}] expected' format: { minProperties }) ] ].
+	schema maxProperties ifNotNil: [ :maxProperties |
+		(instance isDictionary and: [ instance keys size <= maxProperties ])
+			ifFalse: [ self addValidationErrorMessage: ('object maxProperties [{1}] expected' format: { maxProperties }) ] ].
+	"additionalProperties"
+	"patternProperties"
+	"unevaluatedProperties"
 ]
 
 { #category : #validation }
