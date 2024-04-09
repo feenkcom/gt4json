@@ -24,7 +24,7 @@ NeoJSONSchema class >> metaSchema [
 	<gtExample>
 	
 	| jsonString json |
-	jsonString := ZnClient new beOneShot; get: self metaSchemaUrl.
+	jsonString := NeoJSONSchemaStore uniqueInstance schemaAt: self metaSchemaUrl.
 	json := NeoJSONObject fromString: jsonString.
 	^ self new json: json
 ]
@@ -216,7 +216,7 @@ NeoJSONSchema >> gtViewRawJsonIn: aComposite [
 	^ aComposite forward
 		  title: 'Raw JSON';
 		  priority: 50;
-		  object: [ self raw ];
+		  object: [ self json ];
 		  view: #gtJsonFor:
 ]
 
@@ -262,6 +262,11 @@ NeoJSONSchema >> items [
 ]
 
 { #category : #accessing }
+NeoJSONSchema >> json [
+	^ self raw
+]
+
+{ #category : #accessing }
 NeoJSONSchema >> json: jsonObject [
 	self raw: jsonObject
 ]
@@ -289,6 +294,15 @@ NeoJSONSchema >> maxProperties [
 { #category : #vocabulary }
 NeoJSONSchema >> maximum [
 	^ self rawProperties at: #maximum
+]
+
+{ #category : #validation }
+NeoJSONSchema >> metaValidate [
+	| metaSchema metaValidator |
+	metaSchema := self class metaSchema.
+	metaValidator := metaSchema validator.
+	metaValidator validate: self json.
+	^ metaValidator
 ]
 
 { #category : #vocabulary }
@@ -421,7 +435,22 @@ NeoJSONSchema >> resolveJSONPointer: jsonPointer [
 		ifTrue: [ ^ nil ].
 	url hasFragment
 		ifFalse: [ ^ nil ].
-	^ self root raw atPath: ($/ split: url fragment) allButFirst
+	^ self root json atPath: ($/ split: url fragment) allButFirst
+]
+
+{ #category : #accessing }
+NeoJSONSchema >> resolveRef: reference [
+	| url resolvedUrl urlWithoutFragment jsonString json |
+	url := reference asUrl.
+	(self resolveJSONPointer: url)
+		ifNotNil: [ :resolvedJson | ^ self newSubSchema json: resolvedJson ].
+	resolvedUrl := self root schemaUrl withRelativeReference: reference.
+	urlWithoutFragment := resolvedUrl copy fragment: nil.
+	jsonString := NeoJSONSchemaStore uniqueInstance schemaAt: urlWithoutFragment.
+	json := NeoJSONObject fromString: jsonString.
+	resolvedUrl hasFragment
+		ifTrue: [ json := json atPath: ($/ split: resolvedUrl fragment) allButFirst ].
+	^ NeoJSONSchema new json: json
 ]
 
 { #category : #accessing }
@@ -429,9 +458,10 @@ NeoJSONSchema >> resolveSubSchema: jsonObject [
 	jsonObject isDictionary
 		ifTrue: [ 
 			(jsonObject at: '$ref')
-				ifNotNil: [ :url | 
-					(self resolveJSONPointer: url)
-						ifNotNil: [ :resolvedJson | ^ self newSubSchema json: resolvedJson ] ] ].
+				ifNotNil: [ :ref | 
+					(self resolveRef: ref)
+						ifNotNil: [ :resolvedSchema | ^ resolvedSchema ] ] ].
+	"fallback"
 	^ self newSubSchema json: jsonObject
 ]
 

@@ -1,3 +1,8 @@
+"
+I am NeoJSONSchemaValidator.
+
+Given a NeoJSONSchema and a JSON instance I run a validation and collect NeoJSONValidationErrors, if any.
+"
 Class {
 	#name : #NeoJSONSchemaValidator,
 	#superclass : #Object,
