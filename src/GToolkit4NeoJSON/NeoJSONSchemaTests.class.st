@@ -423,6 +423,24 @@ NeoJSONSchemaTests >> testNumberRange [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testObjectProperties [
+	self schemaFromJson: '
+	{
+		"type":"object",
+		"propertyNames":{"pattern":"^[A-Z]*$"},
+		"minProperties":1,
+		"maxProperties":3
+	}'.
+	self assertValidJson: '{"AA":1,"BB":2,"CC":3}'.
+	self assertValidJson: '{"AA":1}'.
+	self denyValidJson: '{"first":"Jane","last":"Doe","age":0}'.
+	self denyValidJson: '{"AA":1,"BB":2,"CC":3,"DD":4}'.
+	self denyValidJson: '{}'.
+	self denyValidJson: '{"AA":1,"BB":2,"cc":3}'.
+	self denyValidJson: '42'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testObjectSimple [
 	self schemaFromJson: '
 	{
