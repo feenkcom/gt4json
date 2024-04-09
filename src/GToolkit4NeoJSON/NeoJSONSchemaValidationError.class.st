@@ -1,3 +1,14 @@
+"
+I am NeoJSONSchemaValidationError.
+
+I register a NeoJSONSchema validation error.
+
+I know
+- the JSON instance where validation failed
+- the NeoJSONSchema that was invalid
+- the location (path) from the root instance to this sub instance
+- the validation error message
+"
 Class {
 	#name : #NeoJSONSchemaValidationError,
 	#superclass : #Error,
