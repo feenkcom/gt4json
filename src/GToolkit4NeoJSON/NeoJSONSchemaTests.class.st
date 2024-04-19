@@ -72,6 +72,27 @@ NeoJSONSchemaTests >> testAllOf [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testAnchorRef [
+	| subSchema |
+	self schemaFromJson: '
+	{
+	  "$id": "https://example.com/schemas/address",
+	  "type": "object",
+	  "properties": {
+	    "street_address": { "$anchor": "street_address", "type": "string", "format": "ISO-19160-4:2023" },
+	    "city": { "type": "string" },
+	    "state": { "type": "string" },
+	    "shipping_address": { "$ref": "#street_address" }
+	  }, 
+	  "required": ["street_address", "city", "state"]
+	}'.
+	self assert: (schema properties includesKey: 'shipping_address').
+	subSchema := schema resolveSubSchema: (schema properties at: 'shipping_address').
+	self assert: subSchema type equals: 'string'.
+	self assert: subSchema format equals: 'ISO-19160-4:2023'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testAnyOf [
 	self schemaFromJson: '
 	{
