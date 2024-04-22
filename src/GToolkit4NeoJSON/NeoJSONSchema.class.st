@@ -115,6 +115,11 @@ NeoJSONSchema >> dynamicAnchor [
 ]
 
 { #category : #vocabulary }
+NeoJSONSchema >> dynamicRef [
+	^ self rawProperties at: '$dynamicRef'
+]
+
+{ #category : #vocabulary }
 NeoJSONSchema >> else [
 	^ self rawProperties at: #else
 ]
@@ -412,7 +417,8 @@ NeoJSONSchema >> recognisedVocabulary [
 		contentMediaType contentEncoding
 		allOf anyOf oneOf not
 		dependentRequired dependentSchemas if then else
-		(ref '$ref') (defs '$defs') (anchor '$anchor') (dynamicAnchor '$dynamicAnchor')
+		(ref '$ref') (defs '$defs') (anchor '$anchor')
+		(dynamicRef '$dynamicRef') (dynamicAnchor '$dynamicAnchor')
 		(comment '$comment') (vocabulary '$vocubulary')
 	)
 ]
@@ -429,13 +435,20 @@ NeoJSONSchema >> required [
 
 { #category : #accessing }
 NeoJSONSchema >> resolveJSONPointer: jsonPointer [
-	| url |
+	| url fragment |
 	url := jsonPointer asUrl.
 	url hasScheme | url hasHost | url hasPort | url hasPath
 		ifTrue: [ ^ nil ].
 	url hasFragment
 		ifFalse: [ ^ nil ].
-	^ self root json atPath: ($/ split: url fragment) allButFirst
+	fragment := url fragment.
+	^ fragment first = $/
+		ifTrue: [
+			self root json atPath: ($/ split: url fragment) allButFirst ]
+		ifFalse: [
+			(self json findPath: [ :object | (object at: '$anchor') = fragment ])
+				ifNotNil: [ :path |
+					self json atPath: path ] ]
 ]
 
 { #category : #accessing }
