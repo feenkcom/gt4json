@@ -371,6 +371,13 @@ NeoJSONSchema >> prefixItems [
 	^ self rawProperties at: #prefixItems
 ]
 
+{ #category : #printing }
+NeoJSONSchema >> printOn: stream [
+	super printOn: stream.
+	self title ifNotNil: [ :title |
+		stream nextPut: $(; nextPutAll: title; nextPut: $) ]
+]
+
 { #category : #vocabulary }
 NeoJSONSchema >> properties [
 	^ self rawProperties at: #properties
