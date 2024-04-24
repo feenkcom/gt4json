@@ -498,6 +498,50 @@ NeoJSONSchemaTests >> testOneOf [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testRecursion [
+	self schemaFromJson: '{
+	  "type": "object",
+	  "properties": {
+	    "name": { "type": "string" },
+	    "children": {
+	      "type": "array",
+	      "items": { "$ref": "#" }
+	    }
+	  },
+	  "required": ["name"]
+	}'.
+	self assertValidJson: '{
+	  "name": "Elizabeth",
+	  "children": [
+	    {
+	      "name": "Charles",
+	      "children": [
+	        {
+	          "name": "William",
+	          "children": [
+	            { "name": "George" },
+	            { "name": "Charlotte" }
+	          ]
+	        },
+	        {
+	          "name": "Harry",
+	          "children": [
+	          	{ "name": "Archie" },
+	          	{ "name": "Lilibet" }
+	          ]
+	        }
+	      ]
+	    }
+	  ]
+	}'.
+	self assertValidJson: '{"name": "parent", "children": [ { "name": "child" } ]}'.
+	self denyValidJson: '"foo"'.
+	self denyValidJson: '{"name": "parent", "children": [ { "name": 42 } ]}'.
+	self denyValidJson: '{"name": "parent", "children": [ { "name1": "child" } ]}'.
+	self denyValidJson: '{"name": "parent", "children": [ { "children": [] } ]}'.
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testString [
 	schema := NeoJSONSchema new json: ({ 'type' -> 'string' } as: NeoJSONObject).
 	#( 'str' '' 'élève' ) do: [ :each |

@@ -454,6 +454,7 @@ NeoJSONSchema >> resolveJSONPointer: jsonPointer [
 { #category : #accessing }
 NeoJSONSchema >> resolveRef: reference [
 	| url resolvedUrl urlWithoutFragment jsonString json |
+	reference = '#' ifTrue: [ ^ self root ].
 	url := reference asUrl.
 	(self resolveJSONPointer: url)
 		ifNotNil: [ :resolvedJson | ^ self newSubSchema json: resolvedJson ].
