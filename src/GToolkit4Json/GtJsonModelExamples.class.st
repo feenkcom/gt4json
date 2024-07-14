@@ -324,9 +324,8 @@ GtJsonModelExamples >> primaryAddressModel_JsonValues [
 
 { #category : #'examples - person' }
 GtJsonModelExamples >> simplePersonJson [
-
 	<gtExample>
-	^ GtJsonExamples new simplePersonJsonObject asJson.
+	^ GtJsonExamples new simplePersonJsonObject asGtJson
 ]
 
 { #category : #'examples - simple person' }

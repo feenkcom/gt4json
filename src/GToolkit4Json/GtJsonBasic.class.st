@@ -38,9 +38,18 @@ GtJsonBasic >> allValuesDepthFirstDo: aBlock [
 ]
 
 { #category : #converting }
-GtJsonBasic >> asJson [
+GtJsonBasic >> asGtJson [
 
 	^ self
+]
+
+{ #category : #converting }
+GtJsonBasic >> asJson [
+	self
+		deprecated: 'Please use #asGtJson instead.'
+		transformWith: '`@receiver asJson' -> '`@receiver asGtJson'.
+		
+	^ self asGtJson
 ]
 
 { #category : #converting }
