@@ -1,9 +1,18 @@
 Extension { #name : #Dictionary }
 
 { #category : #'*GToolkit4Json' }
-Dictionary >> asJson [
+Dictionary >> asGtJson [
 
 	^ GtJson forJsonObject: self
+]
+
+{ #category : #'*GToolkit4Json' }
+Dictionary >> asJson [
+	self
+		deprecated: 'Please use #asGtJson instead.'
+		transformWith: '`@receiver asJson' -> '`@receiver asGtJson'.
+
+	^ self asGtJson
 ]
 
 { #category : #'*GToolkit4Json' }
