@@ -453,7 +453,7 @@ NeoJSONSchema >> resolveJSONPointer: jsonPointer [
 		ifTrue: [
 			self root json atPath: ($/ split: url fragment) allButFirst ]
 		ifFalse: [
-			(self json findPath: [ :object | (object at: '$anchor') = fragment ])
+			(self json findPath: [ :object | object isDictionary and: [ (object at: '$anchor') = fragment ] ])
 				ifNotNil: [ :path |
 					self json atPath: path ] ]
 ]
