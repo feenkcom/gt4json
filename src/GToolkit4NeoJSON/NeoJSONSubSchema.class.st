@@ -1,3 +1,6 @@
+"
+I am NeoJSONSubSchema, I am a NeoJSONSchema that is rooted in another schema
+"
 Class {
 	#name : #NeoJSONSubSchema,
 	#superclass : #NeoJSONSchema,
