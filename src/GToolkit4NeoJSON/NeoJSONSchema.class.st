@@ -442,7 +442,7 @@ NeoJSONSchema >> required [
 
 { #category : #accessing }
 NeoJSONSchema >> resolveJSONPointer: jsonPointer [
-	| url fragment |
+	| url fragment neoJSONPointer |
 	url := jsonPointer asUrl.
 	url hasScheme | url hasHost | url hasPort | url hasPath
 		ifTrue: [ ^ nil ].
@@ -451,7 +451,8 @@ NeoJSONSchema >> resolveJSONPointer: jsonPointer [
 	fragment := url fragment.
 	^ fragment first = $/
 		ifTrue: [
-			self root json atPath: ($/ split: url fragment) allButFirst ]
+			neoJSONPointer := NeoJSONPointer new fromString: fragment.
+			self root json atPath: neoJSONPointer path ]
 		ifFalse: [
 			(self json findPath: [ :object | object isDictionary and: [ (object at: '$anchor') = fragment ] ])
 				ifNotNil: [ :path |
@@ -460,7 +461,7 @@ NeoJSONSchema >> resolveJSONPointer: jsonPointer [
 
 { #category : #accessing }
 NeoJSONSchema >> resolveRef: reference [
-	| url resolvedUrl urlWithoutFragment jsonString json |
+	| url resolvedUrl urlWithoutFragment jsonString json neoJSONPointer |
 	reference = '#' ifTrue: [ ^ self root ].
 	url := reference asUrl.
 	(self resolveJSONPointer: url)
@@ -470,7 +471,9 @@ NeoJSONSchema >> resolveRef: reference [
 	jsonString := NeoJSONSchemaStore uniqueInstance schemaAt: urlWithoutFragment.
 	json := NeoJSONObject fromString: jsonString.
 	resolvedUrl hasFragment
-		ifTrue: [ json := json atPath: ($/ split: resolvedUrl fragment) allButFirst ].
+		ifTrue: [ 
+			neoJSONPointer := NeoJSONPointer new fromString: resolvedUrl fragment.
+			json := json atPath: neoJSONPointer path ].
 	^ NeoJSONSchema new json: json
 ]
 
