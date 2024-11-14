@@ -24,7 +24,7 @@ NeoJSONPointer >> exampleConstructed [
 	self assert: self tokens first equals: 'foo'.
 	self assert: self tokens second equals: 1.
 	self assert: self tokens third equals: 'bar'.
-	self assert: self printString equals: '/foo/1/bar'
+	self assert: self printString equals: '/foo/0/bar'
 ]
 
 { #category : #examples }
@@ -33,7 +33,7 @@ NeoJSONPointer >> exampleEscape [
 	self fromString: '/_~1_/7/_~0_'.
 	self assert: self isRoot not.
 	self assert: self tokens first equals: '_/_'.
-	self assert: self tokens second equals: 7.
+	self assert: self tokens second equals: 8.
 	self assert: self tokens third equals: '_~_'.
 	self assert: self printString equals: '/_~1_/7/_~0_'
 ]
@@ -41,7 +41,9 @@ NeoJSONPointer >> exampleEscape [
 { #category : #examples }
 NeoJSONPointer >> exampleRoot [
 	<gtExample>
-	self assert: self isRoot
+	self assert: self isRoot.
+	self assert: self path isEmpty.
+	self assert: self printString equals: String empty
 ]
 
 { #category : #examples }
@@ -50,7 +52,7 @@ NeoJSONPointer >> exampleSimple [
 	self fromString: '/foo/1/bar'.
 	self assert: self isRoot not.
 	self assert: self tokens first equals: 'foo'.
-	self assert: self tokens second equals: 1.
+	self assert: self tokens second equals: 2.
 	self assert: self tokens third equals: 'bar'.
 	self assert: self printString equals: '/foo/1/bar'
 ]
@@ -71,6 +73,7 @@ NeoJSONPointer >> fromString: string [
 						char = $1 ifTrue: [ out nextPut: $/ ] ]
 					ifFalse: [ out nextPut: char ] ] ].
 		token := Integer readFrom: token ifFail: [ token ].
+		token isInteger ifTrue: [ token := token + 1 ].
 		self add: token ]
 ]
 
@@ -86,11 +89,11 @@ NeoJSONPointer >> path [
 
 { #category : #printing }
 NeoJSONPointer >> printOn: stream [
-	self isRoot ifTrue: [ ^ stream nextPut: $/ ].
+	self isRoot ifTrue: [ ^ self ].
 	self tokens do: [ :token |
 		stream nextPut: $/.
 		token isInteger
-			ifTrue: [ stream print: token ]
+			ifTrue: [ stream print: token - 1 ]
 			ifFalse: [ token do: [ :char |
 				char = $/
 					ifTrue: [ stream nextPut: $~; print: 1 ]
@@ -98,6 +101,11 @@ NeoJSONPointer >> printOn: stream [
 						char = $~
 							ifTrue: [ stream nextPut: $~; print: 0 ]
 							ifFalse: [ stream nextPut: char ] ] ] ] ]
+]
+
+{ #category : #accessing }
+NeoJSONPointer >> size [
+	^ self isRoot ifTrue: [ 0 ] ifFalse: [ self tokens size ]
 ]
 
 { #category : #accessing }
