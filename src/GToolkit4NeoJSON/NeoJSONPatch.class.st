@@ -19,20 +19,11 @@ NeoJSONPatch >> applyTo: anObject [
 				atPath: self path tokens put: self value;
 				yourself ].
 	self isRemoval
-		ifTrue: [ | subObject token |
+		ifTrue: [
 			self path isRoot ifTrue: [ ^ anObject species new ].
-			subObject := self path size = 1
-				ifTrue: [
-					anObject ]
-				ifFalse: [
-					anObject atPath: self path tokens allButLast ].
-			token := self path tokens last.
-			token isInteger
-				ifTrue: [ anObject 
-							at: self path tokens allButLast 
-							put: (subObject copyWithoutIndex:  token) ]
-				ifFalse: [ subObject removeKey: token ].
-			^ anObject ].
+			^ anObject
+				removeAtPath: self path tokens;
+				yourself ].
 	self isReplacement
 		ifTrue: [
 			self path isRoot ifTrue: [ ^ self value ]. 
@@ -42,16 +33,13 @@ NeoJSONPatch >> applyTo: anObject [
 	self isCopy
 		ifTrue: [
 			^ anObject 
-				atPath: self path tokens 
-				put: (anObject atPath: self from tokens);
+				atPath: self path tokens  put: (anObject atPath: self from tokens);
 				yourself].
 	self isMove
 		ifTrue: [
 			anObject 
-				atPath: self path tokens 
-				put: (anObject atPath: self from tokens).
-			(anObject atPath: self from tokens allButLast) 
-				removeKey: self from tokens last.
+				atPath: self path tokens put: (anObject atPath: self from tokens);
+				removeAtPath: self from tokens.
 			^ anObject ].
 	self isTest
 		ifTrue: [
