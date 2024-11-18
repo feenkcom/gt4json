@@ -16,7 +16,7 @@ NeoJSONPatch >> applyTo: anObject [
 		ifTrue: [
 			self path isRoot ifTrue: [ ^ self value ]. 
 			^ anObject
-				atPath: self path tokens put: self value;
+				atPath: self path tokens add: self value;
 				yourself ].
 	self isRemoval
 		ifTrue: [
