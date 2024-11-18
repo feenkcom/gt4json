@@ -10,8 +10,9 @@ NeoJSONPointerExamples >> exampleBiscuits [
 	| pointer biscuits |
 	pointer := NeoJSONPointer new fromString: '/biscuits'.
 	biscuits := self exampleJSON atPath: pointer path.
-	self assert: biscuits isArray.
 	self assert: biscuits size equals: 2.
+	self assert: (biscuits at: 1) notNil.
+	self assert: (biscuits at: 2) notNil.
 	^ biscuits
 ]
 

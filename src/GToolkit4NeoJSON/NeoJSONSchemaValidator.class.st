@@ -118,7 +118,7 @@ NeoJSONSchemaValidator >> validateArray [
 	lastPrefixItemMatch := 0.
 	schema prefixItems ifNotNil: [ :prefixItems |
 		incomplete := false.
-		instance isArray ifTrue: [
+		(instance isKindOf: SequenceableCollection) ifTrue: [
 			prefixItems doWithIndex: [ :prefixItem :index |
 				| subSchema subValidator subInstance |
 				subSchema := schema resolveSubSchema: prefixItem.
@@ -138,7 +138,7 @@ NeoJSONSchemaValidator >> validateArray [
 		| itemsSchema itemsValidator |
 		itemsSchema := schema resolveSubSchema: items.
 		itemsValidator := itemsSchema validator.
-		instance isArray ifTrue: [
+		(instance isKindOf: SequenceableCollection) ifTrue: [
 			instance doWithIndex: [ :item :index |
 				index > lastPrefixItemMatch
 					ifTrue: [
@@ -148,19 +148,19 @@ NeoJSONSchemaValidator >> validateArray [
 									self addValidationError: (error pushLocation: index) ] ] ] ] ] ].
 	schema uniqueItems ifNotNil: [ :uniqueItems |
 		uniqueItems ifTrue: [
-			(instance isArray and: [ instance asSet size = instance size ]) ifFalse: [
+			((instance isKindOf: SequenceableCollection) and: [ instance asSet size = instance size ]) ifFalse: [
 				self addValidationErrorMessage: 'array uniqueItems expected' ] ] ].
 	schema minItems ifNotNil: [ :minItems |
-		(instance isArray and: [ minItems <= instance size ]) ifFalse: [
+		((instance isKindOf: SequenceableCollection) and: [ minItems <= instance size ]) ifFalse: [
 			self addValidationErrorMessage: ('less than minItems [{1}]' format: { minItems }) ] ].
 	schema maxItems ifNotNil: [ :maxItems |
-		(instance isArray and: [ instance size  <= maxItems ]) ifFalse: [
+		((instance isKindOf: SequenceableCollection) and: [ instance size  <= maxItems ]) ifFalse: [
 			self addValidationErrorMessage: ('more than maxItems [{1}]' format: { maxItems }) ] ].
 	schema contains ifNotNil: [ :contains |
 		| containsSchema containsValidator |
 		containsSchema := schema resolveSubSchema: contains.
 		containsValidator := containsSchema validator.
-		(instance isArray and: [ instance anySatisfy: [ :each | containsValidator validate: each ] ])
+		((instance isKindOf: SequenceableCollection) and: [ instance anySatisfy: [ :each | containsValidator validate: each ] ])
 			ifFalse: [ self addValidationErrorMessage: 'contains expected' ].
 		"minContains"
 		"maxContains" ].
@@ -347,7 +347,7 @@ NeoJSONSchemaValidator >> validateType [
 
 { #category : #validation }
 NeoJSONSchemaValidator >> validateTypeArray [
-	^ instance isArray
+	^ instance isKindOf: SequenceableCollection
 ]
 
 { #category : #validation }
