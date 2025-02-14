@@ -1,9 +1,9 @@
 {
 	"repositories" : {
 		"github://feenkcom/gtoolkit-utility/src" : "v0.8.356",
-		"github://feenkcom/Brick/src" : "v0.8.1416",
+		"github://feenkcom/Brick/src" : "v0.8.1417",
 		"github://svenvc/NeoJSON/repository" : "f54cfb4a931971ed356d1dfde0e135951e82daae",
-		"github://feenkcom/gtoolkit-inspector/src" : "v0.8.2549",
-		"github://j-brant/SmaCC" : "v3.0.92"
+		"github://feenkcom/gtoolkit-inspector/src" : "v0.8.2550",
+		"github://j-brant/SmaCC" : "v3.0.93"
 	}
 }
