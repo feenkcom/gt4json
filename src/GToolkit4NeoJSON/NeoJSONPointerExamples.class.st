@@ -7,6 +7,7 @@ Class {
 { #category : #accessing }
 NeoJSONPointerExamples >> exampleBiscuits [
 	<gtExample>
+	<return: #NeoJSONArray>
 	| pointer biscuits |
 	pointer := NeoJSONPointer new fromString: '/biscuits'.
 	biscuits := self exampleJSON atPath: pointer path.
@@ -19,6 +20,7 @@ NeoJSONPointerExamples >> exampleBiscuits [
 { #category : #accessing }
 NeoJSONPointerExamples >> exampleChocoLeibniz [
 	<gtExample>
+	<return: #ByteString>
 	| pointer biscuit |
 	pointer := NeoJSONPointer new fromString: '/biscuits/1/name'.
 	biscuit := self exampleJSON atPath: pointer path.
@@ -29,8 +31,9 @@ NeoJSONPointerExamples >> exampleChocoLeibniz [
 { #category : #'as yet unclassified' }
 NeoJSONPointerExamples >> exampleJSON [
 	<gtExample>
-	^ NeoJSONObject fromString: 
-'{
+	<return: #NeoJSONObject>
+	^ NeoJSONObject
+		fromString: '{
   "biscuits": [
     { "name": "Digestive" },
     { "name": "Choco Leibniz" }
@@ -41,6 +44,7 @@ NeoJSONPointerExamples >> exampleJSON [
 { #category : #accessing }
 NeoJSONPointerExamples >> exampleRoot [
 	<gtExample>
+	<return: #NeoJSONObject>
 	| pointer root |
 	pointer := NeoJSONPointer new.
 	self assert: pointer isRoot.
