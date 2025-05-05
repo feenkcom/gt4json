@@ -7,7 +7,8 @@ Class {
 { #category : #accessing }
 NeoJSONSchemaExamples >> firstSchema [
 	<gtExample>
-	| jsonObject schema|
+	<return: #NeoJSONSchema>
+	| jsonObject schema |
 	jsonObject := NeoJSONObject fromString: self firstSchemaJson.
 	schema := NeoJSONSchema new json: jsonObject.
 	^ schema
@@ -127,6 +128,7 @@ NeoJSONSchemaExamples >> firstSchemaJson [
 { #category : #accessing }
 NeoJSONSchemaExamples >> validateFirstSchemaInstanceOne [
 	<gtExample>
+	<return: #NeoJSONSchemaValidator>
 	| schema instance validator |
 	schema := self firstSchema.
 	instance := NeoJSONObject fromString: self firstSchemaInstanceOneJson.
@@ -139,6 +141,7 @@ NeoJSONSchemaExamples >> validateFirstSchemaInstanceOne [
 { #category : #accessing }
 NeoJSONSchemaExamples >> validateFirstSchemaInstanceTwo [
 	<gtExample>
+	<return: #NeoJSONSchemaValidator>
 	| schema instance validator |
 	schema := self firstSchema.
 	instance := NeoJSONObject fromString: self firstSchemaInstanceTwoJson.

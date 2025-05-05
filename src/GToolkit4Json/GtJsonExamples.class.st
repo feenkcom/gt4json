@@ -7,6 +7,7 @@ Class {
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAddDoubleUnknownPathKey [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -23,6 +24,7 @@ GtJsonExamples >> jsonAddDoubleUnknownPathKey [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAddNewRootKey [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -39,6 +41,7 @@ GtJsonExamples >> jsonAddNewRootKey [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAddPathIndex [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -55,6 +58,7 @@ GtJsonExamples >> jsonAddPathIndex [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAddTripleUnknownPathIndex [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject anArraySize aPath |
 	aRawObject := self jsonRoot.
 
@@ -79,6 +83,7 @@ GtJsonExamples >> jsonAddTripleUnknownPathIndex [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAddTripleUnknownPathKey [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject anArraySize aPath |
 	aRawObject := self jsonRoot.
 
@@ -103,6 +108,7 @@ GtJsonExamples >> jsonAddTripleUnknownPathKey [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAddUnknownPathKey [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -119,6 +125,7 @@ GtJsonExamples >> jsonAddUnknownPathKey [
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllLeafValuesIteration_jsonRoot [
 	<gtExample>
+	<return: #OrderedCollection>
 	| aJson allValues |
 	aJson := self jsonRoot.
 	allValues := OrderedCollection new.
@@ -146,6 +153,7 @@ GtJsonExamples >> jsonAllLeafValuesIteration_jsonRoot [
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllValuesIteration_collection [
 	<gtExample>
+	<return: #OrderedCollection>
 	| aJson allValues |
 	aJson := GtJson forJsonObject: Array empty.
 	allValues := OrderedCollection new.
@@ -173,6 +181,7 @@ GtJsonExamples >> jsonAllValuesIteration_collection [
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllValuesIteration_dictionary [
 	<gtExample>
+	<return: #OrderedCollection>
 	| aJson allValues |
 	aJson := GtJson forJsonObject: Dictionary new.
 	allValues := OrderedCollection new.
@@ -200,6 +209,7 @@ GtJsonExamples >> jsonAllValuesIteration_dictionary [
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllValuesIteration_integer [
 	<gtExample>
+	<return: #OrderedCollection>
 	| aJson allValues |
 	aJson := GtJson forJsonObject: 108.
 	allValues := OrderedCollection new.
@@ -227,6 +237,7 @@ GtJsonExamples >> jsonAllValuesIteration_integer [
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllValuesIteration_jsonRoot [
 	<gtExample>
+	<return: #OrderedCollection>
 	| aJson allValues |
 	aJson := self jsonRoot.
 	allValues := OrderedCollection new.
@@ -254,23 +265,24 @@ GtJsonExamples >> jsonAllValuesIteration_jsonRoot [
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllValuesIteration_notExisting [
 	<gtExample>
-	
+	<return: #GtJson>
 	| aJson allValues |
 	aJson := GtJson new.
 	allValues := OrderedCollection new.
-	
+
 	self assert: aJson exists not.
-	
+
 	aJson allValuesDepthFirstDo: [ :aValue | allValues add: aValue ].
-	
+
 	self assert: allValues size equals: 0.
-	
+
 	^ aJson
 ]
 
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllValuesIteration_string [
 	<gtExample>
+	<return: #OrderedCollection>
 	| aJson allValues |
 	aJson := GtJson forJsonObject: 'value'.
 	allValues := OrderedCollection new.
@@ -298,6 +310,7 @@ GtJsonExamples >> jsonAllValuesIteration_string [
 { #category : #'examples - enumeration' }
 GtJsonExamples >> jsonAllValuesIteration_unknown [
 	<gtExample>
+	<return: #GtJsonKey>
 	| aJson allValues aRoot |
 	aRoot := GtJson forJsonObject: Dictionary new.
 	aJson := aRoot at: #uknown.
@@ -320,6 +333,7 @@ GtJsonExamples >> jsonAllValuesIteration_unknown [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonAppNewPathKey [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -335,8 +349,8 @@ GtJsonExamples >> jsonAppNewPathKey [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonRoot.
 	aRawObject := aParent at: #b.
@@ -349,8 +363,8 @@ GtJsonExamples >> jsonBChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD1Child [
-
 	<gtExample>
+	<return: #GtJsonIndex>
 	| aParent aRawObject |
 	aParent := self jsonBDChild.
 	aRawObject := aParent at: 1.
@@ -365,8 +379,8 @@ GtJsonExamples >> jsonBD1Child [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD1EChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD1Child.
 	aRawObject := aParent at: #e.
@@ -381,8 +395,8 @@ GtJsonExamples >> jsonBD1EChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD1FChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD1Child.
 	aRawObject := aParent at: #f.
@@ -397,8 +411,8 @@ GtJsonExamples >> jsonBD1FChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2Child [
-
 	<gtExample>
+	<return: #GtJsonIndex>
 	| aParent aRawObject |
 	aParent := self jsonBDChild.
 	aRawObject := aParent at: 2.
@@ -413,8 +427,8 @@ GtJsonExamples >> jsonBD2Child [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2FChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
 	aRawObject := aParent at: #f.
@@ -429,8 +443,8 @@ GtJsonExamples >> jsonBD2FChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2GChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
 	aRawObject := aParent at: #g.
@@ -445,8 +459,8 @@ GtJsonExamples >> jsonBD2GChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2HChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
 	aRawObject := aParent at: #h.
@@ -461,8 +475,8 @@ GtJsonExamples >> jsonBD2HChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2IChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
 	aRawObject := aParent at: #i.
@@ -477,8 +491,8 @@ GtJsonExamples >> jsonBD2IChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2JChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
 	aRawObject := aParent at: #j.
@@ -493,50 +507,44 @@ GtJsonExamples >> jsonBD2JChild [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2UnknownMapChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBD2Child.
 	aRawObject := aParent at: #unknown.
 
 	self assert: aRawObject parent equals: aParent.
 	self assert: aRawObject exists not.
-	self
-		assert: aRawObject jsonObject
-		equals: nil.
+	self assert: aRawObject jsonObject equals: nil.
 
 	^ aRawObject
 ]
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBD2UnknownMapLostChild [
-
 	<gtExample>
+	<return: #GtJsonUnknown>
 	| aParent aRawObject |
 	aParent := self jsonBD2UnknownMapChild.
 	aRawObject := aParent at: #lost.
 
 	self assert: aRawObject parent equals: aParent.
 	self assert: aRawObject exists not.
-	self
-		assert: aRawObject jsonObject
-		equals: nil.
+	self assert: aRawObject jsonObject equals: nil.
 
 	^ aRawObject
 ]
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonBDChild [
-
 	<gtExample>
+	<return: #GtJsonKey>
 	| aParent aRawObject |
 	aParent := self jsonBChild.
 	aRawObject := aParent at: #d.
 
 	self assert: aRawObject parent equals: aParent.
-	self
-		assert: aRawObject jsonObject
-		equals: ((self jsonObject at: #b) at: #d).
+	self assert: aRawObject jsonObject equals: ((self jsonObject at: #b) at: #d).
 
 	^ aRawObject
 ]
@@ -544,6 +552,7 @@ GtJsonExamples >> jsonBDChild [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonModifyPathIndex [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -560,6 +569,7 @@ GtJsonExamples >> jsonModifyPathIndex [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonModifyPathKey [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -576,6 +586,7 @@ GtJsonExamples >> jsonModifyPathKey [
 { #category : #'examples - modifications' }
 GtJsonExamples >> jsonModifyRootKeyValue [
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject |
 	aRawObject := self jsonRoot.
 
@@ -591,6 +602,7 @@ GtJsonExamples >> jsonModifyRootKeyValue [
 { #category : #'examples - json object' }
 GtJsonExamples >> jsonObject [
 	<gtExample>
+	<return: #OrderedDictionary>
 	^ OrderedDictionary new
 		at: #a put: 'value-a';
 		at: #b
@@ -620,8 +632,8 @@ GtJsonExamples >> jsonObject [
 
 { #category : #'examples - json' }
 GtJsonExamples >> jsonRoot [
-
 	<gtExample>
+	<return: #GtJson>
 	| aRawObject aJsonObject |
 	aJsonObject := self jsonObject.
 	aRawObject := GtJson forJsonObject: aJsonObject.
@@ -634,8 +646,8 @@ GtJsonExamples >> jsonRoot [
 
 { #category : #'examples - person' }
 GtJsonExamples >> personJson [
-
 	<gtExample>
+	<return: #GtJson>
 	| aJsonObject aJson |
 	aJsonObject := self personJsonObject.
 	aJson := GtJson forJsonObject: aJsonObject.
@@ -649,29 +661,29 @@ GtJsonExamples >> personJson [
 
 { #category : #'examples - person' }
 GtJsonExamples >> personJsonObject [
-
 	<gtExample>
+	<return: #OrderedDictionary>
 	^ OrderedDictionary new
-		  at: #firstName put: 'Joe';
-		  at: #familyName put: 'Doe';
-		  at: #birthday put: '12 June 2001';
-		  at: #addresses put: { 
-				  (OrderedDictionary new
-					   at: #street put: 'Kopernikova 345';
-					   at: #city put: 'Bratislava';
-					   yourself).
-				  (OrderedDictionary new
-					   at: #street put: 'Havlova 89';
-					   at: #city put: 'Praha';
-					   at: #is_primary put: true;
-					   yourself) };
-		  yourself
+		at: #firstName put: 'Joe';
+		at: #familyName put: 'Doe';
+		at: #birthday put: '12 June 2001';
+		at: #addresses
+			put: {OrderedDictionary new
+						at: #street put: 'Kopernikova 345';
+						at: #city put: 'Bratislava';
+						yourself.
+					OrderedDictionary new
+						at: #street put: 'Havlova 89';
+						at: #city put: 'Praha';
+						at: #is_primary put: true;
+						yourself};
+		yourself
 ]
 
 { #category : #'examples - person' }
 GtJsonExamples >> personKeyedAddressesJson [
-
 	<gtExample>
+	<return: #GtJson>
 	| aJsonObject aJson |
 	aJsonObject := self personKeyedAddressesJsonObject.
 	aJson := GtJson forJsonObject: aJsonObject.
@@ -679,8 +691,10 @@ GtJsonExamples >> personKeyedAddressesJson [
 	self assert: aJson jsonObject equals: aJsonObject.
 	self assert: (aJson at: #birthday) jsonObject equals: '12 June 2001'.
 	self assert: aJson birthday jsonObject equals: '12 June 2001'.
-	
-	self assert: (aJson atPath: #(addresses home street)) jsonObject equals: 'Kopernikova 345'.
+
+	self
+		assert: (aJson atPath: #(addresses home street)) jsonObject
+		equals: 'Kopernikova 345'.
 	self assert: aJson addresses home street jsonObject equals: 'Kopernikova 345'.
 
 	self assert: aJson addresses work street jsonObject equals: 'Havlova 89'.
@@ -691,6 +705,7 @@ GtJsonExamples >> personKeyedAddressesJson [
 { #category : #'examples - person' }
 GtJsonExamples >> personKeyedAddressesJsonObject [
 	<gtExample>
+	<return: #OrderedDictionary>
 	^ OrderedDictionary new
 		at: #firstName put: 'Joe';
 		at: #familyName put: 'Doe';
@@ -714,29 +729,29 @@ GtJsonExamples >> personKeyedAddressesJsonObject [
 
 { #category : #'examples - person' }
 GtJsonExamples >> personTwoJsonObject [
-
 	<gtExample>
+	<return: #OrderedDictionary>
 	^ OrderedDictionary new
-		  at: #firstName put: 'Jim';
-		  at: #familyName put: 'Doe';
-		  at: #birthday put: '21 June 2021';
-		  at: #addresses put: { 
-				  (OrderedDictionary new
-					   at: #street put: 'Vladimírova 108';
-					   at: #city put: 'Košice';
-					   yourself).
-				  (OrderedDictionary new
-					   at: #street put: 'Havlova 89';
-					   at: #city put: 'Praha';
-					   at: #is_primary put: true;
-					   yourself) };
-		  yourself
+		at: #firstName put: 'Jim';
+		at: #familyName put: 'Doe';
+		at: #birthday put: '21 June 2021';
+		at: #addresses
+			put: {OrderedDictionary new
+						at: #street put: 'Vladimírova 108';
+						at: #city put: 'Košice';
+						yourself.
+					OrderedDictionary new
+						at: #street put: 'Havlova 89';
+						at: #city put: 'Praha';
+						at: #is_primary put: true;
+						yourself};
+		yourself
 ]
 
 { #category : #'examples - person' }
 GtJsonExamples >> personsJson [
-
 	<gtExample>
+	<return: #GtJson>
 	| aJsonObject aJson |
 	aJsonObject := self personsJsonObject.
 	aJson := GtJson forJsonObject: aJsonObject.
@@ -751,12 +766,14 @@ GtJsonExamples >> personsJson [
 { #category : #'examples - person' }
 GtJsonExamples >> personsJsonObject [
 	<gtExample>
+	<return: #Array>
 	^ Array with: self personJsonObject with: self personTwoJsonObject
 ]
 
 { #category : #'examples - person' }
 GtJsonExamples >> simplePersonJsonObject [
 	<gtExample>
+	<return: #OrderedDictionary>
 	^ OrderedDictionary new
 		at: #firstName put: 'Joe';
 		at: #familyName put: 'Doe';

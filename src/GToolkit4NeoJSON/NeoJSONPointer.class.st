@@ -19,6 +19,7 @@ NeoJSONPointer >> add: token [
 { #category : #examples }
 NeoJSONPointer >> exampleConstructed [
 	<gtExample>
+	<return: #NeoJSONPointer>
 	self tokens: #(foo 1 bar).
 	self assert: self isRoot not.
 	self assert: self tokens first equals: 'foo'.
@@ -30,6 +31,7 @@ NeoJSONPointer >> exampleConstructed [
 { #category : #examples }
 NeoJSONPointer >> exampleEscape [
 	<gtExample>
+	<return: #NeoJSONPointer>
 	self fromString: '/_~1_/7/_~0_'.
 	self assert: self isRoot not.
 	self assert: self tokens first equals: '_/_'.
@@ -41,6 +43,7 @@ NeoJSONPointer >> exampleEscape [
 { #category : #examples }
 NeoJSONPointer >> exampleRoot [
 	<gtExample>
+	<return: #NeoJSONPointer>
 	self assert: self isRoot.
 	self assert: self path isEmpty.
 	self assert: self printString equals: String empty
@@ -49,6 +52,7 @@ NeoJSONPointer >> exampleRoot [
 { #category : #examples }
 NeoJSONPointer >> exampleSimple [
 	<gtExample>
+	<return: #NeoJSONPointer>
 	self fromString: '/foo/1/bar'.
 	self assert: self isRoot not.
 	self assert: self tokens first equals: 'foo'.

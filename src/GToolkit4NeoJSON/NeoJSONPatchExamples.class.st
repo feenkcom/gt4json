@@ -7,18 +7,21 @@ Class {
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleAddPatch [
 	<gtExample>
-	^ NeoJSONObject fromString: '{ "op": "add", "path": "/email", "value": "bob@example.com" }'
+	<return: #NeoJSONObject>
+	^ NeoJSONObject
+		fromString: '{ "op": "add", "path": "/email", "value": "bob@example.com" }'
 ]
 
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleApplyAddPatch [
 	<gtExample>
+	<return: #NeoJSONObject>
 	| source target patch result |
 	source := self exampleDocument.
 	patch := NeoJSONPatch new fromDictionary: self exampleAddPatch.
 	result := patch applyTo: source.
-	target := NeoJSONObject fromString: 
-'{
+	target := NeoJSONObject
+			fromString: '{
   "user": {
     "name": "Bob",
     "age": 25
@@ -32,12 +35,13 @@ NeoJSONPatchExamples >> exampleApplyAddPatch [
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleApplyCopyPatch [
 	<gtExample>
+	<return: #NeoJSONObject>
 	| source target patch result |
 	source := self exampleDocument.
 	patch := NeoJSONPatch new fromDictionary: self exampleCopyPatch.
 	result := patch applyTo: source.
-	target := NeoJSONObject fromString: 
-'{
+	target := NeoJSONObject
+			fromString: '{
   "user": {
     "name": "Bob",
     "age": 25
@@ -51,12 +55,13 @@ NeoJSONPatchExamples >> exampleApplyCopyPatch [
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleApplyMovePatch [
 	<gtExample>
+	<return: #NeoJSONObject>
 	| source target patch result |
 	source := self exampleDocument.
 	patch := NeoJSONPatch new fromDictionary: self exampleMovePatch.
 	result := patch applyTo: source.
-	target := NeoJSONObject fromString: 
-'{
+	target := NeoJSONObject
+			fromString: '{
   "user": {
     "name": "Bob",
     "birthYear": 25
@@ -69,12 +74,13 @@ NeoJSONPatchExamples >> exampleApplyMovePatch [
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleApplyRemovePatch [
 	<gtExample>
+	<return: #NeoJSONObject>
 	| source target patch result |
 	source := self exampleDocument.
 	patch := NeoJSONPatch new fromDictionary: self exampleRemovePatch.
 	result := patch applyTo: source.
-	target := NeoJSONObject fromString: 
-'{
+	target := NeoJSONObject
+			fromString: '{
   "user": {
     "name": "Bob"
   }
@@ -86,12 +92,13 @@ NeoJSONPatchExamples >> exampleApplyRemovePatch [
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleApplyReplacePatch [
 	<gtExample>
+	<return: #NeoJSONObject>
 	| source target patch result |
 	source := self exampleDocument.
 	patch := NeoJSONPatch new fromDictionary: self exampleReplacePatch.
 	result := patch applyTo: source.
-	target := NeoJSONObject fromString: 
-'{
+	target := NeoJSONObject
+			fromString: '{
   "user": {
     "name": "Alice",
     "age": 25
@@ -104,6 +111,7 @@ NeoJSONPatchExamples >> exampleApplyReplacePatch [
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleApplyTestPatch [
 	<gtExample>
+	<return: #NeoJSONPatchExamples>
 	| source patch failed |
 	source := self exampleDocument.
 	patch := NeoJSONPatch new fromDictionary: self exampleTestPatch.
@@ -117,14 +125,17 @@ NeoJSONPatchExamples >> exampleApplyTestPatch [
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleCopyPatch [
 	<gtExample>
-	^ NeoJSONObject fromString: '{ "op": "copy", "from": "/user/name", "path": "/displayName" }'
+	<return: #NeoJSONObject>
+	^ NeoJSONObject
+		fromString: '{ "op": "copy", "from": "/user/name", "path": "/displayName" }'
 ]
 
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleDocument [
 	<gtExample>
-	^ NeoJSONObject fromString:
-'{
+	<return: #NeoJSONObject>
+	^ NeoJSONObject
+		fromString: '{
   "user": {
     "name": "Bob",
     "age": 25
@@ -135,23 +146,30 @@ NeoJSONPatchExamples >> exampleDocument [
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleMovePatch [
 	<gtExample>
-	^ NeoJSONObject fromString: '{ "op": "move", "from": "/user/age", "path": "/user/birthYear" }'
+	<return: #NeoJSONObject>
+	^ NeoJSONObject
+		fromString: '{ "op": "move", "from": "/user/age", "path": "/user/birthYear" }'
 ]
 
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleRemovePatch [
 	<gtExample>
+	<return: #NeoJSONObject>
 	^ NeoJSONObject fromString: '{ "op": "remove", "path": "/user/age" }'
 ]
 
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleReplacePatch [
 	<gtExample>
-	^ NeoJSONObject fromString: '{ "op": "replace", "path": "/user/name", "value": "Alice" }'
+	<return: #NeoJSONObject>
+	^ NeoJSONObject
+		fromString: '{ "op": "replace", "path": "/user/name", "value": "Alice" }'
 ]
 
 { #category : #accessing }
 NeoJSONPatchExamples >> exampleTestPatch [
 	<gtExample>
-	^ NeoJSONObject fromString: '{ "op": "test", "path": "/email", "value": "bob@example.com" }'
+	<return: #NeoJSONObject>
+	^ NeoJSONObject
+		fromString: '{ "op": "test", "path": "/email", "value": "bob@example.com" }'
 ]
