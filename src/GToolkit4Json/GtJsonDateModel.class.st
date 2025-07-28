@@ -7,5 +7,5 @@ Class {
 { #category : #accessing }
 GtJsonDateModel >> convertJsonObjectToValue [
 
-	^ self json jsonObject asDate
+	^ Date readFrom: self json jsonObject pattern: 'yyyy-mm-dd' 
 ]

@@ -161,14 +161,16 @@ GtJsonModelExamples >> personKeyedAddressesModel_ExplicitValue [
 
 	aPerson firstName: 'Joe'.
 	aPerson familyName: 'Doe'.
-	aPerson birthday: '12 June 2001' asDate.
+	aPerson birthday: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 
 	aPerson addresses home: self primaryAddressModel_ExplicitValues.
 	aPerson addresses work: self anotherAddressModel_JsonValues.
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson addresses size equals: 2.
 
 	self assert: aPerson addresses home street equals: 'Kostelní 12'.
@@ -188,7 +190,9 @@ GtJsonModelExamples >> personKeyedAddressesModel_JsonValue [
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson addresses size equals: 2.
 
 	self assert: aPerson addresses home street equals: 'Kopernikova 345'.
@@ -205,7 +209,7 @@ GtJsonModelExamples >> personModel_ExplicitValue [
 
 	aPerson firstName: 'Joe'.
 	aPerson familyName: 'Doe'.
-	aPerson birthday: '12 June 2001' asDate.
+	aPerson birthday: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 
 	aPerson
 		addresses: {self primaryAddressModel_ExplicitValues.
@@ -213,7 +217,9 @@ GtJsonModelExamples >> personModel_ExplicitValue [
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson addresses size equals: 2.
 
 	^ aPerson
@@ -230,7 +236,9 @@ GtJsonModelExamples >> personModel_JsonValue [
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson addresses size equals: 2.
 
 	^ aPerson
@@ -257,7 +265,9 @@ GtJsonModelExamples >> personsModel_JsonValue [
 	self assert: aPersons size equals: 2.
 	self assert: (aPersons modelAt: 1) firstName equals: 'Joe'.
 	self assert: (aPersons modelAt: 1) familyName equals: 'Doe'.
-	self assert: (aPersons modelAt: 1) birthday equals: '12 June 2001' asDate.
+	self 
+		assert: (aPersons modelAt: 1) birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: (aPersons modelAt: 1) addresses size equals: 2.
 
 	^ aPersons
@@ -335,7 +345,9 @@ GtJsonModelExamples >> simplePersonModelWithouAccessors_JsonValues [
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson address street equals: 'Kopernikova 345'.
 	self assert: aPerson address city equals: 'Bratislava'.
 
@@ -351,14 +363,16 @@ GtJsonModelExamples >> simplePersonModelWithoutAccessors_ExplicitValue [
 
 	aPerson firstName: 'Joe'.
 	aPerson familyName: 'Doe'.
-	aPerson birthday: '12 June 2001' asDate.
+	aPerson birthday: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	anAddress := self primaryAddressModel_ExplicitValues.
 
 	aPerson address: anAddress.
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson address equals: anAddress.
 
 	^ aPerson
@@ -376,7 +390,9 @@ GtJsonModelExamples >> simplePersonModelWithoutAccessors_JsonValues [
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson address street equals: 'Kopernikova 345'.
 	self assert: aPerson address city equals: 'Bratislava'.
 
@@ -399,14 +415,16 @@ GtJsonModelExamples >> simplePersonModel_ExplicitValue [
 
 	aPerson firstName: 'Joe'.
 	aPerson familyName: 'Doe'.
-	aPerson birthday: '12 June 2001' asDate.
+	aPerson birthday: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	anAddress := self primaryAddressModel_ExplicitValues.
 
 	aPerson address: anAddress.
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson address equals: anAddress.
 
 	^ aPerson
@@ -424,7 +442,9 @@ GtJsonModelExamples >> simplePersonModel_JsonValues [
 
 	self assert: aPerson firstName equals: 'Joe'.
 	self assert: aPerson familyName equals: 'Doe'.
-	self assert: aPerson birthday equals: '12 June 2001' asDate.
+	self 
+		assert: aPerson birthday 
+		equals: (Date readFrom: '2021-06-12' pattern: 'yyyy-mm-dd').
 	self assert: aPerson address street equals: 'Kopernikova 345'.
 	self assert: aPerson address city equals: 'Bratislava'.
 

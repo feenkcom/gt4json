@@ -653,8 +653,8 @@ GtJsonExamples >> personJson [
 	aJson := GtJson forJsonObject: aJsonObject.
 
 	self assert: aJson jsonObject equals: aJsonObject.
-	self assert: (aJson at: #birthday) jsonObject equals: '12 June 2001'.
-	self assert: aJson birthday jsonObject equals: '12 June 2001'.
+	self assert: (aJson at: #birthday) jsonObject equals: '2021-06-12'.
+	self assert: aJson birthday jsonObject equals: '2021-06-12'.
 
 	^ aJson
 ]
@@ -666,7 +666,7 @@ GtJsonExamples >> personJsonObject [
 	^ OrderedDictionary new
 		at: #firstName put: 'Joe';
 		at: #familyName put: 'Doe';
-		at: #birthday put: '12 June 2001';
+		at: #birthday put: '2021-06-12';
 		at: #addresses
 			put: {OrderedDictionary new
 						at: #street put: 'Kopernikova 345';
@@ -689,8 +689,8 @@ GtJsonExamples >> personKeyedAddressesJson [
 	aJson := GtJson forJsonObject: aJsonObject.
 
 	self assert: aJson jsonObject equals: aJsonObject.
-	self assert: (aJson at: #birthday) jsonObject equals: '12 June 2001'.
-	self assert: aJson birthday jsonObject equals: '12 June 2001'.
+	self assert: (aJson at: #birthday) jsonObject equals: '2021-06-12'.
+	self assert: aJson birthday jsonObject equals: '2021-06-12'.
 
 	self
 		assert: (aJson atPath: #(addresses home street)) jsonObject
@@ -709,7 +709,7 @@ GtJsonExamples >> personKeyedAddressesJsonObject [
 	^ OrderedDictionary new
 		at: #firstName put: 'Joe';
 		at: #familyName put: 'Doe';
-		at: #birthday put: '12 June 2001';
+		at: #birthday put: '2021-06-12';
 		at: #addresses
 			put: (OrderedDictionary new
 					at: #home
@@ -757,8 +757,8 @@ GtJsonExamples >> personsJson [
 	aJson := GtJson forJsonObject: aJsonObject.
 
 	self assert: aJson jsonObject equals: aJsonObject.
-	self assert: (aJson atPath: #(1 #birthday)) jsonObject equals: '12 June 2001'.
-	self assert: (aJson at: 1) birthday jsonObject equals: '12 June 2001'.
+	self assert: (aJson atPath: #(1 #birthday)) jsonObject equals: '2021-06-12'.
+	self assert: (aJson at: 1) birthday jsonObject equals: '2021-06-12'.
 
 	^ aJson
 ]
@@ -777,7 +777,7 @@ GtJsonExamples >> simplePersonJsonObject [
 	^ OrderedDictionary new
 		at: #firstName put: 'Joe';
 		at: #familyName put: 'Doe';
-		at: #birthday put: '12 June 2001';
+		at: #birthday put: '2021-06-12';
 		at: #address
 			put: (OrderedDictionary new
 					at: #street put: 'Kopernikova 345';
