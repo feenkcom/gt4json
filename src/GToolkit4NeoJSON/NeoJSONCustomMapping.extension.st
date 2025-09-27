@@ -9,7 +9,7 @@ NeoJSONCustomMapping >> gtViewReaderSourceCodeFor: aView [
 		priority: 1;
 		object: [ reader ];
 		view: #gtSourceCodeFor:;
-		actionButtonIcon: BrGlamorousIcons inspect 
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect Block' 
 			action: [ :aButton | 
 				aButton phlow spawnObject: self ]
@@ -24,7 +24,7 @@ NeoJSONCustomMapping >> gtViewWriterSourceCodeFor: aView [
 		priority: 10;
 		object: [ writer ];
 		view: #gtSourceCodeFor:;
-		actionButtonIcon: BrGlamorousIcons inspect 
+		actionButtonIcon: BrGlamorousVectorIcons inspect 
 			tooltip: 'Inspect Block' 
 			action: [ :aButton | 
 				aButton phlow spawnObject: self ]
