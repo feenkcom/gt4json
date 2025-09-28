@@ -164,7 +164,7 @@ GtJsonCollectionModel >> gtModelsFor: aView [
 		  column: 'Value' text: [ :anAssoc | anAssoc value value ] weight: 3;
 		  send: #value;
 		  actionUpdateButton;
-		  actionButtonIcon: BrGlamorousIcons trash
+		  actionButtonIcon: BrGlamorousVectorIcons bin
 		  tooltip: 'Remove models'
 		  action: [ :aButton :aTab | 
 			  models := nil.
