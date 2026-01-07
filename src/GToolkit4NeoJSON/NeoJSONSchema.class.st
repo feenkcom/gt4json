@@ -19,6 +19,13 @@ Class {
 	#category : #'GToolkit4NeoJSON-Schema'
 }
 
+{ #category : #comparing }
+NeoJSONSchema class >> equalityProperties [
+	"Answer the collection of property names that should be compared by value when testing for equality"
+
+	^ #(#then #comment #else #contains #dependentSchemas #patternProperties #minLength #const #deprecated #pattern #minimum #maxContains #format #dynamicAnchor #if #vocabulary #propertyNames #minProperties #not #dependentRequired #dynamicRef #maximum #defs #prefixItems #minContains #writeOnly #readOnly #items #ref #additionalProperties #title #enum #anchor #examples #default #minItems #maxLength #contentEncoding #unevaluatedItems #maxProperties #unevaluatedProperties #description #exclusiveMaximum #exclusiveMinimum #type #uniqueItems #multipleOf #maxItems)
+]
+
 { #category : #accessing }
 NeoJSONSchema class >> metaSchema [
 	<gtExample>
@@ -32,6 +39,31 @@ NeoJSONSchema class >> metaSchema [
 { #category : #accessing }
 NeoJSONSchema class >> metaSchemaUrl [
 	^ 'https://json-schema.org/draft/2020-12/schema' asUrl
+]
+
+{ #category : #comparing }
+NeoJSONSchema class >> orderIndependentProperties [
+	"Answer the collection of property names that answer a collection that should be compared without considering order"
+
+	^ #(#allOf #anyOf #oneOf #required )
+]
+
+{ #category : #comparing }
+NeoJSONSchema >> = anotherSchema [
+
+	self == anotherSchema ifTrue: [ ^ true ].
+	(anotherSchema isKindOf: self class) ifFalse: [ ^ false ].
+
+	(self class equalityProperties anySatisfy: [ :selector |
+		(self rawProperties at: selector ifAbsent: []) ~= (anotherSchema rawProperties at: selector ifAbsent: []) ]) ifTrue:
+			[ ^ false ].
+	(self class orderIndependentProperties anySatisfy: [ :selector |
+		| selfProperty anotherProperty |
+		selfProperty := (self perform: selector) ifNotNil: #asSet.
+		anotherProperty := (anotherSchema perform: selector) ifNotNil: #asSet.
+		selfProperty ~= anotherProperty ]) ifTrue:
+			[ ^ false ].
+	^ true.
 ]
 
 { #category : #vocabulary }
@@ -223,6 +255,18 @@ NeoJSONSchema >> gtViewRawJsonIn: aComposite [
 		  priority: 50;
 		  object: [ self json ];
 		  view: #gtJsonFor:
+]
+
+{ #category : #comparing }
+NeoJSONSchema >> hash [
+	| hash |
+
+	hash := 0.
+	self class equalityProperties do: [ :selector |
+			hash := hash bitXor: (self perform: selector) hash ].
+	self class orderIndependentProperties do: [ :selector |
+			hash := hash bitXor: (self perform: selector) hash ].
+	^ hash
 ]
 
 { #category : #vocabulary }
