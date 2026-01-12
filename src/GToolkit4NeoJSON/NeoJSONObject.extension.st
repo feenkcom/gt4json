@@ -21,3 +21,41 @@ NeoJSONObject >> gtJsonFor: aView [
 					c vertical matchParent ].
 			editorElement ]
 ]
+
+{ #category : #'*GToolkit4NeoJSON' }
+NeoJSONObject >> putObjectSchemaAt: aKey properties: aProperties [
+	self
+		at: aKey
+		put: (NeoJSONObject new
+				at: #type put: 'object';
+				at: #properties put: aProperties;
+				yourself)
+]
+
+{ #category : #'*GToolkit4NeoJSON' }
+NeoJSONObject >> putStringArraySchemaAt: aKey [
+	self
+		at: aKey
+		put: {NeoJSONObject new
+					at: #type put: 'array';
+					putStringSchemaAt: #items;
+					yourself}
+]
+
+{ #category : #'*GToolkit4NeoJSON' }
+NeoJSONObject >> putStringOrNilSchemaAt: aKey [
+	self
+		at: aKey
+		put: (NeoJSONObject new
+				at: #type put: #('string' 'null');
+				yourself)
+]
+
+{ #category : #'*GToolkit4NeoJSON' }
+NeoJSONObject >> putStringSchemaAt: aKey [
+	self
+		at: aKey
+		put: (NeoJSONObject new
+				at: #type put: 'string';
+				yourself)
+]

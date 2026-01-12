@@ -34,17 +34,25 @@ NeoJSONSchemaValidator >> addValidationErrorMessage: message [
 { #category : #'gt extensions' }
 NeoJSONSchemaValidator >> gtViewDetailsIn: composite [
 	<gtView>
-	^ composite columnedList
+	^ composite columnedTree
 		title: 'Details';
 		priority: 30;
-		items: [ {
-			{ #valid . self isValid }.
-			{ #instance . instance }.
-			{ #schema . self schema }. 
-		} ];
-		column: 'Key' text: #first;
-		column: 'Value' text: #second weight: 3;
-		send: #second
+		items: [ {#valid -> self isValid.
+				#instance -> instance.
+				#schema -> self schema.
+				#validationErrors
+					-> (self validationErrors withIndexCollect: [ :each :index | index -> each ])} ];
+		children: [ :anObject | 
+			(anObject isKindOf: Association)
+				ifTrue: [ (anObject value isKindOf: OrderedCollection)
+						ifTrue: [ anObject value ]
+						ifFalse: [ #() ] ]
+				ifFalse: [ #() ] ];
+		column: 'Key' text: #key;
+		column: 'Value'
+			text: #value
+			weight: 3;
+		send: #value
 ]
 
 { #category : #'gt extensions' }
