@@ -344,12 +344,12 @@ NeoJSONSchemaValidator >> validateType [
 			ifTrue: [
 				(type anySatisfy: [ :each |
 						(self knowTypes includes: each)
-							and: [ self perform: #validateType , each capitalized ] ])
+							and: [ self perform: (#validateType , each capitalized) asSymbol ] ])
 					ifFalse: [ self addValidationErrorMessage: ('{1] expected' format: { ' or' join: type }) ] ]
 			ifFalse: [
 				(self knowTypes includes: type)
 					ifTrue: [ 
-						(self perform: #validateType , type capitalized)
+						(self perform: (#validateType , type capitalized) asSymbol)
 							ifFalse: [ self addValidationErrorMessage: ('{1} expected' format: { type }) ] ] ] ]
 ]
 
