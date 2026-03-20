@@ -388,7 +388,7 @@ GtJsonBasic >> gtJsonStringFor: aView [
 		priority: 41;
 		aptitude: [ BrGlamorousCodeEditorAptitude ];
 		styler: [ JSONParser gtStyler ];
-		text: [ STONJSON toStringPretty: self jsonObject ]
+		text: [ NeoJSONWriter toStringPretty: self jsonObject ]
 ]
 
 { #category : #'gt - extensions' }
