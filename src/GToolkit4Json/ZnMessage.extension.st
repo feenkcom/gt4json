@@ -13,3 +13,12 @@ ZnMessage >> asJson [
 		
 	^ self asGtJson
 ]
+
+{ #category : #'*GToolkit4Json' }
+ZnMessage >> gtJsonContents [
+	"Answer the receiver's value decoded.
+	Must have a json sub-type."
+
+	self assert: self contentType sub = 'json'.
+	^ NeoJSONReader fromString: self contents
+]
