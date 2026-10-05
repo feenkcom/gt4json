@@ -12,7 +12,9 @@ Class {
 	#name : #GtJsonShapeComparison,
 	#superclass : #Object,
 	#instVars : [
-		'differences'
+		'differences',
+		'testObject',
+		'expectedObject'
 	],
 	#category : #'GToolkit4Json-Utilities'
 }
@@ -20,7 +22,9 @@ Class {
 { #category : #'instance creation' }
 GtJsonShapeComparison class >> compare: aJsonObject with: anotherJsonObject [
 	^ self new
-		compare: aJsonObject with: anotherJsonObject;
+		testObject: aJsonObject;
+		expectedObject: anotherJsonObject;
+		compare;
 		yourself
 ]
 
@@ -34,6 +38,11 @@ GtJsonShapeComparison class >> compareJsonString: aJsonString withJsonString: an
 { #category : #private }
 GtJsonShapeComparison >> addDifferenceAt: aPath message: aMessage [
 	differences add: aPath -> aMessage
+]
+
+{ #category : #comparing }
+GtJsonShapeComparison >> compare [
+	self compare: testObject with: expectedObject atPath: '$'
 ]
 
 { #category : #comparing }
@@ -89,6 +98,16 @@ GtJsonShapeComparison >> differences [
 	^ differences
 ]
 
+{ #category : #accessing }
+GtJsonShapeComparison >> expectedObject [
+	^ expectedObject
+]
+
+{ #category : #accessing }
+GtJsonShapeComparison >> expectedObject: aJsonObject [
+	expectedObject := aJsonObject
+]
+
 { #category : #views }
 GtJsonShapeComparison >> gtDifferencesFor: aView [
 	<gtView>
@@ -98,7 +117,34 @@ GtJsonShapeComparison >> gtDifferencesFor: aView [
 		items: [ self differences ];
 		column: 'Path' text: [ :each | each key ];
 		column: 'Difference' text: [ :each | each value ];
+		send: [ :item | self ];
 		actionUpdateButtonTooltip: 'Update differences'
+]
+
+{ #category : #views }
+GtJsonShapeComparison >> gtExpectedObjectFor: aView [
+	<gtView>
+	expectedObject ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'ExpectedObject';
+		priority: 20;
+		items: [ expectedObject associations ];
+		column: 'Key' text: [ :each | each key gtDisplayString ];
+		column: 'Value' text: [ :each | each value gtDisplayString ];
+		send: [ :each | each value ]
+]
+
+{ #category : #views }
+GtJsonShapeComparison >> gtTestObjectFor: aView [
+	<gtView>
+	testObject ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'TestObject';
+		priority: 15;
+		items: [ testObject associations ];
+		column: 'Key' text: [ :each | each key gtDisplayString ];
+		column: 'Value' text: [ :each | each value gtDisplayString ];
+		send: [ :each | each value ]
 ]
 
 { #category : #initialization }
@@ -146,4 +192,14 @@ GtJsonShapeComparison >> printOn: aStream [
 		nextPutAll: '(';
 		nextPutAll: (self matches ifTrue: [ 'matching shape' ] ifFalse: [ differences size asString, ' differences' ]);
 		nextPutAll: ')'
+]
+
+{ #category : #accessing }
+GtJsonShapeComparison >> testObject [
+	^ testObject
+]
+
+{ #category : #accessing }
+GtJsonShapeComparison >> testObject: aJsonObject [
+	testObject := aJsonObject
 ]
