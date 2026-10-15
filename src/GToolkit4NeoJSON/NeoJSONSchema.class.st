@@ -59,8 +59,8 @@ NeoJSONSchema >> = anotherSchema [
 			[ ^ false ].
 	(self class orderIndependentProperties anySatisfy: [ :selector |
 		| selfProperty anotherProperty |
-		selfProperty := (self perform: selector) ifNotNil: #asSet.
-		anotherProperty := (anotherSchema perform: selector) ifNotNil: #asSet.
+		selfProperty := (self perform: selector) ifNotNil: [ :property | property asSet ].
+		anotherProperty := (anotherSchema perform: selector) ifNotNil: [ :property | property asSet ].
 		selfProperty ~= anotherProperty ]) ifTrue:
 			[ ^ false ].
 	^ true.
