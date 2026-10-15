@@ -23,7 +23,7 @@ BaselineOfGToolkit4Json >> baseline: spec [
 				
 			spec
 				baseline: 'JSONParser'
-				with: [ spec repository: 'github://j-brant/SmaCC' ].
+				with: [ spec repository: 'github://j-brant/SmaCC:/src' ].
 
 			spec
 				baseline: 'GToolkitInspector'
