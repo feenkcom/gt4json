@@ -81,7 +81,7 @@ NeoJSONSchemaValidator >> isValid [
 
 { #category : #accessing }
 NeoJSONSchemaValidator >> knowTypes [
-	^ #( number integer string boolean null object array )
+	^ #('number' 'integer' 'string' 'boolean' 'null' 'object' 'array')
 ]
 
 { #category : #accessing }
