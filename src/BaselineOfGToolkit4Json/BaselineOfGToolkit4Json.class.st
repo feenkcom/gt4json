@@ -10,7 +10,7 @@ BaselineOfGToolkit4Json >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: 'GToolkit4NeoJSON' with: [
-				spec repository: 'github://feenkcom/gt4json:v0.7.331/src' ].
+				spec repository: 'github://feenkcom/gt4json:v0.7.332/src' ].
 		spec
 			baseline: 'GToolkitBasicUtility' with: [
 				spec repository: 'github://feenkcom/gtoolkit-utility:v0.9.59/src' ].
@@ -19,10 +19,10 @@ BaselineOfGToolkit4Json >> baseline: spec [
 				spec repository: 'github://feenkcom/Brick:v0.9.164/src' ].
 		spec
 			baseline: 'JSONParser' with: [
-				spec repository: 'github://j-brant/SmaCC:cc9a2a478c8ca00a9cfe496279cb343049e865fc/src' ].
+				spec repository: 'github://j-brant/SmaCC:4d35437e8caad84156606cf2b57923481c02ab4f/src' ].
 		spec
 			baseline: 'GToolkitInspector' with: [
-				spec repository: 'github://feenkcom/gtoolkit-inspector:v0.9.329/src' ].
+				spec repository: 'github://feenkcom/gtoolkit-inspector:v0.9.330/src' ].
 
 		spec package: 'GToolkit4Json' with: [
 			spec requires: #(#GToolkit4NeoJSON #GToolkitBasicUtility #Brick #JSONParser #GToolkitInspector) ].
