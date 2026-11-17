@@ -137,16 +137,14 @@ GtJsonDictionaryModel >> json: anObject [
 
 { #category : #accessing }
 GtJsonDictionaryModel >> modelAt: aKey [
-
-	^ self models
-		  at: aKey
-		  ifAbsent: [ self createModelAt: aKey ]
+	| aModelKey |
+	aModelKey := GtJsonUtility normalizedKey: aKey.
+	^ self models at: aModelKey ifAbsent: [ self createModelAt: aModelKey ]
 ]
 
 { #category : #accessing }
 GtJsonDictionaryModel >> modelAt: aKey put: aValue [
-
-	self models at: aKey put: aValue
+	self models at: (GtJsonUtility normalizedKey: aKey) put: aValue
 ]
 
 { #category : #accessing }
@@ -166,7 +164,7 @@ GtJsonDictionaryModel >> models [
 { #category : #accessing }
 GtJsonDictionaryModel >> size [
 	self json ifNotNil: [ :aJson | ^ aJson jsonObject size ].
-	^ models ifNotNil: #size ifNil: [ 0 ]
+	^ models ifNotNil: [ :aModels | aModels size ] ifNil: [ 0 ]
 ]
 
 { #category : #accessing }

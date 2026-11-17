@@ -644,6 +644,26 @@ GtJsonExamples >> jsonRoot [
 	^ aRawObject
 ]
 
+{ #category : #'examples - keys' }
+GtJsonExamples >> parsedJsonAccessedWithSymbolKeys [
+	"Parsed JSON always has String keys. Be forgiving on input: Symbols find them too,
+	including through the unary-message shortcut (aJson city -> aJson at: #city)."
+
+	<gtExample>
+	<return: #GtJson>
+	| aJson |
+	aJson := GtJson forJsonString: '{"name":"Ada","address":{"city":"London"}}'.
+
+	self assert: (aJson at: #name) exists.
+	self assert: (aJson at: #name) jsonObject equals: 'Ada'.
+	self assert: ((aJson at: #address) at: #city) jsonObject equals: 'London'.
+	self assert: (aJson atPath: #(#address #city)) jsonObject equals: 'London'.
+	self assert: (aJson at: #address) city jsonObject equals: 'London'.
+	self assert: (aJson at: #missing) exists not.
+
+	^ aJson
+]
+
 { #category : #'examples - person' }
 GtJsonExamples >> personJson [
 	<gtExample>
@@ -784,4 +804,55 @@ GtJsonExamples >> simplePersonJsonObject [
 					at: #city put: 'Bratislava';
 					yourself);
 		yourself
+]
+
+{ #category : #'examples - keys' }
+GtJsonExamples >> stringKeyFindsSymbolKeyedObject [
+	"A JSON object built in Smalltalk may use Symbol keys. String keys find them,
+	and updating keeps the existing key instead of adding a String duplicate."
+
+	<gtExample>
+	<return: #GtJson>
+	| aJson |
+	aJson := GtJson
+			forJsonObject: (OrderedDictionary new
+					at: #name put: 'Ada';
+					yourself).
+
+	self assert: (aJson at: 'name') exists.
+	self assert: (aJson at: 'name') jsonObject equals: 'Ada'.
+
+	aJson at: 'name' put: 'Grace'.
+	self assert: aJson jsonObject size equals: 1.
+	self assert: aJson jsonObject keys first isSymbol.
+	self assert: (aJson at: #name) jsonObject equals: 'Grace'.
+
+	^ aJson
+]
+
+{ #category : #'examples - keys' }
+GtJsonExamples >> symbolKeyWriteCreatesStringKey [
+	"Be strict on output: keys created through GtJson are Strings, even when given as Symbols.
+	Writing to an existing key through a Symbol updates it rather than adding a duplicate."
+
+	<gtExample>
+	<return: #GtJson>
+	| aJson |
+	aJson := GtJson forJsonString: '{"name":"Ada"}'.
+
+	aJson at: #age put: 37.
+	self assert: (aJson jsonObject includesKey: 'age').
+	self
+		assert: (aJson jsonObject keys allSatisfy: [ :eachKey | eachKey isSymbol not ]).
+	self assert: (aJson at: 'age') jsonObject equals: 37.
+
+	aJson at: #name put: 'Grace'.
+	self assert: aJson jsonObject size equals: 2.
+	self assert: (aJson at: 'name') jsonObject equals: 'Grace'.
+
+	aJson atPath: #(#address #city) put: 'London'.
+	self assert: ((aJson jsonObject at: 'address') includesKey: 'city').
+	self assert: (aJson atPath: #('address' 'city')) jsonObject equals: 'London'.
+
+	^ aJson
 ]

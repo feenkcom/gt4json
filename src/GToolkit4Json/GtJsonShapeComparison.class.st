@@ -76,21 +76,25 @@ GtJsonShapeComparison >> compareArray: aCollection with: anotherCollection atPat
 
 { #category : #comparing }
 GtJsonShapeComparison >> compareObject: aDictionary with: anotherDictionary atPath: aPath [
+	"Keys are compared by content: a Symbol and a String with the same characters are the same key
+	(see GtJsonUtility class>>#key:matches:)."
+
 	| leftKeys rightKeys missingKeys extraKeys commonKeys |
-	leftKeys := aDictionary keys asSet.
-	rightKeys := anotherDictionary keys asSet.
-	missingKeys := leftKeys difference: rightKeys.
-	extraKeys := rightKeys difference: leftKeys.
-	missingKeys asSortedCollection do: [ :eachKey |
-		self addDifferenceAt: (self path: aPath key: eachKey) message: 'missing key' ].
-	extraKeys asSortedCollection do: [ :eachKey |
-		self addDifferenceAt: (self path: aPath key: eachKey) message: 'extra key' ].
-	commonKeys := leftKeys intersection: rightKeys.
-	commonKeys asSortedCollection do: [ :eachKey |
-		self
-			compare: (aDictionary at: eachKey)
-			with: (anotherDictionary at: eachKey)
-			atPath: (self path: aPath key: eachKey) ]
+	leftKeys := self normalizedKeysOf: aDictionary.
+	rightKeys := self normalizedKeysOf: anotherDictionary.
+	missingKeys := leftKeys keys asSet difference: rightKeys keys asSet.
+	extraKeys := rightKeys keys asSet difference: leftKeys keys asSet.
+	missingKeys asSortedCollection
+		do: [ :eachKey | self addDifferenceAt: (self path: aPath key: eachKey) message: 'missing key' ].
+	extraKeys asSortedCollection
+		do: [ :eachKey | self addDifferenceAt: (self path: aPath key: eachKey) message: 'extra key' ].
+	commonKeys := leftKeys keys asSet intersection: rightKeys keys asSet.
+	commonKeys asSortedCollection
+		do: [ :eachKey | 
+			self
+				compare: (aDictionary at: (leftKeys at: eachKey))
+				with: (anotherDictionary at: (rightKeys at: eachKey))
+				atPath: (self path: aPath key: eachKey) ]
 ]
 
 { #category : #accessing }
@@ -173,6 +177,17 @@ GtJsonShapeComparison >> jsonKindOf: anObject [
 { #category : #testing }
 GtJsonShapeComparison >> matches [
 	^ differences isEmpty
+]
+
+{ #category : #private }
+GtJsonShapeComparison >> normalizedKeysOf: aDictionary [
+	"Answer a Dictionary mapping each normalized (String) key of aDictionary to its original key"
+
+	| aMapping |
+	aMapping := Dictionary new.
+	aDictionary
+		keysDo: [ :eachKey | aMapping at: (GtJsonUtility normalizedKey: eachKey) put: eachKey ].
+	^ aMapping
 ]
 
 { #category : #private }

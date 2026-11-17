@@ -147,24 +147,35 @@ GtJsonBasic >> atIndex: anIndex put: aValue [
 
 { #category : #'private - path' }
 GtJsonBasic >> atKey: aKey [
+	"Be forgiving on input: aKey may be a Symbol or a String (see GtJsonUtility class>>#key:matches:).
+	An existing key is kept as it is; a missing key is answered in its normalized (String) form."
 
-	^ self jsonObject
-		  at: aKey
-		  ifPresent: [ :aValue | 
-			  GtJsonKey new
-				  parent: self;
-				  key: aKey;
-				  jsonObject: aValue ]
-		  ifAbsent: [ 
-			  GtJsonKey new
-				  parent: self;
-				  key: aKey ]
+	^ GtJsonUtility
+		keyIn: self jsonObject
+		matching: aKey
+		ifFound: [ :anExistingKey | 
+			GtJsonKey new
+				parent: self;
+				key: anExistingKey;
+				jsonObject: (self jsonObject at: anExistingKey) ]
+		ifNone: [ GtJsonKey new
+				parent: self;
+				key: (GtJsonUtility normalizedKey: aKey) ]
 ]
 
 { #category : #'private - path' }
 GtJsonBasic >> atKey: aKey put: aValue [
-	self jsonObject at: aKey put: aValue.
-	^ self atKey: aKey
+	"Update an existing matching key, otherwise add the key in its normalized (String) form.
+	Be strict on output: keys created by GtJson are always strings."
+
+	| aJsonKey |
+	aJsonKey := GtJsonUtility
+			keyIn: self jsonObject
+			matching: aKey
+			ifFound: [ :anExistingKey | anExistingKey ]
+			ifNone: [ GtJsonUtility normalizedKey: aKey ].
+	self jsonObject at: aJsonKey put: aValue.
+	^ self atKey: aJsonKey
 ]
 
 { #category : #'accessing - path' }

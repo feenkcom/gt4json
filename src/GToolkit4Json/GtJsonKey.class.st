@@ -70,11 +70,18 @@ GtJsonKey >> pathText [
 
 { #category : #private }
 GtJsonKey >> updateValueInParent: aNewValue [
-	"Set new value in my parent JSON object"
+	"Set new value in my parent JSON object.
+	Update an existing matching key, otherwise add the key in its normalized (String) form."
 
 	| aParentObject |
 	aParentObject := self parent jsonObject.
-	aParentObject at: self key put: aNewValue
+	GtJsonUtility
+		keyIn: aParentObject
+		matching: self key
+		ifFound: [ :anExistingKey | aParentObject at: anExistingKey put: aNewValue ]
+		ifNone: [ aParentObject
+				at: (GtJsonUtility normalizedKey: self key)
+				put: aNewValue ]
 ]
 
 { #category : #enumerating }

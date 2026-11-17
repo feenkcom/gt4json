@@ -27,7 +27,9 @@ GtJsonExplicitDictionaryModel >> doesNotUnderstand: aMessage [
 	aMessage numArgs = 1
 		ifTrue: [ aSelector := aMessage selector copyFrom: 1 to: aMessage selector size - 1 ].
 
-	(self keys includes: aSelector)
+	aSelector := GtJsonUtility normalizedKey: aSelector.
+	(self keys
+		anySatisfy: [ :eachKey | GtJsonUtility key: eachKey matches: aSelector ])
 		ifFalse: [ self keys: (self keys copyWith: aSelector) ].
 
 	^ super doesNotUnderstand: aMessage
