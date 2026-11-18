@@ -27,23 +27,23 @@ GtJsonCollectionModel >> collect: aBlock [
 
 { #category : #accessing }
 GtJsonCollectionModel >> createModelAt: anIndex [
-
 	| aDefinition aJson aModel |
 	aDefinition := self jsonModelDefinition.
 
-	self json ifNil: [ 
-		| aValue |
-		aValue := aDefinition ifNotNil: #defaultValue.
-		^ GtJsonLeafModel new value: aValue ].
+	self json
+		ifNil: [ | aValue |
+			aValue := aDefinition
+					ifNotNil: [ :aDefinitionValue | aDefinitionValue defaultValue ].
+			^ GtJsonLeafModel new value: aValue ].
 
 	aJson := self json at: anIndex.
-	(aJson exists not and: [ aDefinition isNil ]) ifTrue: [ 
-		^ GtJsonLeafModel new value: nil ].
+	(aJson exists not and: [ aDefinition isNil ])
+		ifTrue: [ ^ GtJsonLeafModel new value: nil ].
 
-	aDefinition ifNil: [ 
-		aModel := GtJsonLeafModel forJson: aJson.
-		self modelAt: anIndex put: aModel.
-		^ aModel ].
+	aDefinition
+		ifNil: [ aModel := GtJsonLeafModel forJson: aJson.
+			self modelAt: anIndex put: aModel.
+			^ aModel ].
 
 	aModel := aDefinition createModelForJson: aJson.
 	self modelAt: anIndex put: aModel.
@@ -233,7 +233,7 @@ GtJsonCollectionModel >> select: aBlock [
 { #category : #accessing }
 GtJsonCollectionModel >> size [
 	self json ifNotNil: [ :aJson | ^ aJson jsonObject size ].
-	^ models ifNotNil: #size ifNil: [ 0 ]
+	^ models ifNotNil: [ :aModels | aModels size ] ifNil: [ 0 ]
 ]
 
 { #category : #enumerating }

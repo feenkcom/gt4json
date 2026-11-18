@@ -56,7 +56,7 @@ GtJsonDictionariesAtKeyModelDefinition >> defaultValue: anObject [
 
 { #category : #testing }
 GtJsonDictionariesAtKeyModelDefinition >> includesKey: aKey [
-	^ self key = aKey
+	^ GtJsonUtility key: self key matches: aKey
 ]
 
 { #category : #accessing }
@@ -75,8 +75,7 @@ GtJsonDictionariesAtKeyModelDefinition >> key [
 
 { #category : #accessing }
 GtJsonDictionariesAtKeyModelDefinition >> key: anObject [
-
-	key := anObject
+	key := GtJsonUtility normalizedKey: anObject
 ]
 
 { #category : #accessing }

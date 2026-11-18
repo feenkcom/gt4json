@@ -67,3 +67,26 @@ GtJsonShapeComparisonExamples >> missingAndExtraKeys [
 	self assert: (paths includes: '$.address.country').
 	^ comparison
 ]
+
+{ #category : #examples }
+GtJsonShapeComparisonExamples >> symbolAndStringKeysMatch [
+	"Keys are compared by content: an object built with Symbol keys has the same shape
+	as the parsed JSON (String keys) it corresponds to."
+
+	<gtExample>
+	<return: #GtJsonShapeComparison>
+	| comparison |
+	comparison := GtJsonShapeComparison
+			compare: (OrderedDictionary new
+					at: #name put: 'Ada';
+					at: #address
+						put: (OrderedDictionary new
+								at: #city put: 'London';
+								yourself);
+					yourself)
+			with: (GtJson forJsonString: '{"name":"Grace","address":{"city":"Paris"}}')
+					jsonObject.
+	self assert: comparison matches.
+	self assert: comparison differences isEmpty.
+	^ comparison
+]

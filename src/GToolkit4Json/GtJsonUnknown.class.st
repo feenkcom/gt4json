@@ -78,10 +78,20 @@ GtJsonUnknown >> pathText [
 { #category : #private }
 GtJsonUnknown >> updateValueInParent: aNewValue [
 	"I am not sure what to do in this case."
-	
+
+	| aParentObject |
 	self parent exists ifFalse: [ ^ self ].
-	
-	self parent jsonObject at: self path put: aNewValue
+
+	aParentObject := self parent jsonObject.
+	aParentObject isDictionary
+		ifTrue: [ GtJsonUtility
+				keyIn: aParentObject
+				matching: self path
+				ifFound: [ :anExistingKey | aParentObject at: anExistingKey put: aNewValue ]
+				ifNone: [ aParentObject
+						at: (GtJsonUtility normalizedKey: self path)
+						put: aNewValue ] ]
+		ifFalse: [ aParentObject at: self path put: aNewValue ]
 ]
 
 { #category : #accessing }
