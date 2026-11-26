@@ -20,7 +20,7 @@ NeoJSONPointer >> add: token [
 NeoJSONPointer >> exampleConstructed [
 	<gtExample>
 	<return: #NeoJSONPointer>
-	self tokens: #(foo 1 bar).
+	self tokens: #('foo' 1 'bar').
 	self assert: self isRoot not.
 	self assert: self tokens first equals: 'foo'.
 	self assert: self tokens second equals: 1.
