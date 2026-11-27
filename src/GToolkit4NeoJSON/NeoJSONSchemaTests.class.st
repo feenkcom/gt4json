@@ -224,6 +224,17 @@ NeoJSONSchemaTests >> testConst [
 ]
 
 { #category : #testing }
+NeoJSONSchemaTests >> testConstValidationMessage [
+	| validator |
+	schema := NeoJSONSchema new json: ({'const' -> 'one'} as: NeoJSONObject).
+	validator := NeoJSONSchemaValidator new schema: schema.
+	self deny: (validator validate: 'two').
+	self
+		assert: validator validationErrors first message
+		equals: '"two" not equal to const "one"'
+]
+
+{ #category : #testing }
 NeoJSONSchemaTests >> testDependentRequired [
 	self schemaFromJson: '{
   	"type": "object",
@@ -297,6 +308,23 @@ NeoJSONSchemaTests >> testEnum [
 		self assert: (schema validate: each) ].
 	{ 'foo' . Float pi . true . nil . #(1 2 3) } do: [ :each |
 		self deny: (schema validate: each) ] 	
+]
+
+{ #category : #testing }
+NeoJSONSchemaTests >> testEnumValidationMessage [
+	| validator |
+	schema := NeoJSONSchema new
+			json: ({'enum' -> #('one' 'two')} as: NeoJSONObject).
+	validator := NeoJSONSchemaValidator new schema: schema.
+	self deny: (validator validate: 'foo').
+	self
+		assert: validator validationErrors first message
+		equals: '"foo" not part of enum ["one","two"]'.
+	validator := NeoJSONSchemaValidator new schema: schema.
+	self deny: (validator validate: 42).
+	self
+		assert: validator validationErrors first message
+		equals: '42 not part of enum ["one","two"]'
 ]
 
 { #category : #testing }
