@@ -79,6 +79,15 @@ NeoJSONSchemaValidator >> isValid [
 	^ validationErrors isEmpty
 ]
 
+{ #category : #private }
+NeoJSONSchemaValidator >> jsonStringOf: anObject [
+	"Return anObject written as JSON, for validation messages that name values: their readers expect JSON, not the printString of Smalltalk objects"
+
+	^ [ NeoJSONWriter toString: anObject ]
+		on: Error
+		do: [ :anError | anObject printString ]
+]
+
 { #category : #accessing }
 NeoJSONSchemaValidator >> knowTypes [
 	^ #('number' 'integer' 'string' 'boolean' 'null' 'object' 'array')
@@ -250,12 +259,20 @@ NeoJSONSchemaValidator >> validateFormatDateTime [
 
 { #category : #validation }
 NeoJSONSchemaValidator >> validateGeneric [
-	schema const ifNotNil: [ :const |
-		instance = const 
-			ifFalse: [ self addValidationErrorMessage: ('not equal to const [{1}]' format: { const }) ] ].
-	schema enum ifNotNil: [ :enum |
-		(enum includes: instance) 
-			ifFalse: [ self addValidationErrorMessage: ('not part of enum [{1}]' format: { enum }) ] ].
+	schema const
+		ifNotNil: [ :const | 
+			instance = const
+				ifFalse: [ self
+						addValidationErrorMessage: ('{1} not equal to const {2}'
+								format: {self jsonStringOf: instance.
+										self jsonStringOf: const}) ] ].
+	schema enum
+		ifNotNil: [ :enum | 
+			(enum includes: instance)
+				ifFalse: [ self
+						addValidationErrorMessage: ('{1} not part of enum {2}'
+								format: {self jsonStringOf: instance.
+										self jsonStringOf: enum asArray}) ] ]
 ]
 
 { #category : #validation }
